@@ -6,8 +6,8 @@ static BOOL g_hookDidRun = NO;
 
 void MockHookForTesting(NSInvocation* inv)
 {
-	g_hookDidRun = YES;
-	[inv invoke];
+    g_hookDidRun = YES;
+    [inv invoke];
 }
 
 
@@ -15,30 +15,30 @@ void MockHookForTesting(NSInvocation* inv)
 
 -(void) doTestInstallAndUninstallForSelector:(SEL)selector;
 {
-	Class cls = [self class];
-	
-	IMP impBefore = [cls instanceMethodForSelector:selector];
-	
-	[self performSelector:selector];
-	STAssertFalse(g_hookDidRun, @"Hook should not run because it should not be installed");
-	
-	STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook should not be installed yet");
-	BOOL didInstall = AOCInstallHook(cls, selector, nil);
-	STAssertTrue(didInstall, @"Hook failed to install");
-	STAssertTrue(AOCIsHookInstalled(cls, selector), @"AOCIsHookInstalled failed to recognise installed hook");
-	
-	g_hookDidRun = NO;
-	[self performSelector:selector];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
-	
-	AOCUninstallHook(cls, selector);
-	STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook hasn't been uninstalled properly");
-	
-	STAssertEquals(impBefore, [cls instanceMethodForSelector:selector], @"Installation and uninstallation mangled the IMP");
-	
-	g_hookDidRun = NO;
-	[self performSelector:selector];
-	STAssertFalse(g_hookDidRun, @"Hook should not run because it should be uninstalled");
+    Class cls = [self class];
+    
+    IMP impBefore = [cls instanceMethodForSelector:selector];
+    
+    [self performSelector:selector];
+    STAssertFalse(g_hookDidRun, @"Hook should not run because it should not be installed");
+    
+    STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook should not be installed yet");
+    BOOL didInstall = AOCInstallHook(cls, selector, nil);
+    STAssertTrue(didInstall, @"Hook failed to install");
+    STAssertTrue(AOCIsHookInstalled(cls, selector), @"AOCIsHookInstalled failed to recognise installed hook");
+    
+    g_hookDidRun = NO;
+    [self performSelector:selector];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    
+    AOCUninstallHook(cls, selector);
+    STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook hasn't been uninstalled properly");
+    
+    STAssertEquals(impBefore, [cls instanceMethodForSelector:selector], @"Installation and uninstallation mangled the IMP");
+    
+    g_hookDidRun = NO;
+    [self performSelector:selector];
+    STAssertFalse(g_hookDidRun, @"Hook should not run because it should be uninstalled");
 }
 
 /***************************************
@@ -47,1270 +47,1270 @@ void MockHookForTesting(NSInvocation* inv)
 #pragma mark Return value tests
 // id /////////////////////////
 -(id) returnId; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_id;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_id;
 }
 -(void) testReturnId1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = self;
-	STAssertEquals([self returnId], m_id, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = self;
+    STAssertEquals([self returnId], m_id, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnId2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = nil;
-	STAssertEquals([self returnId], m_id, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = nil;
+    STAssertEquals([self returnId], m_id, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnId3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = [NSDate date];
-	STAssertEquals([self returnId], m_id, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = [NSDate date];
+    STAssertEquals([self returnId], m_id, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(id) returnIdForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_id;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_id;
 }
 -(void) testInstallAndUninstallForReturnTypeId; {
-	SEL selector = @selector(returnIdForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnIdForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // Class /////////////////////////
 -(Class) returnClass; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_class;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_class;
 }
 -(void) testReturnClass1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_class = NULL;
-	STAssertEquals([self returnClass], m_class, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_class = NULL;
+    STAssertEquals([self returnClass], m_class, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnClass2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_class = [NSDate class];
-	STAssertEquals([self returnClass], m_class, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_class = [NSDate class];
+    STAssertEquals([self returnClass], m_class, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(Class) returnClassForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_class;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_class;
 }
 -(void) testInstallAndUninstallForReturnTypeClass; {
-	SEL selector = @selector(returnClassForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnClassForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // SEL /////////////////////////
 -(SEL) returnSEL; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_sel;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_sel;
 }
 -(void) testReturnSEL1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_sel = NULL;
-	STAssertEquals([self returnSEL], m_sel, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_sel = NULL;
+    STAssertEquals([self returnSEL], m_sel, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnSEL2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_sel = @selector(fake:selector:);
-	STAssertEquals([self returnSEL], m_sel, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_sel = @selector(fake:selector:);
+    STAssertEquals([self returnSEL], m_sel, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(SEL) returnSELForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_sel;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_sel;
 }
 -(void) testInstallAndUninstallForReturnTypeSEL; {
-	SEL selector = @selector(returnSELForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnSELForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // char /////////////////////////
 -(char) returnChar; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_chr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_chr;
 }
 -(void) testReturnChar1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = CHAR_MAX;
-	STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = CHAR_MAX;
+    STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnChar2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = 'a';
-	STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = 'a';
+    STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnChar3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = CHAR_MIN;
-	STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = CHAR_MIN;
+    STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(char) returnCharForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_chr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_chr;
 }
 -(void) testInstallAndUninstallForReturnTypeChar; {
-	SEL selector = @selector(returnCharForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnCharForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned char /////////////////////////
 -(unsigned char) returnUChar; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_uchr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_uchr;
 }
 -(void) testReturnUChar1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = UCHAR_MAX;
-	STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = UCHAR_MAX;
+    STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUChar2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = 'z';
-	STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = 'z';
+    STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUChar3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = 0;
-	STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = 0;
+    STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(unsigned char) returnUCharForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_uchr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_uchr;
 }
 -(void) testInstallAndUninstallForReturnTypeUChar; {
-	SEL selector = @selector(returnUCharForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnUCharForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // short /////////////////////////
 -(short) returnShort; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_shrt;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_shrt;
 }
 -(void) testReturnShort1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = SHRT_MAX;
-	STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = SHRT_MAX;
+    STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnShort2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = 333;
-	STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = 333;
+    STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnShort3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = 0;
-	STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = 0;
+    STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnShort4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = -333;
-	STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = -333;
+    STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnShort5;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = SHRT_MIN;
-	STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = SHRT_MIN;
+    STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(short) returnShortForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_shrt;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_shrt;
 }
 -(void) testInstallAndUninstallForReturnTypeShort; {
-	SEL selector = @selector(returnShortForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnShortForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned short /////////////////////////
 -(unsigned short) returnUShort; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ushrt;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ushrt;
 }
 -(void) testReturnUShort1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = USHRT_MAX;
-	STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = USHRT_MAX;
+    STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUShort2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = 55;
-	STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = 55;
+    STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUShort3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = 0;
-	STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = 0;
+    STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(unsigned short) returnUShortForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ushrt;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ushrt;
 }
 -(void) testInstallAndUninstallForReturnTypeUShort; {
-	SEL selector = @selector(returnUShortForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnUShortForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // int /////////////////////////
 -(int) returnInt; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_int;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_int;
 }
 -(void) testReturnInt1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = INT_MAX;
-	STAssertEquals([self returnInt], m_int, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = INT_MAX;
+    STAssertEquals([self returnInt], m_int, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnInt2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = 0;
-	STAssertEquals([self returnInt], m_int, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = 0;
+    STAssertEquals([self returnInt], m_int, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnInt3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = -144;
-	STAssertEquals([self returnInt], m_int, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = -144;
+    STAssertEquals([self returnInt], m_int, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnInt4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = INT_MIN;
-	STAssertEquals([self returnInt], m_int, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = INT_MIN;
+    STAssertEquals([self returnInt], m_int, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(int) returnIntForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_int;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_int;
 }
 -(void) testInstallAndUninstallForReturnTypeInt; {
-	SEL selector = @selector(returnIntForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnIntForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned int /////////////////////////
 -(unsigned int) returnUInt; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_uint;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_uint;
 }
 -(void) testReturnUInt1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = UINT_MAX;
-	STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = UINT_MAX;
+    STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUInt2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = 60000;
-	STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = 60000;
+    STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnUInt3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = 0;
-	STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = 0;
+    STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(unsigned int) returnUIntForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_uint;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_uint;
 }
 -(void) testInstallAndUninstallForReturnTypeUInt; {
-	SEL selector = @selector(returnUIntForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnUIntForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // long /////////////////////////
 -(long) returnLong; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_long;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_long;
 }
 -(void) testReturnLong1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = LONG_MAX;
-	STAssertEquals([self returnLong], m_long, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = LONG_MAX;
+    STAssertEquals([self returnLong], m_long, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLong2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = 800;
-	STAssertEquals([self returnLong], m_long, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = 800;
+    STAssertEquals([self returnLong], m_long, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLong3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = 0;
-	STAssertEquals([self returnLong], m_long, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = 0;
+    STAssertEquals([self returnLong], m_long, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLong4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = LONG_MIN;
-	STAssertEquals([self returnLong], m_long, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = LONG_MIN;
+    STAssertEquals([self returnLong], m_long, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(long) returnLongForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_long;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_long;
 }
 -(void) testInstallAndUninstallForReturnTypeLong; {
-	SEL selector = @selector(returnLongForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnLongForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned long /////////////////////////
 -(unsigned long) returnULong; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ulong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ulong;
 }
 -(void) testReturnULong1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = ULONG_MAX;
-	STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = ULONG_MAX;
+    STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnULong2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = 1337;
-	STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = 1337;
+    STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnULong3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = 0;
-	STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = 0;
+    STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(unsigned long) returnULongForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ulong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ulong;
 }
 -(void) testInstallAndUninstallForReturnTypeULong; {
-	SEL selector = @selector(returnULongForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnULongForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // long long /////////////////////////
 -(long long) returnLongLong; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_longLong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_longLong;
 }
 -(void) testReturnLongLong1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = LONG_LONG_MAX;
-	STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = LONG_LONG_MAX;
+    STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLongLong2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = 3376;
-	STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = 3376;
+    STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLongLong3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = 0;
-	STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = 0;
+    STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLongLong4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = -872;
-	STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = -872;
+    STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnLongLong5;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = LONG_LONG_MIN;
-	STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = LONG_LONG_MIN;
+    STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(long long) returnLongLongForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_longLong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_longLong;
 }
 -(void) testInstallAndUninstallForReturnTypeLongLong; {
-	SEL selector = @selector(returnLongLongForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnLongLongForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned long long /////////////////////////
 -(unsigned long long) returnULongLong; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ulongLong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ulongLong;
 }
 -(void) testReturnULongLong1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = ULONG_LONG_MAX;
-	STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = ULONG_LONG_MAX;
+    STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnULongLong2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = ULONG_LONG_MAX - 64;
-	STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = ULONG_LONG_MAX - 64;
+    STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnULongLong3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = 0;
-	STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = 0;
+    STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(unsigned long long) returnULongLongForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ulongLong;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ulongLong;
 }
 -(void) testInstallAndUninstallForReturnTypeULongLong; {
-	SEL selector = @selector(returnULongLongForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnULongLongForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // float /////////////////////////
 -(float) returnFloat; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_float;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_float;
 }
 -(void) testReturnFloat1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MAX;
-	STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MAX;
+    STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnFloat2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MAX - 33.0f;
-	STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MAX - 33.0f;
+    STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnFloat3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = 0.0f;
-	STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = 0.0f;
+    STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnFloat4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = -123.4f;
-	STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = -123.4f;
+    STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnFloat5;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MIN;
-	STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MIN;
+    STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(float) returnFloatForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_float;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_float;
 }
 -(void) testInstallAndUninstallForReturnTypeFloat; {
-	SEL selector = @selector(returnFloatForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnFloatForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // double /////////////////////////
 -(double) returnDouble; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_double;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_double;
 }
 -(void) testReturnDouble1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MAX;
-	STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MAX;
+    STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnDouble2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = 66.0;
-	STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = 66.0;
+    STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnDouble3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = 0.0;
-	STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = 0.0;
+    STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnDouble4;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MIN + 44.0;
-	STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MIN + 44.0;
+    STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnDouble5;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MIN;
-	STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MIN;
+    STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(double) returnDoubleForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_double;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_double;
 }
 -(void) testInstallAndUninstallForReturnTypeDouble; {
-	SEL selector = @selector(returnDoubleForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnDoubleForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // _Bool /////////////////////////
 -(_Bool) return_Bool; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_bool;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_bool;
 }
 -(void) testReturn_Bool1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_bool = true;
-	STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_bool = true;
+    STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturn_Bool2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_bool = false;
-	STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_bool = false;
+    STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(_Bool) return_BoolForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_bool;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_bool;
 }
 -(void) testInstallAndUninstallForReturnType_Bool; {
-	SEL selector = @selector(return_BoolForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(return_BoolForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // void* /////////////////////////
 -(void*) returnPtr; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ptr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ptr;
 }
 -(void) testReturnPtr1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = NULL;
-	STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = NULL;
+    STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnPtr2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = self;
-	STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = self;
+    STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnPtr3;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = (void*)0xDEADBEEF;
-	STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = (void*)0xDEADBEEF;
+    STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void*) returnPtrForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_ptr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_ptr;
 }
 -(void) testInstallAndUninstallForReturnTypePtr; {
-	SEL selector = @selector(returnPtrForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnPtrForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // char* /////////////////////////
 -(char*) returnCharPtr; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_charPtr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_charPtr;
 }
 -(void) testReturnCharPtr1;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_charPtr = NULL;
-	STAssertEquals([self returnCharPtr], m_charPtr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_charPtr = NULL;
+    STAssertEquals([self returnCharPtr], m_charPtr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testReturnCharPtr2;{
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_charPtr = "hello";
-	STAssertEquals([self returnCharPtr], m_charPtr, @"Return value is mangled");
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_charPtr = "hello";
+    STAssertEquals([self returnCharPtr], m_charPtr, @"Return value is mangled");
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(char*) returnCharPtrForInstall; {
-	NSLog(@"inside %@", NSStringFromSelector(_cmd));
-	return m_charPtr;
+    NSLog(@"inside %@", NSStringFromSelector(_cmd));
+    return m_charPtr;
 }
 -(void) testInstallAndUninstallForReturnTypeCharPtr; {
-	SEL selector = @selector(returnCharPtrForInstall);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(returnCharPtrForInstall);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 #pragma mark Argument value tests
 // id /////////////////////////
 -(void) assertArgEqualOfTypeId:(id)arg;{
-	STAssertEquals(arg, m_id, @"Argument is mangled");
+    STAssertEquals(arg, m_id, @"Argument is mangled");
 }
 -(void) testArgEqualForId1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = self;
-	[self assertArgEqualOfTypeId:m_id];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = self;
+    [self assertArgEqualOfTypeId:m_id];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForId2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = nil;
-	[self assertArgEqualOfTypeId:m_id];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = nil;
+    [self assertArgEqualOfTypeId:m_id];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForId3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_id = [NSDate date];
-	[self assertArgEqualOfTypeId:m_id];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_id = [NSDate date];
+    [self assertArgEqualOfTypeId:m_id];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeId:(id)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeId; {
-	SEL selector = @selector(installMethodForArgTypeId:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeId:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // Class /////////////////////////
 -(void) assertArgEqualOfTypeClass:(Class)arg;{
-	STAssertEquals(arg, m_class, @"Argument is mangled");
+    STAssertEquals(arg, m_class, @"Argument is mangled");
 }
 -(void) testArgEqualForClass1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_class = NULL;
-	[self assertArgEqualOfTypeClass:m_class];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_class = NULL;
+    [self assertArgEqualOfTypeClass:m_class];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForClass2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_class = [NSDate class];
-	[self assertArgEqualOfTypeClass:m_class];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_class = [NSDate class];
+    [self assertArgEqualOfTypeClass:m_class];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeClass:(Class)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeClass; {
-	SEL selector = @selector(installMethodForArgTypeClass:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeClass:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // SEL /////////////////////////
 -(void) assertArgEqualOfTypeSEL:(SEL)arg;{
-	STAssertEquals(arg, m_sel, @"Argument is mangled");
+    STAssertEquals(arg, m_sel, @"Argument is mangled");
 }
 -(void) testArgEqualForSEL1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_sel = NULL;
-	[self assertArgEqualOfTypeSEL:m_sel];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_sel = NULL;
+    [self assertArgEqualOfTypeSEL:m_sel];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForSEL2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_sel = @selector(fake:selector:);
-	[self assertArgEqualOfTypeSEL:m_sel];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_sel = @selector(fake:selector:);
+    [self assertArgEqualOfTypeSEL:m_sel];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeSEL:(SEL)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeSEL; {
-	SEL selector = @selector(installMethodForArgTypeSEL:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeSEL:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // char /////////////////////////
 -(void) assertArgEqualOfTypeChar:(char)arg;{
-	STAssertEquals(arg, m_chr, @"Argument is mangled");
+    STAssertEquals(arg, m_chr, @"Argument is mangled");
 }
 -(void) testArgEqualForChar1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = CHAR_MAX;
-	[self assertArgEqualOfTypeChar:m_chr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = CHAR_MAX;
+    [self assertArgEqualOfTypeChar:m_chr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForChar2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = 'a';
-	[self assertArgEqualOfTypeChar:m_chr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = 'a';
+    [self assertArgEqualOfTypeChar:m_chr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForChar3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_chr = CHAR_MIN;
-	[self assertArgEqualOfTypeChar:m_chr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_chr = CHAR_MIN;
+    [self assertArgEqualOfTypeChar:m_chr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeChar:(char)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeChar; {
-	SEL selector = @selector(installMethodForArgTypeChar:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeChar:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned char /////////////////////////
 -(void) assertArgEqualOfTypeUChar:(unsigned char)arg;{
-	STAssertEquals(arg, m_uchr, @"Argument is mangled");
+    STAssertEquals(arg, m_uchr, @"Argument is mangled");
 }
 -(void) testArgEqualForUChar1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = UCHAR_MAX;
-	[self assertArgEqualOfTypeUChar:m_uchr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = UCHAR_MAX;
+    [self assertArgEqualOfTypeUChar:m_uchr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUChar2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = 'z';
-	[self assertArgEqualOfTypeUChar:m_uchr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = 'z';
+    [self assertArgEqualOfTypeUChar:m_uchr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUChar3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uchr = 0;
-	[self assertArgEqualOfTypeUChar:m_uchr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uchr = 0;
+    [self assertArgEqualOfTypeUChar:m_uchr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeUChar:(unsigned char)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeUChar; {
-	SEL selector = @selector(installMethodForArgTypeUChar:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeUChar:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // short /////////////////////////
 -(void) assertArgEqualOfTypeShort:(short)arg;{
-	STAssertEquals(arg, m_shrt, @"Argument is mangled");
+    STAssertEquals(arg, m_shrt, @"Argument is mangled");
 }
 -(void) testArgEqualForShort1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = SHRT_MAX;
-	[self assertArgEqualOfTypeShort:m_shrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = SHRT_MAX;
+    [self assertArgEqualOfTypeShort:m_shrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForShort2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = 333;
-	[self assertArgEqualOfTypeShort:m_shrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = 333;
+    [self assertArgEqualOfTypeShort:m_shrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForShort3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = 0;
-	[self assertArgEqualOfTypeShort:m_shrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = 0;
+    [self assertArgEqualOfTypeShort:m_shrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForShort4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = -333;
-	[self assertArgEqualOfTypeShort:m_shrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = -333;
+    [self assertArgEqualOfTypeShort:m_shrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForShort5; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_shrt = SHRT_MIN;
-	[self assertArgEqualOfTypeShort:m_shrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_shrt = SHRT_MIN;
+    [self assertArgEqualOfTypeShort:m_shrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeShort:(short)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeShort; {
-	SEL selector = @selector(installMethodForArgTypeShort:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeShort:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned short /////////////////////////
 -(void) assertArgEqualOfTypeUShort:(unsigned short)arg;{
-	STAssertEquals(arg, m_ushrt, @"Argument is mangled");
+    STAssertEquals(arg, m_ushrt, @"Argument is mangled");
 }
 -(void) testArgEqualForUShort1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = USHRT_MAX;
-	[self assertArgEqualOfTypeUShort:m_ushrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = USHRT_MAX;
+    [self assertArgEqualOfTypeUShort:m_ushrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUShort2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = 55;
-	[self assertArgEqualOfTypeUShort:m_ushrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = 55;
+    [self assertArgEqualOfTypeUShort:m_ushrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUShort3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ushrt = 0;
-	[self assertArgEqualOfTypeUShort:m_ushrt];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ushrt = 0;
+    [self assertArgEqualOfTypeUShort:m_ushrt];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeUShort:(unsigned short)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeUShort; {
-	SEL selector = @selector(installMethodForArgTypeUShort:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeUShort:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // int /////////////////////////
 -(void) assertArgEqualOfTypeInt:(int)arg;{
-	STAssertEquals(arg, m_int, @"Argument is mangled");
+    STAssertEquals(arg, m_int, @"Argument is mangled");
 }
 -(void) testArgEqualForInt1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = INT_MAX;
-	[self assertArgEqualOfTypeInt:m_int];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = INT_MAX;
+    [self assertArgEqualOfTypeInt:m_int];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForInt2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = 0;
-	[self assertArgEqualOfTypeInt:m_int];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = 0;
+    [self assertArgEqualOfTypeInt:m_int];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForInt3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = -144;
-	[self assertArgEqualOfTypeInt:m_int];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = -144;
+    [self assertArgEqualOfTypeInt:m_int];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForInt4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_int = INT_MIN;
-	[self assertArgEqualOfTypeInt:m_int];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_int = INT_MIN;
+    [self assertArgEqualOfTypeInt:m_int];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeInt:(int)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeInt; {
-	SEL selector = @selector(installMethodForArgTypeInt:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeInt:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned int /////////////////////////
 -(void) assertArgEqualOfTypeUInt:(unsigned int)arg;{
-	STAssertEquals(arg, m_uint, @"Argument is mangled");
+    STAssertEquals(arg, m_uint, @"Argument is mangled");
 }
 -(void) testArgEqualForUInt1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = UINT_MAX;
-	[self assertArgEqualOfTypeUInt:m_uint];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = UINT_MAX;
+    [self assertArgEqualOfTypeUInt:m_uint];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUInt2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = 60000;
-	[self assertArgEqualOfTypeUInt:m_uint];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = 60000;
+    [self assertArgEqualOfTypeUInt:m_uint];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForUInt3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_uint = 0;
-	[self assertArgEqualOfTypeUInt:m_uint];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_uint = 0;
+    [self assertArgEqualOfTypeUInt:m_uint];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeUInt:(unsigned int)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeUInt; {
-	SEL selector = @selector(installMethodForArgTypeUInt:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeUInt:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // long /////////////////////////
 -(void) assertArgEqualOfTypeLong:(long)arg;{
-	STAssertEquals(arg, m_long, @"Argument is mangled");
+    STAssertEquals(arg, m_long, @"Argument is mangled");
 }
 -(void) testArgEqualForLong1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = LONG_MAX;
-	[self assertArgEqualOfTypeLong:m_long];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = LONG_MAX;
+    [self assertArgEqualOfTypeLong:m_long];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLong2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = 800;
-	[self assertArgEqualOfTypeLong:m_long];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = 800;
+    [self assertArgEqualOfTypeLong:m_long];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLong3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = 0;
-	[self assertArgEqualOfTypeLong:m_long];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = 0;
+    [self assertArgEqualOfTypeLong:m_long];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLong4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_long = LONG_MIN;
-	[self assertArgEqualOfTypeLong:m_long];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_long = LONG_MIN;
+    [self assertArgEqualOfTypeLong:m_long];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeLong:(long)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeLong; {
-	SEL selector = @selector(installMethodForArgTypeLong:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeLong:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned long /////////////////////////
 -(void) assertArgEqualOfTypeULong:(unsigned long)arg;{
-	STAssertEquals(arg, m_ulong, @"Argument is mangled");
+    STAssertEquals(arg, m_ulong, @"Argument is mangled");
 }
 -(void) testArgEqualForULong1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = ULONG_MAX;
-	[self assertArgEqualOfTypeULong:m_ulong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = ULONG_MAX;
+    [self assertArgEqualOfTypeULong:m_ulong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForULong2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = 1337;
-	[self assertArgEqualOfTypeULong:m_ulong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = 1337;
+    [self assertArgEqualOfTypeULong:m_ulong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForULong3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulong = 0;
-	[self assertArgEqualOfTypeULong:m_ulong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulong = 0;
+    [self assertArgEqualOfTypeULong:m_ulong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeULong:(unsigned long)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeULong; {
-	SEL selector = @selector(installMethodForArgTypeULong:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeULong:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // long long /////////////////////////
 -(void) assertArgEqualOfTypeLongLong:(long long)arg;{
-	STAssertEquals(arg, m_longLong, @"Argument is mangled");
+    STAssertEquals(arg, m_longLong, @"Argument is mangled");
 }
 -(void) testArgEqualForLongLong1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = LONG_LONG_MAX;
-	[self assertArgEqualOfTypeLongLong:m_longLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = LONG_LONG_MAX;
+    [self assertArgEqualOfTypeLongLong:m_longLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLongLong2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = 3376;
-	[self assertArgEqualOfTypeLongLong:m_longLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = 3376;
+    [self assertArgEqualOfTypeLongLong:m_longLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLongLong3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = 0;
-	[self assertArgEqualOfTypeLongLong:m_longLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = 0;
+    [self assertArgEqualOfTypeLongLong:m_longLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLongLong4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = -872;
-	[self assertArgEqualOfTypeLongLong:m_longLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = -872;
+    [self assertArgEqualOfTypeLongLong:m_longLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForLongLong5; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_longLong = LONG_LONG_MIN;
-	[self assertArgEqualOfTypeLongLong:m_longLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_longLong = LONG_LONG_MIN;
+    [self assertArgEqualOfTypeLongLong:m_longLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeLongLong:(long long)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeLongLong; {
-	SEL selector = @selector(installMethodForArgTypeLongLong:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeLongLong:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // unsigned long long /////////////////////////
 -(void) assertArgEqualOfTypeULongLong:(unsigned long long)arg;{
-	STAssertEquals(arg, m_ulongLong, @"Argument is mangled");
+    STAssertEquals(arg, m_ulongLong, @"Argument is mangled");
 }
 -(void) testArgEqualForULongLong1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = ULONG_LONG_MAX;
-	[self assertArgEqualOfTypeULongLong:m_ulongLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = ULONG_LONG_MAX;
+    [self assertArgEqualOfTypeULongLong:m_ulongLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForULongLong2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = ULONG_LONG_MAX - 64;
-	[self assertArgEqualOfTypeULongLong:m_ulongLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = ULONG_LONG_MAX - 64;
+    [self assertArgEqualOfTypeULongLong:m_ulongLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForULongLong3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ulongLong = 0;
-	[self assertArgEqualOfTypeULongLong:m_ulongLong];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ulongLong = 0;
+    [self assertArgEqualOfTypeULongLong:m_ulongLong];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeULongLong:(unsigned long long)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeULongLong; {
-	SEL selector = @selector(installMethodForArgTypeULongLong:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeULongLong:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // float /////////////////////////
 -(void) assertArgEqualOfTypeFloat:(float)arg;{
-	STAssertEquals(arg, m_float, @"Argument is mangled");
+    STAssertEquals(arg, m_float, @"Argument is mangled");
 }
 -(void) testArgEqualForFloat1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MAX;
-	[self assertArgEqualOfTypeFloat:m_float];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MAX;
+    [self assertArgEqualOfTypeFloat:m_float];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForFloat2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MAX - 33.0f;
-	[self assertArgEqualOfTypeFloat:m_float];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MAX - 33.0f;
+    [self assertArgEqualOfTypeFloat:m_float];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForFloat3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = 0.0f;
-	[self assertArgEqualOfTypeFloat:m_float];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = 0.0f;
+    [self assertArgEqualOfTypeFloat:m_float];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForFloat4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = -123.4f;
-	[self assertArgEqualOfTypeFloat:m_float];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = -123.4f;
+    [self assertArgEqualOfTypeFloat:m_float];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForFloat5; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_float = FLT_MIN;
-	[self assertArgEqualOfTypeFloat:m_float];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_float = FLT_MIN;
+    [self assertArgEqualOfTypeFloat:m_float];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeFloat:(float)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeFloat; {
-	SEL selector = @selector(installMethodForArgTypeFloat:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeFloat:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // double /////////////////////////
 -(void) assertArgEqualOfTypeDouble:(double)arg;{
-	STAssertEquals(arg, m_double, @"Argument is mangled");
+    STAssertEquals(arg, m_double, @"Argument is mangled");
 }
 -(void) testArgEqualForDouble1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MAX;
-	[self assertArgEqualOfTypeDouble:m_double];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MAX;
+    [self assertArgEqualOfTypeDouble:m_double];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForDouble2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = 66.0;
-	[self assertArgEqualOfTypeDouble:m_double];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = 66.0;
+    [self assertArgEqualOfTypeDouble:m_double];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForDouble3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = 0.0;
-	[self assertArgEqualOfTypeDouble:m_double];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = 0.0;
+    [self assertArgEqualOfTypeDouble:m_double];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForDouble4; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MIN + 44.0;
-	[self assertArgEqualOfTypeDouble:m_double];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MIN + 44.0;
+    [self assertArgEqualOfTypeDouble:m_double];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForDouble5; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_double = DBL_MIN;
-	[self assertArgEqualOfTypeDouble:m_double];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_double = DBL_MIN;
+    [self assertArgEqualOfTypeDouble:m_double];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeDouble:(double)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeDouble; {
-	SEL selector = @selector(installMethodForArgTypeDouble:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeDouble:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // _Bool /////////////////////////
 -(void) assertArgEqualOfType_Bool:(_Bool)arg;{
-	STAssertEquals(arg, m_bool, @"Argument is mangled");
+    STAssertEquals(arg, m_bool, @"Argument is mangled");
 }
 -(void) testArgEqualFor_Bool1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_bool = true;
-	[self assertArgEqualOfType_Bool:m_bool];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_bool = true;
+    [self assertArgEqualOfType_Bool:m_bool];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualFor_Bool2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_bool = false;
-	[self assertArgEqualOfType_Bool:m_bool];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_bool = false;
+    [self assertArgEqualOfType_Bool:m_bool];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgType_Bool:(_Bool)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgType_Bool; {
-	SEL selector = @selector(installMethodForArgType_Bool:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgType_Bool:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // void* /////////////////////////
 -(void) assertArgEqualOfTypePtr:(void*)arg;{
-	STAssertEquals(arg, m_ptr, @"Argument is mangled");
+    STAssertEquals(arg, m_ptr, @"Argument is mangled");
 }
 -(void) testArgEqualForPtr1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = NULL;
-	[self assertArgEqualOfTypePtr:m_ptr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = NULL;
+    [self assertArgEqualOfTypePtr:m_ptr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForPtr2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = self;
-	[self assertArgEqualOfTypePtr:m_ptr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = self;
+    [self assertArgEqualOfTypePtr:m_ptr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForPtr3; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_ptr = (void*)0xDEADBEEF;
-	[self assertArgEqualOfTypePtr:m_ptr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_ptr = (void*)0xDEADBEEF;
+    [self assertArgEqualOfTypePtr:m_ptr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypePtr:(void*)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypePtr; {
-	SEL selector = @selector(installMethodForArgTypePtr:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypePtr:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 // char* /////////////////////////
 -(void) assertArgEqualOfTypeCharPtr:(char*)arg;{
-	STAssertEquals(arg, m_charPtr, @"Argument is mangled");
+    STAssertEquals(arg, m_charPtr, @"Argument is mangled");
 }
 -(void) testArgEqualForCharPtr1; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_charPtr = NULL;
-	[self assertArgEqualOfTypeCharPtr:m_charPtr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_charPtr = NULL;
+    [self assertArgEqualOfTypeCharPtr:m_charPtr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) testArgEqualForCharPtr2; {
-	STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-	m_charPtr = "hello";
-	[self assertArgEqualOfTypeCharPtr:m_charPtr];
-	STAssertTrue(g_hookDidRun, @"Hook should have run by now");
+    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
+    m_charPtr = "hello";
+    [self assertArgEqualOfTypeCharPtr:m_charPtr];
+    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
 -(void) installMethodForArgTypeCharPtr:(char*)arg;{
-	NSLog(@"Inside %@", NSStringFromSelector(_cmd));
+    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
 }
 -(void) testInstallAndUninstallForArgTypeCharPtr; {
-	SEL selector = @selector(installMethodForArgTypeCharPtr:);
-	[self doTestInstallAndUninstallForSelector:selector];
+    SEL selector = @selector(installMethodForArgTypeCharPtr:);
+    [self doTestInstallAndUninstallForSelector:selector];
 }
 
 
 #pragma mark Initialisation code
 //Call this from +(void)initialize
 +(void) initializeNecessaryHooks; {
-	//return methods
-	AOCInstallHook([self class], @selector(returnId), nil);
-	AOCInstallHook([self class], @selector(returnClass), nil);
-	AOCInstallHook([self class], @selector(returnSEL), nil);
-	AOCInstallHook([self class], @selector(returnChar), nil);
-	AOCInstallHook([self class], @selector(returnUChar), nil);
-	AOCInstallHook([self class], @selector(returnShort), nil);
-	AOCInstallHook([self class], @selector(returnUShort), nil);
-	AOCInstallHook([self class], @selector(returnInt), nil);
-	AOCInstallHook([self class], @selector(returnUInt), nil);
-	AOCInstallHook([self class], @selector(returnLong), nil);
-	AOCInstallHook([self class], @selector(returnULong), nil);
-	AOCInstallHook([self class], @selector(returnLongLong), nil);
-	AOCInstallHook([self class], @selector(returnULongLong), nil);
-	AOCInstallHook([self class], @selector(returnFloat), nil);
-	AOCInstallHook([self class], @selector(returnDouble), nil);
-	AOCInstallHook([self class], @selector(return_Bool), nil);
-	AOCInstallHook([self class], @selector(returnPtr), nil);
-	AOCInstallHook([self class], @selector(returnCharPtr), nil);
-	//arg methods
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeId:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeClass:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeSEL:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeChar:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeUChar:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeShort:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeUShort:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeInt:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeUInt:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeLong:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeULong:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeLongLong:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeULongLong:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeFloat:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeDouble:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfType_Bool:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypePtr:), nil);
-	AOCInstallHook([self class], @selector(assertArgEqualOfTypeCharPtr:), nil);
+    //return methods
+    AOCInstallHook([self class], @selector(returnId), nil);
+    AOCInstallHook([self class], @selector(returnClass), nil);
+    AOCInstallHook([self class], @selector(returnSEL), nil);
+    AOCInstallHook([self class], @selector(returnChar), nil);
+    AOCInstallHook([self class], @selector(returnUChar), nil);
+    AOCInstallHook([self class], @selector(returnShort), nil);
+    AOCInstallHook([self class], @selector(returnUShort), nil);
+    AOCInstallHook([self class], @selector(returnInt), nil);
+    AOCInstallHook([self class], @selector(returnUInt), nil);
+    AOCInstallHook([self class], @selector(returnLong), nil);
+    AOCInstallHook([self class], @selector(returnULong), nil);
+    AOCInstallHook([self class], @selector(returnLongLong), nil);
+    AOCInstallHook([self class], @selector(returnULongLong), nil);
+    AOCInstallHook([self class], @selector(returnFloat), nil);
+    AOCInstallHook([self class], @selector(returnDouble), nil);
+    AOCInstallHook([self class], @selector(return_Bool), nil);
+    AOCInstallHook([self class], @selector(returnPtr), nil);
+    AOCInstallHook([self class], @selector(returnCharPtr), nil);
+    //arg methods
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeId:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeClass:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeSEL:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeChar:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUChar:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeShort:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUShort:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeInt:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUInt:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeLong:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeULong:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeLongLong:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeULongLong:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeFloat:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeDouble:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfType_Bool:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypePtr:), nil);
+    AOCInstallHook([self class], @selector(assertArgEqualOfTypeCharPtr:), nil);
 }
 /************ END generated by generate_method_hooking_tests.rb ***********/
 
@@ -1319,49 +1319,49 @@ void MockHookForTesting(NSInvocation* inv)
 
 -(void) uninstallHookForSelf;
 {
-	STAssertTrue(AOCIsHookInstalled([self class], _cmd), @"Hook should be installed");
-	AOCUninstallHook([self class], _cmd);
-	STAssertFalse(AOCIsHookInstalled([self class], _cmd), @"Hook won't uninstall");
+    STAssertTrue(AOCIsHookInstalled([self class], _cmd), @"Hook should be installed");
+    AOCUninstallHook([self class], _cmd);
+    STAssertFalse(AOCIsHookInstalled([self class], _cmd), @"Hook won't uninstall");
 }
 
 -(void) testUninstallDuringHookInvocation;
 {
-	Class cls = [self class];
-	SEL s = @selector(uninstallHookForSelf);
-	
-	IMP impBefore = [cls instanceMethodForSelector:s];
-	
-	STAssertFalse(AOCIsHookInstalled(cls, s), @"Shouldn't be installed yet");
-	AOCInstallHook(cls, s, nil);
-	STAssertTrue(AOCIsHookInstalled(cls, s), @"Should be installed now");
-	[self performSelector:s];
-	STAssertFalse(AOCIsHookInstalled(cls, s), @"Invocation above should have uninstalled, but didn't");
-	
-	STAssertEquals(impBefore, [cls instanceMethodForSelector:s], @"IMP got mangled");
+    Class cls = [self class];
+    SEL s = @selector(uninstallHookForSelf);
+    
+    IMP impBefore = [cls instanceMethodForSelector:s];
+    
+    STAssertFalse(AOCIsHookInstalled(cls, s), @"Shouldn't be installed yet");
+    AOCInstallHook(cls, s, nil);
+    STAssertTrue(AOCIsHookInstalled(cls, s), @"Should be installed now");
+    [self performSelector:s];
+    STAssertFalse(AOCIsHookInstalled(cls, s), @"Invocation above should have uninstalled, but didn't");
+    
+    STAssertEquals(impBefore, [cls instanceMethodForSelector:s], @"IMP got mangled");
 }
 
 -(void) setIntIvarTo:(int)val;
 {
-	m_int = val;
+    m_int = val;
 }
 
 -(void) testSetAndGetGlobalInvocationHook;
 {
-	AOCInstallHook([self class], @selector(setIntIvarTo:), nil);
-	
-	m_int = 0;
-	
-	AOCSetGlobalInvocationHook(NULL);
-	STAssertEquals((AOCMethodInvocationHook)NULL, AOCGlobalInvocationHook(), @"not setting properly");
-	[self setIntIvarTo:17];
-	STAssertEquals(m_int, 17, @"NULL global invocation hook caused method not to run");
-	
-	AOCSetGlobalInvocationHook(MockHookForTesting);
-	STAssertEquals((AOCMethodInvocationHook)MockHookForTesting, AOCGlobalInvocationHook(), @"not setting properly");
-	g_hookDidRun = NO;
-	[self setIntIvarTo:22];
-	STAssertEquals(m_int, 22, @"method was not run");
-	STAssertTrue(g_hookDidRun, @"Hook should have run");
+    AOCInstallHook([self class], @selector(setIntIvarTo:), nil);
+    
+    m_int = 0;
+    
+    AOCSetGlobalInvocationHook(NULL);
+    STAssertEquals((AOCMethodInvocationHook)NULL, AOCGlobalInvocationHook(), @"not setting properly");
+    [self setIntIvarTo:17];
+    STAssertEquals(m_int, 17, @"NULL global invocation hook caused method not to run");
+    
+    AOCSetGlobalInvocationHook(MockHookForTesting);
+    STAssertEquals((AOCMethodInvocationHook)MockHookForTesting, AOCGlobalInvocationHook(), @"not setting properly");
+    g_hookDidRun = NO;
+    [self setIntIvarTo:22];
+    STAssertEquals(m_int, 22, @"method was not run");
+    STAssertTrue(g_hookDidRun, @"Hook should have run");
 }
 
 #pragma mark -
@@ -1369,9 +1369,9 @@ void MockHookForTesting(NSInvocation* inv)
 
 -(void) setUp;
 {
-	g_hookDidRun = NO;
-	AOCSetGlobalInvocationHook(MockHookForTesting);
-	[super setUp];
+    g_hookDidRun = NO;
+    AOCSetGlobalInvocationHook(MockHookForTesting);
+    [super setUp];
 }
 
 #pragma mark -
@@ -1379,8 +1379,8 @@ void MockHookForTesting(NSInvocation* inv)
 
 +(void) initialize;
 {
-	if (self == [TestAOCMethodHooking class]) {
-		[self initializeNecessaryHooks];
+    if (self == [TestAOCMethodHooking class]) {
+        [self initializeNecessaryHooks];
     }
 }
 

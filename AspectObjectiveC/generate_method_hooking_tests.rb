@@ -3,62 +3,62 @@
 #
 
 TYPE_INFO = {
-	"id" => { :ivar => "m_id", :method_suffix => "Id" },
-	"Class" => { :ivar => "m_class", :method_suffix => "Class" },
-	"SEL" => { :ivar => "m_sel", :method_suffix => "SEL" },
-	"char" => { :ivar => "m_chr", :method_suffix => "Char" },
-	"unsigned char" => { :ivar => "m_uchr", :method_suffix => "UChar" },
-	"short" => { :ivar => "m_shrt", :method_suffix => "Short" },
-	"unsigned short" => { :ivar => "m_ushrt", :method_suffix => "UShort" },
-	"int" => { :ivar => "m_int", :method_suffix => "Int" },
-	"unsigned int" => { :ivar => "m_uint", :method_suffix => "UInt" },
-	"long" => { :ivar => "m_long", :method_suffix => "Long" },
-	"unsigned long" => { :ivar => "m_ulong", :method_suffix => "ULong" },
-	"long long" => { :ivar => "m_longLong", :method_suffix => "LongLong" },
-	"unsigned long long" => { :ivar => "m_ulongLong", :method_suffix => "ULongLong" },
-	"float" => { :ivar => "m_float", :method_suffix => "Float" },
-	"double" => { :ivar => "m_double", :method_suffix => "Double" },
-	"_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool" },
-	"void*" => { :ivar => "m_ptr", :method_suffix => "Ptr" },
-	"char*" => { :ivar => "m_charPtr", :method_suffix => "CharPtr" },
+    "id" => { :ivar => "m_id", :method_suffix => "Id" },
+    "Class" => { :ivar => "m_class", :method_suffix => "Class" },
+    "SEL" => { :ivar => "m_sel", :method_suffix => "SEL" },
+    "char" => { :ivar => "m_chr", :method_suffix => "Char" },
+    "unsigned char" => { :ivar => "m_uchr", :method_suffix => "UChar" },
+    "short" => { :ivar => "m_shrt", :method_suffix => "Short" },
+    "unsigned short" => { :ivar => "m_ushrt", :method_suffix => "UShort" },
+    "int" => { :ivar => "m_int", :method_suffix => "Int" },
+    "unsigned int" => { :ivar => "m_uint", :method_suffix => "UInt" },
+    "long" => { :ivar => "m_long", :method_suffix => "Long" },
+    "unsigned long" => { :ivar => "m_ulong", :method_suffix => "ULong" },
+    "long long" => { :ivar => "m_longLong", :method_suffix => "LongLong" },
+    "unsigned long long" => { :ivar => "m_ulongLong", :method_suffix => "ULongLong" },
+    "float" => { :ivar => "m_float", :method_suffix => "Float" },
+    "double" => { :ivar => "m_double", :method_suffix => "Double" },
+    "_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool" },
+    "void*" => { :ivar => "m_ptr", :method_suffix => "Ptr" },
+    "char*" => { :ivar => "m_charPtr", :method_suffix => "CharPtr" },
 }
 
 TEST_VALUES = {
-	"id" => ["self", "nil", "[NSDate date]"],
-	"Class" => ["NULL", "[NSDate class]"],
-	"SEL" => ["NULL", "@selector(fake:selector:)"],
-	"char" => ["CHAR_MAX", "'a'", "CHAR_MIN"],
-	"unsigned char" => ["UCHAR_MAX", "'z'", "0"],
-	"short" => ["SHRT_MAX", "333", "0", "-333", "SHRT_MIN"],
-	"unsigned short" => ["USHRT_MAX", "55", "0"],
-	"int" => ["INT_MAX", "0", "-144", "INT_MIN"],
-	"unsigned int" => ["UINT_MAX", "60000", "0"],
-	"long" => ["LONG_MAX", "800", "0", "LONG_MIN"],
-	"unsigned long" => ["ULONG_MAX", "1337", "0"],
-	"long long" => ["LONG_LONG_MAX", "3376", "0", "-872", "LONG_LONG_MIN"],
-	"unsigned long long" => ["ULONG_LONG_MAX", "ULONG_LONG_MAX - 64", "0"],
-	"float" => ["FLT_MAX", "FLT_MAX - 33.0f", "0.0f", "-123.4f", "FLT_MIN"],
-	"double" => ["DBL_MAX", "66.0", "0.0", "DBL_MIN + 44.0", "DBL_MIN"],
-	"_Bool" => ["true", "false"],
-	"void*" => ["NULL", "self", "(void*)0xDEADBEEF"],
-	"char*" => ["NULL", "\"hello\""],
+    "id" => ["self", "nil", "[NSDate date]"],
+    "Class" => ["NULL", "[NSDate class]"],
+    "SEL" => ["NULL", "@selector(fake:selector:)"],
+    "char" => ["CHAR_MAX", "'a'", "CHAR_MIN"],
+    "unsigned char" => ["UCHAR_MAX", "'z'", "0"],
+    "short" => ["SHRT_MAX", "333", "0", "-333", "SHRT_MIN"],
+    "unsigned short" => ["USHRT_MAX", "55", "0"],
+    "int" => ["INT_MAX", "0", "-144", "INT_MIN"],
+    "unsigned int" => ["UINT_MAX", "60000", "0"],
+    "long" => ["LONG_MAX", "800", "0", "LONG_MIN"],
+    "unsigned long" => ["ULONG_MAX", "1337", "0"],
+    "long long" => ["LONG_LONG_MAX", "3376", "0", "-872", "LONG_LONG_MIN"],
+    "unsigned long long" => ["ULONG_LONG_MAX", "ULONG_LONG_MAX - 64", "0"],
+    "float" => ["FLT_MAX", "FLT_MAX - 33.0f", "0.0f", "-123.4f", "FLT_MIN"],
+    "double" => ["DBL_MAX", "66.0", "0.0", "DBL_MIN + 44.0", "DBL_MIN"],
+    "_Bool" => ["true", "false"],
+    "void*" => ["NULL", "self", "(void*)0xDEADBEEF"],
+    "char*" => ["NULL", "\"hello\""],
 }
 
 ALLOWED_RETURN_TYPES = ["id", "Class", "SEL", "char", "unsigned char", "short",
-						"unsigned short", "int", "unsigned int", "long", 
-						"unsigned long", "long long", "unsigned long long",
-						"float", "double", "_Bool", "void*", "char*"]
-						
+                        "unsigned short", "int", "unsigned int", "long", 
+                        "unsigned long", "long long", "unsigned long long",
+                        "float", "double", "_Bool", "void*", "char*"]
+                        
 ALLOWED_ARG_TYPES = ALLOWED_RETURN_TYPES;
-			
-# Asserting that above data is corret ##############			
+            
+# Asserting that above data is corret ##############            
 
 def AssertTypesExistInHash(typeList, theHash)
-	typeList.each do |type|
-		if theHash[type].nil?
-			abort("Type not found: #{type}")
-		end
-	end
+    typeList.each do |type|
+        if theHash[type].nil?
+            abort("Type not found: #{type}")
+        end
+    end
 end
 
 AssertTypesExistInHash(ALLOWED_RETURN_TYPES, TYPE_INFO);
@@ -70,64 +70,64 @@ AssertTypesExistInHash(ALLOWED_ARG_TYPES, TEST_VALUES);
 # Helper functions ####################
 
 def PrintReturnMethod(returnType, suffix2)
-	ivar = TYPE_INFO[returnType][:ivar]
-	suffix = TYPE_INFO[returnType][:method_suffix]
-	puts "-(#{returnType}) return#{suffix}#{suffix2}; {"
-	puts "	NSLog(@\"inside %@\", NSStringFromSelector(_cmd));"
-	puts "	return #{ivar};"
-	puts "}"
+    ivar = TYPE_INFO[returnType][:ivar]
+    suffix = TYPE_INFO[returnType][:method_suffix]
+    puts "-(#{returnType}) return#{suffix}#{suffix2}; {"
+    puts "    NSLog(@\"inside %@\", NSStringFromSelector(_cmd));"
+    puts "    return #{ivar};"
+    puts "}"
 end
 
 def PrintReturnMethodTests(returnType)
-	ivar = TYPE_INFO[returnType][:ivar]
-	suffix = TYPE_INFO[returnType][:method_suffix]
-	TEST_VALUES[returnType].each_index do |idx|
-		testValue = TEST_VALUES[returnType][idx];
-		puts "-(void) testReturn#{suffix}#{idx+1};{"
-		puts "	STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
-		puts "	#{ivar} = #{testValue};"
-		puts "	STAssertEquals([self return#{suffix}], #{ivar}, @\"Return value is mangled\");"
-		puts "	STAssertTrue(g_hookDidRun, @\"Hook should have run by now\");"
-		puts "}"
-	end
+    ivar = TYPE_INFO[returnType][:ivar]
+    suffix = TYPE_INFO[returnType][:method_suffix]
+    TEST_VALUES[returnType].each_index do |idx|
+        testValue = TEST_VALUES[returnType][idx];
+        puts "-(void) testReturn#{suffix}#{idx+1};{"
+        puts "    STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
+        puts "    #{ivar} = #{testValue};"
+        puts "    STAssertEquals([self return#{suffix}], #{ivar}, @\"Return value is mangled\");"
+        puts "    STAssertTrue(g_hookDidRun, @\"Hook should have run by now\");"
+        puts "}"
+    end
 end
 
 def PrintArgMethod(argType)
-	ivar = TYPE_INFO[argType][:ivar]
-	suffix = TYPE_INFO[argType][:method_suffix]
-	puts "-(void) assertArgEqualOfType#{suffix}:(#{argType})arg;{"
-	puts "	STAssertEquals(arg, #{ivar}, @\"Argument is mangled\");"
-	puts "}"
+    ivar = TYPE_INFO[argType][:ivar]
+    suffix = TYPE_INFO[argType][:method_suffix]
+    puts "-(void) assertArgEqualOfType#{suffix}:(#{argType})arg;{"
+    puts "    STAssertEquals(arg, #{ivar}, @\"Argument is mangled\");"
+    puts "}"
 end
 
 def PrintArgMethodTests(argType)
-	ivar = TYPE_INFO[argType][:ivar]
-	suffix = TYPE_INFO[argType][:method_suffix]
-	TEST_VALUES[argType].each_index do |idx|
-		testValue = TEST_VALUES[argType][idx];
-		puts "-(void) testArgEqualFor#{suffix}#{idx+1}; {"
-		puts "	STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
-		puts "	#{ivar} = #{testValue};"
-		puts "	[self assertArgEqualOfType#{suffix}:#{ivar}];"
-		puts "	STAssertTrue(g_hookDidRun, @\"Hook should have run by now\");"
-		puts "}"
-	end
+    ivar = TYPE_INFO[argType][:ivar]
+    suffix = TYPE_INFO[argType][:method_suffix]
+    TEST_VALUES[argType].each_index do |idx|
+        testValue = TEST_VALUES[argType][idx];
+        puts "-(void) testArgEqualFor#{suffix}#{idx+1}; {"
+        puts "    STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
+        puts "    #{ivar} = #{testValue};"
+        puts "    [self assertArgEqualOfType#{suffix}:#{ivar}];"
+        puts "    STAssertTrue(g_hookDidRun, @\"Hook should have run by now\");"
+        puts "}"
+    end
 end
 
 def PrintArgInstallMethod(argType)
-	suffix = TYPE_INFO[argType][:method_suffix]
-	ivar = TYPE_INFO[argType][:ivar]
-	puts "-(void) installMethodForArgType#{suffix}:(#{argType})arg;{"
-	puts "	NSLog(@\"Inside %@\", NSStringFromSelector(_cmd));"
-	puts "}"
+    suffix = TYPE_INFO[argType][:method_suffix]
+    ivar = TYPE_INFO[argType][:ivar]
+    puts "-(void) installMethodForArgType#{suffix}:(#{argType})arg;{"
+    puts "    NSLog(@\"Inside %@\", NSStringFromSelector(_cmd));"
+    puts "}"
 end
 
 def PrintInstallMethodTest(type, returnOrArg, selector)
-	suffix = TYPE_INFO[type][:method_suffix]
-	puts "-(void) testInstallAndUninstallFor#{returnOrArg}Type#{suffix}; {"
-	puts "	SEL selector = @selector(#{selector});"
-	puts "	[self doTestInstallAndUninstallForSelector:selector];"
-	puts "}"
+    suffix = TYPE_INFO[type][:method_suffix]
+    puts "-(void) testInstallAndUninstallFor#{returnOrArg}Type#{suffix}; {"
+    puts "    SEL selector = @selector(#{selector});"
+    puts "    [self doTestInstallAndUninstallForSelector:selector];"
+    puts "}"
 end
 
 
@@ -141,39 +141,39 @@ puts " ***************************************/"
 puts "#pragma mark Return value tests"
 
 ALLOWED_RETURN_TYPES.each do |returnType|
-	puts "// #{returnType} /////////////////////////"
-	PrintReturnMethod(returnType, "")
-	PrintReturnMethodTests(returnType)
-	PrintReturnMethod(returnType, "ForInstall")
-	suffix = TYPE_INFO[returnType][:method_suffix]
-	PrintInstallMethodTest(returnType, "Return", "return#{suffix}ForInstall")
-	puts "\n\n"
+    puts "// #{returnType} /////////////////////////"
+    PrintReturnMethod(returnType, "")
+    PrintReturnMethodTests(returnType)
+    PrintReturnMethod(returnType, "ForInstall")
+    suffix = TYPE_INFO[returnType][:method_suffix]
+    PrintInstallMethodTest(returnType, "Return", "return#{suffix}ForInstall")
+    puts "\n\n"
 end
 
 puts "#pragma mark Argument value tests"
 
 ALLOWED_ARG_TYPES.each do |argType|
-	puts "// #{argType} /////////////////////////"
-	PrintArgMethod(argType)
-	PrintArgMethodTests(argType)
-	PrintArgInstallMethod(argType)
-	suffix = TYPE_INFO[argType][:method_suffix]
-	PrintInstallMethodTest(argType, "Arg", "installMethodForArgType#{suffix}:")
-	puts "\n\n"
+    puts "// #{argType} /////////////////////////"
+    PrintArgMethod(argType)
+    PrintArgMethodTests(argType)
+    PrintArgInstallMethod(argType)
+    suffix = TYPE_INFO[argType][:method_suffix]
+    PrintInstallMethodTest(argType, "Arg", "installMethodForArgType#{suffix}:")
+    puts "\n\n"
 end
 
 puts "#pragma mark Initialisation code"
 puts "//Call this from +(void)initialize"
 puts "+(void) initializeNecessaryHooks; {"
-puts "	//return methods"
+puts "    //return methods"
 ALLOWED_RETURN_TYPES.each do |returnType|
-	suffix = TYPE_INFO[returnType][:method_suffix]
-	puts "	AOCInstallHook([self class], @selector(return#{suffix}), nil);"
+    suffix = TYPE_INFO[returnType][:method_suffix]
+    puts "    AOCInstallHook([self class], @selector(return#{suffix}), nil);"
 end
-puts "	//arg methods"
+puts "    //arg methods"
 ALLOWED_ARG_TYPES.each do |argType|
-	suffix = TYPE_INFO[argType][:method_suffix]
-	puts "	AOCInstallHook([self class], @selector(assertArgEqualOfType#{suffix}:), nil);"
+    suffix = TYPE_INFO[argType][:method_suffix]
+    puts "    AOCInstallHook([self class], @selector(assertArgEqualOfType#{suffix}:), nil);"
 end
 puts "}"
 
