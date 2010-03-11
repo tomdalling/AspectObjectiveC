@@ -6,6 +6,7 @@
 static AOCMethodInvocationHook g_globalInvocationHook = NULL;
 
 static NSString* const _AOC_BACKUP_SEL_PREFIX = @"__AOC_actual_imp_of_";
+static IMP const _AOC_INVALID_IMP = (IMP)((void*)0xDEADBEEF);
 
 #pragma mark -
 #pragma mark Private functions declaration
@@ -16,6 +17,10 @@ IMP _AOCHookImpForMethodSig(NSMethodSignature* methodSig);
 void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv);
 NSInvocation* _AOCInvocationFromVargs(id self, SEL _cmd, va_list vl);
 void _AOCSetInvocationArgFromVargs(NSInvocation* inv, NSMethodSignature* ms, va_list vl, int argIndex);
+BOOL _AOCCreateOrRevalidateBackupMethod(Class cls, SEL selector, NSError** outError);
+BOOL _AOCDoesValidBackupMethodExist(Class cls, SEL selector);
+void _AOCInvalidateBackupMethod(Class cls, SEL selector);
+void _AOCSetImpFromBackupMethod(Class cls, SEL selector);
 
 #pragma mark -
 #pragma mark Hook IMPs for supported return types
@@ -118,17 +123,23 @@ void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv)
 	Method mthd = class_getInstanceMethod([self class], _cmd);
 	Method backupMthd = class_getInstanceMethod([self class], backupSel);
 	NSCAssert(mthd && backupMthd, @"");
-	IMP realImp = method_getImplementation(backupMthd);
+	IMP backupImp = method_getImplementation(backupMthd);
 	IMP hookImp = method_getImplementation(mthd);
 	
-	//TODO: handle hook uninstall during invocation
-	method_setImplementation(mthd, realImp);
+	//put the original IMP back in before invocation
+	method_setImplementation(mthd, backupImp);
+
 	if(g_globalInvocationHook == NULL){
 		[inv invoke];
 	} else {
 		g_globalInvocationHook(inv);
 	}
-	method_setImplementation(mthd, hookImp);
+
+	//see if hook was uninstalled during invocation.
+	//if so leave the original IMP in, otherwise put the hook IMP back in
+	if(AOCIsHookInstalled([self class], _cmd)){
+		method_setImplementation(mthd, hookImp);
+	}
 }
 
 NSInvocation* _AOCInvocationFromVargs(id self, SEL _cmd, va_list vl)
@@ -182,6 +193,58 @@ void _AOCSetInvocationArgFromVargs(NSInvocation* inv, NSMethodSignature* ms, va_
 	}
 }
 
+BOOL _AOCCreateOrRevalidateBackupMethod(Class cls, SEL selector, NSError** outError)
+{
+	Method realMethod = class_getInstanceMethod(cls, selector);
+	NSCAssert(realMethod != NULL, @"");
+	
+	SEL backupSel = _AOCBackupSelForSel(selector);
+	Method backupMethod = class_getInstanceMethod(cls, backupSel);
+	if(backupMethod == nil){
+		class_addMethod(cls, backupSel, method_getImplementation(realMethod), method_getTypeEncoding(realMethod));
+		return YES;
+	}
+	
+	NSCAssert(strcmp(method_getTypeEncoding(realMethod), method_getTypeEncoding(backupMethod)) == 0, @"");
+	if(method_getImplementation(backupMethod) == _AOC_INVALID_IMP){
+		method_setImplementation(backupMethod, method_getImplementation(realMethod));
+		return YES;
+	}
+	
+	AOCSetError(outError, NSLocalizedString(@"Can't create backup method", @""), NSLocalizedString(@"Backup method already exists", @""));
+	return NO;
+}
+
+BOOL _AOCDoesValidBackupMethodExist(Class cls, SEL selector)
+{
+	SEL backupSel = _AOCBackupSelForSel(selector);
+	Method backupMethod = class_getInstanceMethod(cls, backupSel);
+	if(backupMethod == NULL)
+		return NO;
+	
+	if(method_getImplementation(backupMethod) == _AOC_INVALID_IMP)
+		return NO;
+	
+	return YES;
+}
+
+void _AOCInvalidateBackupMethod(Class cls, SEL selector)
+{
+	SEL backupSel = _AOCBackupSelForSel(selector);
+	Method backupMethod = class_getInstanceMethod(cls, backupSel);
+	if(backupMethod == NULL)
+		return;
+	
+	method_setImplementation(backupMethod, _AOC_INVALID_IMP);
+}
+
+void _AOCSetImpFromBackupMethod(Class cls, SEL selector)
+{
+	Method realMethod = class_getInstanceMethod(cls, selector);
+	Method backupMethod = class_getInstanceMethod(cls, _AOCBackupSelForSel(selector));
+	NSCAssert(backupMethod != NULL && realMethod != NULL, @"");
+	method_exchangeImplementations(realMethod, backupMethod);
+}
 
 #pragma mark -
 #pragma mark Public functions
@@ -207,12 +270,8 @@ BOOL AOCInstallHook(Class cls, SEL selector, NSError** outError)
 	if(!_AOCCanInstallHookForMethodSig(methodSig, outError))
 		return NO;
 	
-	SEL backupSel = _AOCBackupSelForSel(selector);
-	BOOL didBackup = class_addMethod(cls, backupSel, method_getImplementation(mthd), method_getTypeEncoding(mthd));
-	if(!didBackup){
-		AOCSetError(outError, NSLocalizedString(@"Can't install hook", @""), NSLocalizedString(@"Failed to create backup method.", @""));
+	if(!_AOCCreateOrRevalidateBackupMethod(cls, selector, outError))
 		return NO;
-	}
 	
 	IMP hookImp = _AOCHookImpForMethodSig(methodSig);
 	NSCAssert(hookImp != NULL, @"_AOCCanInstallHookForMethodSig passed, but _AOCHookImpForMethodSig returned NULL");
@@ -229,12 +288,8 @@ void AOCUninstallHook(Class cls, SEL selector)
 	if(!AOCIsHookInstalled(cls, selector))
 		return;
 	
-	SEL backupSel = _AOCBackupSelForSel(selector);
-	Method mthd = class_getInstanceMethod(cls, selector);
-	Method backupMthd = class_getInstanceMethod(cls, backupSel);
-	
-	method_exchangeImplementations(mthd, backupMthd);
-	//TODO: find a way to remove backupMthd or mark it as deleted
+	_AOCSetImpFromBackupMethod(cls, selector);
+	_AOCInvalidateBackupMethod(cls, selector);
 }
 
 BOOL AOCIsHookInstalled(Class cls, SEL selector)
@@ -242,8 +297,7 @@ BOOL AOCIsHookInstalled(Class cls, SEL selector)
 	if(cls == NULL || selector == NULL)
 		return NO;
 	
-	SEL backupSel = _AOCBackupSelForSel(selector);
-	return (class_getInstanceMethod(cls, backupSel) != NULL);
+	return _AOCDoesValidBackupMethodExist(cls, selector);
 }
 
 AOCMethodInvocationHook AOCGlobalInvocationHook()

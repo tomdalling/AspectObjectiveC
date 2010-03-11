@@ -145,6 +145,9 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
 	
 	NSMutableArray* adviceList = [self _adviceListForSelector:selector ofClass:cls createIfNotFound:NO];
 	[adviceList removeObjectIdenticalTo:advice];
+	
+	if([adviceList count] <= 0)
+		AOCUninstallHook(cls, selector);
 }
 
 #pragma mark NSObject
