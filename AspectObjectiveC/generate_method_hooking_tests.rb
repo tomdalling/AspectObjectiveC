@@ -125,20 +125,8 @@ end
 def PrintInstallMethodTest(type, returnOrArg, selector)
 	suffix = TYPE_INFO[type][:method_suffix]
 	puts "-(void) testInstallAndUninstallFor#{returnOrArg}Type#{suffix}; {"
-	puts "	Class cls = [self class];"
 	puts "	SEL selector = @selector(#{selector});"
-	puts ""
-	puts "	STAssertFalse(AOCIsHookInstalled(cls, selector), @\"Hook should not be installed yet\");"
-	puts "	BOOL didInstall = AOCInstallHook(cls, selector, nil);"
-	puts "	STAssertTrue(didInstall, @\"Hook failed to install\");"
-	puts "	STAssertTrue(AOCIsHookInstalled(cls, selector), @\"AOCIsHookInstalled failed to recognise installed hook\");"
-	puts ""
-	puts "	STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
-	puts "	[self performSelector:selector];"
-	puts "	STAssertTrue(g_hookDidRun, @\"Hook should have run by now\");"
-	puts ""
-	puts "	AOCUninstallHook(cls, selector);"
-	puts "	STAssertFalse(AOCIsHookInstalled(cls, selector), @\"Hook hasn't bee uninstalled properly\");"
+	puts "	[self doTestInstallAndUninstallForSelector:selector];"
 	puts "}"
 end
 
