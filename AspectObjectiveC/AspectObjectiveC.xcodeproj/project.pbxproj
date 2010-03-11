@@ -23,6 +23,7 @@
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
 		E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCMethodHooking.h; sourceTree = "<group>"; };
 		E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCMethodHooking.m; sourceTree = "<group>"; };
+		E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = generate_method_hooking_tests.rb; sourceTree = "<group>"; };
 		E2905BAE114793AA00D69FE7 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		E2905BB4114793D400D69FE7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -83,6 +84,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */,
 				E2BA925C114860FE0068257E /* README */,
+				E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */,
 			);
 			name = AspectObjectiveC;
 			sourceTree = "<group>";
