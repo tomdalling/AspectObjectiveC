@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */; };
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
 		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
 		E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E2BA925D114860FE0068257E /* README in Resources */ = {isa = PBXBuildFile; fileRef = E2BA925C114860FE0068257E /* README */; };
-		E2BA926D114864740068257E /* IntegrityOfReturnAndArgsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA926C114864740068257E /* IntegrityOfReturnAndArgsTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +21,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
+		E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCMethodHooking.h; sourceTree = "<group>"; };
+		E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCMethodHooking.m; sourceTree = "<group>"; };
 		E2905BAE114793AA00D69FE7 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		E2905BB4114793D400D69FE7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -31,8 +33,6 @@
 		E2BA921811484FC00068257E /* AOCError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCError.h; sourceTree = "<group>"; };
 		E2BA921911484FC00068257E /* AOCError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCError.m; sourceTree = "<group>"; };
 		E2BA925C114860FE0068257E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = ../README; sourceTree = SOURCE_ROOT; };
-		E2BA926B114864740068257E /* IntegrityOfReturnAndArgsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntegrityOfReturnAndArgsTest.h; sourceTree = "<group>"; };
-		E2BA926C114864740068257E /* IntegrityOfReturnAndArgsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntegrityOfReturnAndArgsTest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +113,8 @@
 		E2905BB91147942200D69FE7 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				E2BA926B114864740068257E /* IntegrityOfReturnAndArgsTest.h */,
-				E2BA926C114864740068257E /* IntegrityOfReturnAndArgsTest.m */,
+				E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */,
+				E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -192,7 +192,7 @@
 				E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */,
 				E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */,
 				E2BA921A11484FC00068257E /* AOCError.m in Sources */,
-				E2BA926D114864740068257E /* IntegrityOfReturnAndArgsTest.m in Sources */,
+				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

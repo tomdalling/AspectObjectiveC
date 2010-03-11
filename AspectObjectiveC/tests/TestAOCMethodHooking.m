@@ -1,17 +1,20 @@
 
-#import "IntegrityOfReturnAndArgsTest.h"
+#import "TestAOCMethodHooking.h"
 #import "AOCMethodHooking.h"
 
 static BOOL g_hookDidRun = NO;
 
-void DummyHookForTesting(NSInvocation* inv)
+void MockHookForTesting(NSInvocation* inv)
 {
 	g_hookDidRun = YES;
 	[inv invoke];
 }
 
 
-@implementation IntegrityOfReturnAndArgsTest
+@implementation TestAOCMethodHooking
+
+#pragma mark -
+#pragma mark Tests to see if return value or arguments are mangled after installing a hook
 
 #define MAKE_RETURN_METHOD(TYPE,IVAR,SUFFIX) \
 	-(TYPE) return ## SUFFIX; \
@@ -22,7 +25,7 @@ void DummyHookForTesting(NSInvocation* inv)
 #define MAKE_ARG_METHOD(TYPE, IVAR, SUFFIX) \
 	-(void) assertArgEqualFor ## SUFFIX:(TYPE)arg; \
 	{ \
-		STAssertEquals(arg, (IVAR), @"Argument is mangled in %@", NSStringFromSelector(_cmd));\
+		STAssertEquals(arg, (IVAR), @"Argument is mangled");\
 	}
 
 #define MAKE_RETURN_AND_ARG_METHOD(TYPE, IVAR, SUFFIX) \
@@ -62,7 +65,7 @@ MAKE_RETURN_AND_ARG_METHOD(char*, m_charPtr, CharPtr)
 	{ \
 		STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet"); \
 		(IVAR) = (VALUE); \
-		STAssertEquals([self return ## SUFFIX], (IVAR), @"Return value is mangled from %@", NSStringFromSelector(_cmd)); \
+		STAssertEquals([self return ## SUFFIX], (IVAR), @"Return value is mangled"); \
 		STAssertTrue(g_hookDidRun, @"Hook should have run by now"); \
 	}
 
@@ -146,15 +149,97 @@ MAKE_RETURN_AND_ARG_TEST(m_ptr, Ptr, C, (void*)0xDEADBEEF)
 MAKE_RETURN_AND_ARG_TEST(m_charPtr, CharPtr, A, NULL)
 MAKE_RETURN_AND_ARG_TEST(m_charPtr, CharPtr, B, "hello")
 
+#pragma mark -
+#pragma mark Test that hook installation and uninstallation works
+
+#define MAKE_RETURN_METHOD_FOR_INSTALL(TYPE,IVAR,SUFFIX) \
+	-(TYPE) return ## SUFFIX ## ForInstall; { return (IVAR); }
+
+#define MAKE_ARG_METHOD_FOR_INSTALL(TYPE, IVAR, SUFFIX) \
+	-(void) forInstallArg ## SUFFIX:(TYPE)arg; {}
+
+#define MAKE_RETURN_AND_ARG_METHOD_FOR_INSTALL(TYPE, IVAR, SUFFIX) \
+	MAKE_RETURN_METHOD_FOR_INSTALL(TYPE, IVAR, SUFFIX) \
+	MAKE_ARG_METHOD_FOR_INSTALL(TYPE, IVAR, SUFFIX)
+
+#define MAKE_ARG_INSTALL_AND_UNINSTALL_TEST(SUFFIX) \
+	-(void) testInstallAndUninstallForArg ## SUFFIX; \
+	{ \
+		Class cls = [self class];\
+		SEL selector = @selector(forInstallArg ## SUFFIX:);\
+		STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook should not be installed yet");\
+		BOOL didInstall = AOCInstallHook(cls, selector, nil);\
+		STAssertTrue(didInstall, @"Hook failed to install"); \
+		STAssertTrue(AOCIsHookInstalled(cls, selector), @"AOCIsHookInstalled failed to recognise installed hook");\
+		\
+		STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet"); \
+		[self performSelector:@selector(selector)];\
+		STAssertTrue(g_hookDidRun, @"Hook should have run by now"); \
+		\
+		AOCUninstallHook(cls, selector);\
+		STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook hasn't bee uninstalled properly");\
+	}
+
+#define MAKE_RETURN_INSTALL_AND_UNINSTALL_TEST(SUFFIX) \
+	-(void) testInstallAndUninstallForReturn ## SUFFIX; \
+	{ \
+		Class cls = [self class];\
+		SEL selector = @selector(return ## SUFFIX ## ForInstall);\
+		STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook should not be installed yet");\
+		BOOL didInstall = AOCInstallHook(cls, selector, nil);\
+		STAssertTrue(didInstall, @"Hook failed to install"); \
+		STAssertTrue(AOCIsHookInstalled(cls, selector), @"AOCIsHookInstalled failed to recognise installed hook");\
+		\
+		STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet"); \
+		[self performSelector:@selector(selector)];\
+		STAssertTrue(g_hookDidRun, @"Hook should have run by now"); \
+		\
+		AOCUninstallHook(cls, selector);\
+		STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook hasn't bee uninstalled properly");\
+	}
+
+#define MAKE_INSTALL_AND_UNINSTALL_TESTS(SUFFIX) \
+	MAKE_ARG_INSTALL_AND_UNINSTALL_TEST(SUFFIX) \
+	MAKE_RETURN_INSTALL_AND_UNINSTALL_TEST(SUFFIX)
+
+#define MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(TYPE, IVAR, SUFFIX)\
+	MAKE_RETURN_AND_ARG_METHOD_FOR_INSTALL(TYPE, IVAR, SUFFIX)\
+	MAKE_INSTALL_AND_UNINSTALL_TESTS(SUFFIX)
+
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(id, m_id, Id)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(Class, m_class, Class)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(SEL, m_sel, SEL)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(char, m_chr, Char)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(unsigned char, m_uchr, UChar)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(short, m_shrt, Short)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(unsigned short, m_ushrt, UShort)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(int, m_int, Int)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(unsigned int, m_uint, UInt)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(long, m_long, Long)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(unsigned long, m_ulong, ULong)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(long long, m_longLong, LongLong)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(unsigned long long, m_ulongLong, ULongLong)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(float, m_float, Float)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(double, m_double, Double)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(_Bool, m_bool, _Bool)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(void*, m_ptr, Ptr)
+MAKE_METHODS_AND_TESTS_FOR_INSTALL_AND_UNINSTALL(char*, m_charPtr, CharPtr)
+
+#pragma mark -
+#pragma mark SenTestCase
+
 -(void) setUp;
 {
 	g_hookDidRun = NO;
-	AOCSetGlobalInvocationHook(DummyHookForTesting);
+	AOCSetGlobalInvocationHook(MockHookForTesting);
 }
+
+#pragma mark -
+#pragma mark NSObject
 
 +(void) initialize;
 {
-	if (self == [IntegrityOfReturnAndArgsTest class]) {
+	if (self == [TestAOCMethodHooking class]) {
 #		define INSTALL_HOOK_FOR_RETURN_AND_ARG_METHODS(SUFFIX) \
 			AOCInstallHook([self class], @selector(return ## SUFFIX), nil); \
 			AOCInstallHook([self class], @selector(assertArgEqualFor ## SUFFIX:), nil);

@@ -2,7 +2,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 
-@interface IntegrityOfReturnAndArgsTest : SenTestCase {
+@interface TestAOCMethodHooking : SenTestCase {
 	id m_id;
 	Class m_class;
 	SEL m_sel;
