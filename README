@@ -1,1 +1,8 @@
-This is still pre alpha, so don't try and use it.
+This is still pre alpha, so it's highly unstable. It is however
+usable at the moment if you want to try it out. Build the framework
+target then install it as a private framework in another app to take
+it for a spin. 
+
+I've only tested it with gcc on i386, so you may find that it doesn't
+work with anything else at the moment. If you've got a different setup,
+run the unit tests. If the tests pass then you're probably ok.
