@@ -11,6 +11,7 @@
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
 		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
 		E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
+		E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA572C114904520080CA2D /* TestAOCAspectManager.m */; };
 		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E2BA925D114860FE0068257E /* README in Resources */ = {isa = PBXBuildFile; fileRef = E2BA925C114860FE0068257E /* README */; };
 /* End PBXBuildFile section */
@@ -31,6 +32,8 @@
 		E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAspectManager.m; sourceTree = "<group>"; };
 		E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCMethodHooking.h; sourceTree = "<group>"; };
 		E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCMethodHooking.m; sourceTree = "<group>"; };
+		E2BA572B114904520080CA2D /* TestAOCAspectManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCAspectManager.h; sourceTree = "<group>"; };
+		E2BA572C114904520080CA2D /* TestAOCAspectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCAspectManager.m; sourceTree = "<group>"; };
 		E2BA921811484FC00068257E /* AOCError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCError.h; sourceTree = "<group>"; };
 		E2BA921911484FC00068257E /* AOCError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCError.m; sourceTree = "<group>"; };
 		E2BA925C114860FE0068257E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README; path = ../README; sourceTree = SOURCE_ROOT; };
@@ -117,6 +120,8 @@
 			children = (
 				E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */,
 				E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */,
+				E2BA572B114904520080CA2D /* TestAOCAspectManager.h */,
+				E2BA572C114904520080CA2D /* TestAOCAspectManager.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -195,6 +200,7 @@
 				E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */,
 				E2BA921A11484FC00068257E /* AOCError.m in Sources */,
 				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
+				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

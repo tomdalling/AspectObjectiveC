@@ -62,15 +62,15 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(NSInvocation*)inv;
 {	
+	BOOL didRunAdviceInstead = NO;
 	for(NSObject<AOCAdvice>* advice in adviceList){
 		if([advice respondsToSelector:@selector(adviceInsteadOf:)]){
-			if([advice adviceInsteadOf:inv]){
-				return YES; //advice has replaced invocation
-			}
+			[advice adviceInsteadOf:inv];
+			didRunAdviceInstead = YES;
 		}
 	}
 	
-	return NO; //advice did not replace invocation
+	return didRunAdviceInstead;
 }
 
 -(void) _runAdvice:(NSArray*)adviceList afterInvocation:(NSInvocation*)inv;
@@ -117,6 +117,7 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
 {
 	if(g_sharedAspectManager == nil){
 		g_sharedAspectManager = [AOCAspectManager new];
+		AOCSetGlobalInvocationHook(AOCSharedAspectManagerHook);
 	}
 	return g_sharedAspectManager;
 }
@@ -132,9 +133,13 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
 		return NO;
 	
 	NSMutableArray* adviceList = [self _adviceListForSelector:selector ofClass:cls createIfNotFound:YES];
-	[adviceList addObject:advice];
-	
-	return YES;
+	if([adviceList indexOfObjectIdenticalTo:advice] == NSNotFound){
+		[adviceList addObject:advice];
+		return YES;
+	} else {
+		AOCSetError(outError, NSLocalizedString(@"Can't add advice", @""), NSLocalizedString(@"The same advice object has already been added.", @""));
+		return NO;
+	}
 }
 
 -(void) removeAdvice:(NSObject<AOCAdvice>*)advice forSelector:(SEL)selector ofClass:(Class)cls;
@@ -151,11 +156,6 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
 }
 
 #pragma mark NSObject
-
-+(void) initialize;
-{
-	AOCSetGlobalInvocationHook(AOCSharedAspectManagerHook);
-}
 
 -(id) init;
 {

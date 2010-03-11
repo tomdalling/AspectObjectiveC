@@ -5,6 +5,6 @@
 @protocol AOCAdvice
 @optional
 -(void) adviceBefore:(NSInvocation*)inv;
--(BOOL) adviceInsteadOf:(NSInvocation*)inv;
+-(void) adviceInsteadOf:(NSInvocation*)inv;
 -(void) adviceAfter:(NSInvocation*)inv;
 @end
