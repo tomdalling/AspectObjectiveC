@@ -22,10 +22,10 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(NSMutableDictionary*) _adviceBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 {
-    NSMutableDictionary* adviceBySel = [m_adviceByClass objectForKey:NSStringFromClass(cls)];
+    NSMutableDictionary* adviceBySel = [_adviceByClass objectForKey:NSStringFromClass(cls)];
     if(adviceBySel == nil && createIfNotFound){
         adviceBySel = [NSMutableDictionary dictionary];
-        [m_adviceByClass setObject:adviceBySel forKey:NSStringFromClass(cls)];
+        [_adviceByClass setObject:adviceBySel forKey:NSStringFromClass(cls)];
     }
     return adviceBySel;
 }
@@ -62,15 +62,16 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(NSInvocation*)inv;
 {    
-    BOOL didRunAdviceInstead = NO;
+    BOOL invocationWasReplaced = NO;
     for(NSObject<AOCAdvice>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceInsteadOf:)]){
-            [advice adviceInsteadOf:inv];
-            didRunAdviceInstead = YES;
+            if([advice adviceInsteadOf:inv]){
+                invocationWasReplaced = YES;
+            }
         }
     }
     
-    return didRunAdviceInstead;
+    return invocationWasReplaced;
 }
 
 -(void) _runAdvice:(NSArray*)adviceList afterInvocation:(NSInvocation*)inv;
@@ -163,14 +164,14 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
     if(self == nil)
         return nil;
     
-    m_adviceByClass = [NSMutableDictionary new];
+    _adviceByClass = [NSMutableDictionary new];
     
     return self;
 }
 
 -(void) dealloc;
 {
-    [m_adviceByClass release]; m_adviceByClass = nil;
+    [_adviceByClass release]; _adviceByClass = nil;
     [super dealloc];
 }
 

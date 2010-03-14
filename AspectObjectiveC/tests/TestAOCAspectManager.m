@@ -43,11 +43,12 @@ static int g_lastReturnVal = 0;
 @interface LogAndReturn40Instead : NSObject<AOCAdvice>
 @end
 @implementation LogAndReturn40Instead
--(void) adviceInsteadOf:(NSInvocation*)inv;
+-(BOOL) adviceInsteadOf:(NSInvocation*)inv;
 {
     NSLog(@"Hey, I've got a 40!");
     int myforty = 40;
     [inv setReturnValue:&myforty];
+    return YES;
 }
 @end
 

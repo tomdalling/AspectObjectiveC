@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E247931E114C999000626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
+		E247931F114C999000626905 /* AOCAutoAdvice.h in Headers */ = {isa = PBXBuildFile; fileRef = E247931C114C999000626905 /* AOCAutoAdvice.h */; };
+		E2479320114C999000626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
+		E2479360114C9D7700626905 /* AOCDemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E247935F114C9D7700626905 /* AOCDemoAppDelegate.m */; };
+		E2479363114C9DB000626905 /* DemoApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2479362114C9DB000626905 /* DemoApp.xib */; };
+		E2479368114C9E2400626905 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2479367114C9E2400626905 /* main.m */; };
+		E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
+		E24793AC114CA4DC00626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
+		E24793AD114CA4DD00626905 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
+		E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */; };
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
 		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
@@ -39,6 +49,14 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
+		E247931C114C999000626905 /* AOCAutoAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAutoAdvice.h; sourceTree = "<group>"; };
+		E247931D114C999000626905 /* AOCAutoAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAutoAdvice.m; sourceTree = "<group>"; };
+		E247932D114C9CC300626905 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = DemoApp.app; path = build/Debug/DemoApp.app; sourceTree = "<group>"; };
+		E247932F114C9CC300626905 /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
+		E247935E114C9D7700626905 /* AOCDemoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCDemoAppDelegate.h; sourceTree = "<group>"; };
+		E247935F114C9D7700626905 /* AOCDemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCDemoAppDelegate.m; sourceTree = "<group>"; };
+		E2479362114C9DB000626905 /* DemoApp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoApp.xib; sourceTree = "<group>"; };
+		E2479367114C9E2400626905 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCMethodHooking.h; sourceTree = "<group>"; };
 		E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCMethodHooking.m; sourceTree = "<group>"; };
 		E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = generate_method_hooking_tests.rb; sourceTree = "<group>"; };
@@ -59,6 +77,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E247932B114C9CC300626905 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2905BAB114793AA00D69FE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -101,6 +126,7 @@
 			children = (
 				E2905BAE114793AA00D69FE7 /* UnitTests.octest */,
 				E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */,
+				E247932D114C9CC300626905 /* DemoApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,12 +136,14 @@
 			children = (
 				E2905BB81147942200D69FE7 /* src */,
 				E2905BB91147942200D69FE7 /* tests */,
+				E247935D114C9D5800626905 /* DemoApp */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */,
 				E2BA925C114860FE0068257E /* README */,
 				E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */,
 				E2F6E5811149303D00658AB2 /* AspectObjectiveC-Info.plist */,
+				E247932F114C9CC300626905 /* DemoApp-Info.plist */,
 			);
 			name = AspectObjectiveC;
 			sourceTree = "<group>";
@@ -129,6 +157,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E247935D114C9D5800626905 /* DemoApp */ = {
+			isa = PBXGroup;
+			children = (
+				E2479361114C9D7D00626905 /* Resources */,
+				E247935E114C9D7700626905 /* AOCDemoAppDelegate.h */,
+				E247935F114C9D7700626905 /* AOCDemoAppDelegate.m */,
+				E2479367114C9E2400626905 /* main.m */,
+			);
+			path = DemoApp;
+			sourceTree = "<group>";
+		};
+		E2479361114C9D7D00626905 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E2479362114C9DB000626905 /* DemoApp.xib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		E2905BB81147942200D69FE7 /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +186,8 @@
 				E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */,
 				E2BA921811484FC00068257E /* AOCError.h */,
 				E2BA921911484FC00068257E /* AOCError.m */,
+				E247931C114C999000626905 /* AOCAutoAdvice.h */,
+				E247931D114C999000626905 /* AOCAutoAdvice.m */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -163,12 +212,30 @@
 			files = (
 				E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */,
 				E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */,
+				E247931F114C999000626905 /* AOCAutoAdvice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		E247932C114C9CC300626905 /* DemoApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E2479332114C9CC400626905 /* Build configuration list for PBXNativeTarget "DemoApp" */;
+			buildPhases = (
+				E2479329114C9CC300626905 /* Resources */,
+				E247932A114C9CC300626905 /* Sources */,
+				E247932B114C9CC300626905 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DemoApp;
+			productName = DemoApp;
+			productReference = E247932D114C9CC300626905 /* DemoApp.app */;
+			productType = "com.apple.product-type.application";
+		};
 		E2905BAD114793AA00D69FE7 /* UnitTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2905BB2114793AA00D69FE7 /* Build configuration list for PBXNativeTarget "UnitTests" */;
@@ -220,11 +287,20 @@
 			targets = (
 				E2905BAD114793AA00D69FE7 /* UnitTests */,
 				E2F6E57F1149303D00658AB2 /* AspectObjectiveC */,
+				E247932C114C9CC300626905 /* DemoApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E2479329114C9CC300626905 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2479363114C9DB000626905 /* DemoApp.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2905BA9114793AA00D69FE7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -259,6 +335,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E247932A114C9CC300626905 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2479360114C9D7700626905 /* AOCDemoAppDelegate.m in Sources */,
+				E2479368114C9E2400626905 /* main.m in Sources */,
+				E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */,
+				E24793AC114CA4DC00626905 /* AOCAutoAdvice.m in Sources */,
+				E24793AD114CA4DD00626905 /* AOCError.m in Sources */,
+				E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2905BAA114793AA00D69FE7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,6 +357,7 @@
 				E2BA921A11484FC00068257E /* AOCError.m in Sources */,
 				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
 				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
+				E247931E114C999000626905 /* AOCAutoAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +368,7 @@
 				E2F6E5891149319300658AB2 /* AOCError.m in Sources */,
 				E2F6E5881149319000658AB2 /* AOCMethodHooking.m in Sources */,
 				E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */,
+				E2479320114C999000626905 /* AOCAutoAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +396,54 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+		E2479330114C9CC400626905 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "DemoApp-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = DemoApp;
+			};
+			name = Debug;
+		};
+		E2479331114C9CC400626905 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "DemoApp-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = DemoApp;
+				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -424,6 +563,15 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2479332114C9CC400626905 /* Build configuration list for PBXNativeTarget "DemoApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2479330114C9CC400626905 /* Debug */,
+				E2479331114C9CC400626905 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

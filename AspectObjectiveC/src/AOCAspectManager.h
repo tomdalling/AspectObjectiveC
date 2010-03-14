@@ -4,7 +4,7 @@
 
 
 @interface AOCAspectManager : NSObject {
-    NSMutableDictionary* m_adviceByClass;
+    NSMutableDictionary* _adviceByClass;
 }
 +(AOCAspectManager*) sharedAspectManager;
 -(BOOL) addAdvice:(NSObject<AOCAdvice>*)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
