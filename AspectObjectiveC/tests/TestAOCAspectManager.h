@@ -10,7 +10,7 @@
 
 
 @interface TestAOCAspectManager : SenTestCase {
-
+    int _lastArg;
+    int _lastReturnVal;
 }
-
 @end
