@@ -3,28 +3,28 @@
 #
 
 TYPE_INFO = {
-    "id" => { :ivar => "m_id", :method_suffix => "Id" },
-    "Class" => { :ivar => "m_class", :method_suffix => "Class" },
-    "SEL" => { :ivar => "m_sel", :method_suffix => "SEL" },
-    "char" => { :ivar => "m_chr", :method_suffix => "Char" },
-    "unsigned char" => { :ivar => "m_uchr", :method_suffix => "UChar" },
-    "short" => { :ivar => "m_shrt", :method_suffix => "Short" },
-    "unsigned short" => { :ivar => "m_ushrt", :method_suffix => "UShort" },
-    "int" => { :ivar => "m_int", :method_suffix => "Int" },
-    "unsigned int" => { :ivar => "m_uint", :method_suffix => "UInt" },
-    "long" => { :ivar => "m_long", :method_suffix => "Long" },
-    "unsigned long" => { :ivar => "m_ulong", :method_suffix => "ULong" },
-    "long long" => { :ivar => "m_longLong", :method_suffix => "LongLong" },
-    "unsigned long long" => { :ivar => "m_ulongLong", :method_suffix => "ULongLong" },
-    "float" => { :ivar => "m_float", :method_suffix => "Float" },
-    "double" => { :ivar => "m_double", :method_suffix => "Double" },
-    "_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool" },
-    "void*" => { :ivar => "m_ptr", :method_suffix => "Ptr" },
-    "char*" => { :ivar => "m_charPtr", :method_suffix => "CharPtr" },
+    "id" => { :ivar => "m_id", :method_suffix => "Id", :nsvalue_wrapper => "%s" },
+    "Class" => { :ivar => "m_class", :method_suffix => "Class", :nsvalue_wrapper => "%s" },
+    "SEL" => { :ivar => "m_sel", :method_suffix => "SEL" }, #KVC doesn't work with SEL values
+    "char" => { :ivar => "m_chr", :method_suffix => "Char", :nsvalue_wrapper => "[NSNumber numberWithChar:%s]" },
+    "unsigned char" => { :ivar => "m_uchr", :method_suffix => "UChar", :nsvalue_wrapper => "[NSNumber numberWithUnsignedChar:%s]" },
+    "short" => { :ivar => "m_shrt", :method_suffix => "Short", :nsvalue_wrapper => "[NSNumber numberWithShort:%s]" },
+    "unsigned short" => { :ivar => "m_ushrt", :method_suffix => "UShort", :nsvalue_wrapper => "[NSNumber numberWithUnsignedShort:%s]" },
+    "int" => { :ivar => "m_int", :method_suffix => "Int", :nsvalue_wrapper => "[NSNumber numberWithInt:%s]" },
+    "unsigned int" => { :ivar => "m_uint", :method_suffix => "UInt", :nsvalue_wrapper => "[NSNumber numberWithUnsignedInt:%s]" },
+    "long" => { :ivar => "m_long", :method_suffix => "Long", :nsvalue_wrapper => "[NSNumber numberWithLong:%s]" },
+    "unsigned long" => { :ivar => "m_ulong", :method_suffix => "ULong", :nsvalue_wrapper => "[NSNumber numberWithUnsignedLong:%s]" },
+    "long long" => { :ivar => "m_longLong", :method_suffix => "LongLong", :nsvalue_wrapper => "[NSNumber numberWithLongLong:%s]" },
+    "unsigned long long" => { :ivar => "m_ulongLong", :method_suffix => "ULongLong", :nsvalue_wrapper => "[NSNumber numberWithUnsignedLongLong:%s]" },
+    "float" => { :ivar => "m_float", :method_suffix => "Float", :nsvalue_wrapper => "[NSNumber numberWithFloat:%s]" },
+    "double" => { :ivar => "m_double", :method_suffix => "Double", :nsvalue_wrapper => "[NSNumber numberWithDouble:%s]" },
+    "_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool", :nsvalue_wrapper => "[NSNumber numberWithBool:(BOOL)%s]" },
+    "void*" => { :ivar => "m_ptr", :method_suffix => "Ptr" }, #KVC doesn't work with arbitrary pointer values
+    "char*" => { :ivar => "m_charPtr", :method_suffix => "CharPtr" },  #KVC doesn't work with arbitrary pointer values
 }
 
 TEST_VALUES = {
-    "id" => ["self", "nil", "[NSDate date]"],
+    "id" => ["self", "nil", "[NSDate dateWithTimeIntervalSince1970:0]"],
     "Class" => ["NULL", "[NSDate class]"],
     "SEL" => ["NULL", "@selector(fake:selector:)"],
     "char" => ["CHAR_MAX", "'a'", "CHAR_MIN"],
@@ -92,6 +92,26 @@ def PrintReturnMethodTests(returnType)
     end
 end
 
+def PrintKVCAccessorTests(returnType)
+    ivar = TYPE_INFO[returnType][:ivar]
+    suffix = TYPE_INFO[returnType][:method_suffix]
+    nsvalue_wrapper = TYPE_INFO[returnType][:nsvalue_wrapper]
+    if(nsvalue_wrapper.nil?)
+        puts "// #{returnType} is an invalid type of KVC value, so it's not tested"
+    else
+        TEST_VALUES[returnType].each_index do |idx|
+            testValue = TEST_VALUES[returnType][idx]
+            wrapped = nsvalue_wrapper % testValue;
+            puts "-(void) testKVCAccessor#{suffix}#{idx+1};{"
+            puts "    #{ivar} = #{testValue};"
+            puts "    id retVal = [self valueForKey:@\"return#{suffix}\"];"
+            puts "    id expected = #{wrapped};"
+            puts "    STAssertEqualObjects(retVal, expected, @\"KVC accessor is broken\");"
+            puts "}"
+        end
+    end
+end
+
 def PrintArgMethod(argType)
     ivar = TYPE_INFO[argType][:ivar]
     suffix = TYPE_INFO[argType][:method_suffix]
@@ -104,7 +124,7 @@ def PrintArgMethodTests(argType)
     ivar = TYPE_INFO[argType][:ivar]
     suffix = TYPE_INFO[argType][:method_suffix]
     TEST_VALUES[argType].each_index do |idx|
-        testValue = TEST_VALUES[argType][idx];
+        testValue = TEST_VALUES[argType][idx]
         puts "-(void) testArgEqualFor#{suffix}#{idx+1}; {"
         puts "    STAssertFalse(g_hookDidRun, @\"Hook shouldn't have run yet\");"
         puts "    #{ivar} = #{testValue};"
@@ -144,6 +164,7 @@ ALLOWED_RETURN_TYPES.each do |returnType|
     puts "// #{returnType} /////////////////////////"
     PrintReturnMethod(returnType, "")
     PrintReturnMethodTests(returnType)
+    PrintKVCAccessorTests(returnType)
     PrintReturnMethod(returnType, "ForInstall")
     suffix = TYPE_INFO[returnType][:method_suffix]
     PrintInstallMethodTest(returnType, "Return", "return#{suffix}ForInstall")
@@ -178,3 +199,4 @@ end
 puts "}"
 
 puts "/************ END generated by #{$0} ***********/"
+
