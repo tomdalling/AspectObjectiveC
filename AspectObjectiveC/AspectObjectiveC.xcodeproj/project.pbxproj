@@ -51,7 +51,7 @@
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
 		E247931C114C999000626905 /* AOCAutoAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAutoAdvice.h; sourceTree = "<group>"; };
 		E247931D114C999000626905 /* AOCAutoAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAutoAdvice.m; sourceTree = "<group>"; };
-		E247932D114C9CC300626905 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = DemoApp.app; path = build/Debug/DemoApp.app; sourceTree = "<group>"; };
+		E247932D114C9CC300626905 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E247932F114C9CC300626905 /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
 		E247935E114C9D7700626905 /* AOCDemoAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCDemoAppDelegate.h; sourceTree = "<group>"; };
 		E247935F114C9D7700626905 /* AOCDemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCDemoAppDelegate.m; sourceTree = "<group>"; };

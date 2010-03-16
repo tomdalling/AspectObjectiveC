@@ -48,7 +48,7 @@
 {
     double c = [_celcius doubleValue];
     double f = c * (9.0/5.0) + 32.0;
-    NSLog(@"%f degrees celcius is %f degrees farenheit", c, f);
+    NSLog(@"%f degrees celcius is %f degrees farenheit in %@", c, f, NSStringFromSelector(_cmd));
     return [NSNumber numberWithDouble:f];
 }
 
@@ -58,21 +58,21 @@
     
     _isHijacked = !_isHijacked;
     
-    NSLog(@"before = %p", [self methodForSelector:SEL_TO_HIJACK]);
     if(_isHijacked){
         NSLog(@"Installing advice");
         [[AOCAspectManager sharedAspectManager] addAdvice:_hijackAdvice
                                               forSelector:SEL_TO_HIJACK
                                                   ofClass:[self class]
                                                     error:nil];
+        [self flushKeyBindings];
         [self valueForKey:@"fahrenheit"];
     } else {
         NSLog(@"Uninstalling advice");
         [[AOCAspectManager sharedAspectManager] removeAdvice:_hijackAdvice
                                                  forSelector:SEL_TO_HIJACK
                                                      ofClass:[self class]];
+        [self flushKeyBindings];
     }
-    NSLog(@"after = %p", [self methodForSelector:SEL_TO_HIJACK]);
     
     [self didChangeValueForKey:@"isHijacked"];
 }
@@ -96,8 +96,9 @@
         return nil;
     
     _celcius = [[NSNumber alloc] initWithInt:100.0];
-    _isHijacked = YES;
+    _isHijacked = NO;
     _hijackAdvice = [HijackAdvice new];
+    //[self toggleHijacked:self];
     
     return self;
 }
@@ -113,11 +114,13 @@
 
 -(id) valueForKey:(NSString*)key;
 {
-    SEL s = NSSelectorFromString(key);
-    if([self respondsToSelector:s])
-        return [self performSelector:s];
-    else
-        return [self valueForUndefinedKey:key];
+    return [super valueForKey:key];
+    
+//    SEL s = NSSelectorFromString(key);
+//    if([self respondsToSelector:s])
+//        return [self performSelector:s];
+//    else
+//        return [self valueForUndefinedKey:key];
 }
 
 #pragma mark <NSKeyValueObserving>
