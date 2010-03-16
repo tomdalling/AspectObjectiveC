@@ -21,22 +21,32 @@
 
 -(SEL) _makeAdviceSelWithPrefix:(NSString*)prefix fromSel:(SEL)selBeingInvoked;
 {
-    NSString* selStr = [prefix stringByAppendingString:[NSStringFromSelector(selBeingInvoked) capitalizedString]];
-    return NSSelectorFromString(selStr);
+    NSString* selBeingInvokedStr = NSStringFromSelector(selBeingInvoked);
+    NSMutableString* adviceSelStr = [NSMutableString string];
+    [adviceSelStr appendString:prefix];
+    [adviceSelStr appendString:[[selBeingInvokedStr substringToIndex:1] uppercaseString]];
+    if([selBeingInvokedStr length] > 1)
+        [adviceSelStr appendString:[selBeingInvokedStr substringFromIndex:1]];
+    return NSSelectorFromString(adviceSelStr);
 }
 
 -(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(NSInvocation*)inv;
 {
     SEL originalSel = [inv selector];
+    id originalTarget = [inv target];
+    
     SEL adviceSel = [self _makeAdviceSelWithPrefix:prefix fromSel:originalSel];
-    if(![self respondsToSelector:adviceSel])
+    if(![self respondsToSelector:adviceSel]){
+        NSLog(@"can't invoke %@", NSStringFromSelector(adviceSel));
         return NO;
+    }
     
     NSLog(@"will invoke %@", NSStringFromSelector(adviceSel));
     
     [inv setSelector:adviceSel];
     [inv invokeWithTarget:self];
     [inv setSelector:originalSel];
+    [inv setTarget:originalTarget];
     return YES;
 }
 
