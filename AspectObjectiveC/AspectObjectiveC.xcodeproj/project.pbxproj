@@ -17,6 +17,8 @@
 		E24793AC114CA4DC00626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
 		E24793AD114CA4DD00626905 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
+		E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */; };
+		E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */; };
 		E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */; };
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
 		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
@@ -57,9 +59,10 @@
 		E247935F114C9D7700626905 /* AOCDemoAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCDemoAppDelegate.m; sourceTree = "<group>"; };
 		E2479362114C9DB000626905 /* DemoApp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoApp.xib; sourceTree = "<group>"; };
 		E2479367114C9E2400626905 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = generate_method_hooking_tests.rb; sourceTree = "<group>"; };
+		E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = insert_method_hooking_tests.rb; sourceTree = "<group>"; };
 		E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCMethodHooking.h; sourceTree = "<group>"; };
 		E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCMethodHooking.m; sourceTree = "<group>"; };
-		E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = generate_method_hooking_tests.rb; sourceTree = "<group>"; };
 		E2905BAE114793AA00D69FE7 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		E2905BB4114793D400D69FE7 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -141,7 +144,6 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */,
 				E2BA925C114860FE0068257E /* README */,
-				E26BE7B41148B4AE00D01079 /* generate_method_hooking_tests.rb */,
 				E2F6E5811149303D00658AB2 /* AspectObjectiveC-Info.plist */,
 				E247932F114C9CC300626905 /* DemoApp-Info.plist */,
 			);
@@ -195,6 +197,8 @@
 		E2905BB91147942200D69FE7 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */,
+				E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */,
 				E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */,
 				E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */,
 				E2BA572B114904520080CA2D /* TestAOCAspectManager.h */,
@@ -240,6 +244,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2905BB2114793AA00D69FE7 /* Build configuration list for PBXNativeTarget "UnitTests" */;
 			buildPhases = (
+				E24A4FF81150C30500EFB201 /* ShellScript */,
 				E2905BA9114793AA00D69FE7 /* Resources */,
 				E2905BAA114793AA00D69FE7 /* Sources */,
 				E2905BAB114793AA00D69FE7 /* Frameworks */,
@@ -306,6 +311,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2BA925D114860FE0068257E /* README in Resources */,
+				E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */,
+				E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +326,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		E24A4FF81150C30500EFB201 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "ruby ${PROJECT_DIR}/tests/generate_method_hooking_tests.rb | ruby ${PROJECT_DIR}/tests/insert_method_hooking_tests.rb ${PROJECT_DIR}/tests/TestAOCMethodHooking.m";
+		};
 		E2905BAC114793AA00D69FE7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
