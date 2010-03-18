@@ -1014,18 +1014,18 @@
 								<int key="NSPeriodicInterval">25</int>
 							</object>
 						</object>
-						<object class="NSButton" id="677569855">
+						<object class="NSButton" id="1026275007">
 							<reference key="NSNextResponder" ref="414427165"/>
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{10, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="414427165"/>
 							<bool key="NSEnabled">YES</bool>
-							<object class="NSButtonCell" key="NSCell" id="939472602">
+							<object class="NSButtonCell" key="NSCell" id="400365944">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
 								<string key="NSContents">Convert</string>
 								<reference key="NSSupport" ref="723255795"/>
-								<reference key="NSControlView" ref="677569855"/>
+								<reference key="NSControlView" ref="1026275007"/>
 								<int key="NSButtonFlags">-2038284033</int>
 								<int key="NSButtonFlags2">129</int>
 								<string key="NSAlternateContents"/>
@@ -1041,6 +1041,7 @@
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMinSize">{247, 149}</string>
 				<string key="NSMaxSize">{247, 149}</string>
+				<string key="NSFrameAutosaveName">DemoAppWindow</string>
 			</object>
 			<object class="NSCustomObject" id="937349419">
 				<string key="NSClassName">DemoAppDelegate</string>
@@ -1397,7 +1398,7 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">convertCelciusToFahrenheit:</string>
 						<reference key="source" ref="937349419"/>
-						<reference key="destination" ref="677569855"/>
+						<reference key="destination" ref="1026275007"/>
 					</object>
 					<int key="connectionID">410</int>
 				</object>
@@ -2019,7 +2020,7 @@
 							<reference ref="592467533"/>
 							<reference ref="749727059"/>
 							<reference ref="755865754"/>
-							<reference ref="677569855"/>
+							<reference ref="1026275007"/>
 						</object>
 						<reference key="parent" ref="513744381"/>
 					</object>
@@ -2118,17 +2119,17 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">408</int>
-						<reference key="object" ref="677569855"/>
+						<reference key="object" ref="1026275007"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="939472602"/>
+							<reference ref="400365944"/>
 						</object>
 						<reference key="parent" ref="414427165"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">409</int>
-						<reference key="object" ref="939472602"/>
-						<reference key="parent" ref="677569855"/>
+						<reference key="object" ref="400365944"/>
+						<reference key="parent" ref="1026275007"/>
 					</object>
 				</object>
 			</object>

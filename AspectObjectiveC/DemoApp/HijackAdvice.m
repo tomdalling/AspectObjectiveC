@@ -22,7 +22,7 @@
     // "Instead of" advice completely replaces a method.
     // In this case, we're going to hijack the fahrenheit calculation
     // and make the fahrenheit text field say "dunno"
-    DemoAppDelegate* target = [[self invocation] target];
+    DemoAppDelegate* target = [self target];
     [target.fahrenheitTextField setStringValue:NSLocalizedString(@"dunno", nil)];
 }
 

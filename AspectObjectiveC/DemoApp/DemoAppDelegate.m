@@ -17,7 +17,7 @@
     double celcius = [_celciusTextField doubleValue];
     double fahrenheit = celcius * (9.0/5.0) + 32.0;
     [_fahrenheitTextField setDoubleValue:fahrenheit];
-    NSLog(@"%f degrees celcius = %f degrees fahrenheit", celcius, fahrenheit);
+    NSLog(@"%f degrees celcius = %f degrees fahrenheit. sender = %@", celcius, fahrenheit, sender);
 }
 
 -(IBAction) hijack:(id)sender;

@@ -5,6 +5,10 @@
 
 @interface AOCAutoAdvice : NSObject<AOCAdvice> {
     NSInvocation* _invocation;
+    id _target;
+    SEL _selector;
 }
 -(NSInvocation*) invocation;
+-(id) target;
+-(SEL) selector;
 @end

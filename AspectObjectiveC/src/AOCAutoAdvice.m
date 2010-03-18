@@ -37,9 +37,14 @@
         return NO;
     
     _invocation = inv;
-    NSInvocation* adviceInvocation = [[inv copy] autorelease];
-    [adviceInvocation setSelector:adviceSel];
-    [adviceInvocation invokeWithTarget:self];
+    _target = [inv target];
+    _selector = [inv selector];
+    [inv setSelector:adviceSel];
+    [inv invokeWithTarget:self];
+    [inv setTarget:_target];
+    [inv setSelector:_selector];
+    _selector = NULL;
+    _target = nil;
     _invocation = nil;
     
     return YES;
@@ -57,6 +62,16 @@
 -(NSInvocation*) invocation;
 {
     return _invocation;
+}
+
+-(id) target;
+{
+    return _target;
+}
+
+-(SEL) selector;
+{
+    return _selector;
 }
 
 #pragma mark <AOCAdvice>
