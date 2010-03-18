@@ -32,21 +32,16 @@
 
 -(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(NSInvocation*)inv;
 {
-    SEL originalSel = [inv selector];
-    id originalTarget = [inv target];
-    
-    SEL adviceSel = [self _makeAdviceSelWithPrefix:prefix fromSel:originalSel];
-    if(![self respondsToSelector:adviceSel]){
-        NSLog(@"can't invoke %@", NSStringFromSelector(adviceSel));
+    SEL adviceSel = [self _makeAdviceSelWithPrefix:prefix fromSel:[inv selector]];
+    if(![self respondsToSelector:adviceSel])
         return NO;
-    }
     
-    NSLog(@"will invoke %@", NSStringFromSelector(adviceSel));
+    _invocation = inv;
+    NSInvocation* adviceInvocation = [[inv copy] autorelease];
+    [adviceInvocation setSelector:adviceSel];
+    [adviceInvocation invokeWithTarget:self];
+    _invocation = nil;
     
-    [inv setSelector:adviceSel];
-    [inv invokeWithTarget:self];
-    [inv setSelector:originalSel];
-    [inv setTarget:originalTarget];
     return YES;
 }
 
@@ -59,23 +54,25 @@
 
 @implementation AOCAutoAdvice
 
+-(NSInvocation*) invocation;
+{
+    return _invocation;
+}
+
 #pragma mark <AOCAdvice>
 
 -(void) adviceBefore:(NSInvocation*)inv;
 {
-    NSLog(@"boo");
     [self _runAdviceWithPrefix:@"adviceBefore" invocation:inv];
 }
 
 -(BOOL) adviceInsteadOf:(NSInvocation*)inv;
 {
-    NSLog(@"boo2");
     return [self _runAdviceWithPrefix:@"adviceInsteadOf" invocation:inv];
 }
 
 -(void) adviceAfter:(NSInvocation*)inv;
 {
-    NSLog(@"boo3");
     [self _runAdviceWithPrefix:@"adviceAfter" invocation:inv];
 }
 

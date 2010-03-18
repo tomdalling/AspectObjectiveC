@@ -3,5 +3,8 @@
 #import "AOCAdvice.h"
 
 
-@interface AOCAutoAdvice : NSObject<AOCAdvice>
+@interface AOCAutoAdvice : NSObject<AOCAdvice> {
+    NSInvocation* _invocation;
+}
+-(NSInvocation*) invocation;
 @end

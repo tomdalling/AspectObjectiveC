@@ -13,7 +13,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="29"/>
-			<integer value="383"/>
+			<integer value="367"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -788,8 +788,8 @@
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="975352794">
 								<int key="NSCellFlags">-1804468671</int>
-								<int key="NSCellFlags2">-2009070592</int>
-								<string key="NSContents"/>
+								<int key="NSCellFlags2">138413056</int>
+								<real value="100" key="NSContents"/>
 								<object class="NSFont" key="NSSupport" id="723255795">
 									<string key="NSName">LucidaGrande</string>
 									<double key="NSSize">13</double>
@@ -914,13 +914,12 @@
 						<object class="NSTextField" id="216256475">
 							<reference key="NSNextResponder" ref="414427165"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{17, 60}, {83, 17}}</string>
+							<string key="NSFrame">{{17, 56}, {83, 21}}</string>
 							<reference key="NSSuperview" ref="414427165"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="921703414">
 								<int key="NSCellFlags">76676672</int>
-								<int key="NSCellFlags2">-2009070592</int>
-								<string key="NSContents">Label</string>
+								<int key="NSCellFlags2">138413056</int>
 								<reference key="NSSupport" ref="723255795"/>
 								<object class="NSNumberFormatter" key="NSFormatter" id="306057004">
 									<object class="NSMutableDictionary" key="NS.attributes">
@@ -998,18 +997,38 @@
 						<object class="NSButton" id="755865754">
 							<reference key="NSNextResponder" ref="414427165"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{94, 12}, {139, 32}}</string>
+							<string key="NSFrame">{{144, 12}, {89, 32}}</string>
 							<reference key="NSSuperview" ref="414427165"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="67941570">
 								<int key="NSCellFlags">67239424</int>
 								<int key="NSCellFlags2">134217728</int>
-								<string key="NSContents">Hijack/unhijack</string>
+								<string key="NSContents">Hijack!</string>
 								<reference key="NSSupport" ref="723255795"/>
 								<reference key="NSControlView" ref="755865754"/>
 								<int key="NSButtonFlags">-1232977665</int>
 								<int key="NSButtonFlags2">129</int>
 								<string key="NSAlternateContents">Unhijack</string>
+								<string key="NSKeyEquivalent"/>
+								<int key="NSPeriodicDelay">200</int>
+								<int key="NSPeriodicInterval">25</int>
+							</object>
+						</object>
+						<object class="NSButton" id="677569855">
+							<reference key="NSNextResponder" ref="414427165"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{10, 12}, {96, 32}}</string>
+							<reference key="NSSuperview" ref="414427165"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSButtonCell" key="NSCell" id="939472602">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">134217728</int>
+								<string key="NSContents">Convert</string>
+								<reference key="NSSupport" ref="723255795"/>
+								<reference key="NSControlView" ref="677569855"/>
+								<int key="NSButtonFlags">-2038284033</int>
+								<int key="NSButtonFlags2">129</int>
+								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
 								<int key="NSPeriodicDelay">200</int>
 								<int key="NSPeriodicInterval">25</int>
@@ -1024,7 +1043,7 @@
 				<string key="NSMaxSize">{247, 149}</string>
 			</object>
 			<object class="NSCustomObject" id="937349419">
-				<string key="NSClassName">AOCDemoAppDelegate</string>
+				<string key="NSClassName">DemoAppDelegate</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -1351,40 +1370,36 @@
 					<int key="connectionID">388</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.fahrenheit</string>
-						<reference key="source" ref="216256475"/>
-						<reference key="destination" ref="937349419"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="216256475"/>
-							<reference key="NSDestination" ref="937349419"/>
-							<string key="NSLabel">value: self.fahrenheit</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.fahrenheit</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">celciusTextField</string>
+						<reference key="source" ref="937349419"/>
+						<reference key="destination" ref="403545861"/>
 					</object>
-					<int key="connectionID">395</int>
+					<int key="connectionID">405</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.celcius</string>
-						<reference key="source" ref="403545861"/>
-						<reference key="destination" ref="937349419"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="403545861"/>
-							<reference key="NSDestination" ref="937349419"/>
-							<string key="NSLabel">value: self.celcius</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.celcius</string>
-							<object class="NSDictionary" key="NSOptions">
-								<string key="NS.key.0">NSContinuouslyUpdatesValue</string>
-								<boolean value="YES" key="NS.object.0"/>
-							</object>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">fahrenheitTextField</string>
+						<reference key="source" ref="937349419"/>
+						<reference key="destination" ref="216256475"/>
 					</object>
-					<int key="connectionID">397</int>
+					<int key="connectionID">406</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">hijackButton</string>
+						<reference key="source" ref="937349419"/>
+						<reference key="destination" ref="755865754"/>
+					</object>
+					<int key="connectionID">407</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">convertCelciusToFahrenheit:</string>
+						<reference key="source" ref="937349419"/>
+						<reference key="destination" ref="677569855"/>
+					</object>
+					<int key="connectionID">410</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2004,6 +2019,7 @@
 							<reference ref="592467533"/>
 							<reference ref="749727059"/>
 							<reference ref="755865754"/>
+							<reference ref="677569855"/>
 						</object>
 						<reference key="parent" ref="513744381"/>
 					</object>
@@ -2099,6 +2115,20 @@
 						<int key="objectID">404</int>
 						<reference key="object" ref="306057004"/>
 						<reference key="parent" ref="921703414"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">408</int>
+						<reference key="object" ref="677569855"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="939472602"/>
+						</object>
+						<reference key="parent" ref="414427165"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">409</int>
+						<reference key="object" ref="939472602"/>
+						<reference key="parent" ref="677569855"/>
 					</object>
 				</object>
 			</object>
@@ -2251,7 +2281,6 @@
 					<string>367.windowTemplate.maxSize</string>
 					<string>367.windowTemplate.minSize</string>
 					<string>368.IBPluginDependency</string>
-					<string>373.IBPluginDependency</string>
 					<string>378.IBPluginDependency</string>
 					<string>379.IBPluginDependency</string>
 					<string>380.IBPluginDependency</string>
@@ -2268,6 +2297,8 @@
 					<string>404.IBNumberFormatterBehaviorMetadataKey</string>
 					<string>404.IBNumberFormatterLocalizesFormatMetadataKey</string>
 					<string>404.IBPluginDependency</string>
+					<string>408.IBPluginDependency</string>
+					<string>409.IBPluginDependency</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.ImportedFromIB2</string>
 					<string>56.IBPluginDependency</string>
@@ -2440,9 +2471,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{179, 618}, {247, 127}}</string>
+					<string>{{279, 662}, {247, 127}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{179, 618}, {247, 127}}</string>
+					<string>{{279, 662}, {247, 127}}</string>
 					<integer value="1"/>
 					<string>{{11, 666}, {480, 270}}</string>
 					<boolean value="YES"/>
@@ -2460,12 +2491,13 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1041"/>
 					<boolean value="YES"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1041"/>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
@@ -2519,21 +2551,49 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">404</int>
+			<int key="maxID">410</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<object class="IBPartialClassDescription">
-					<string key="className">AOCDemoAppDelegate</string>
+					<string key="className">DemoAppDelegate</string>
 					<string key="superclassName">NSWindowController</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">toggleHijacked:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>convertCelciusToFahrenheit:</string>
+							<string>hijack:</string>
+							<string>toggleHijacked:</string>
+							<string>unhijack:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>celciusTextField</string>
+							<string>fahrenheitTextField</string>
+							<string>hijackButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSTextField</string>
+							<string>NSTextField</string>
+							<string>NSButton</string>
+						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">DemoApp/AOCDemoAppDelegate.h</string>
+						<string key="minorKey">DemoApp/DemoAppDelegate.h</string>
 					</object>
 				</object>
 			</object>
