@@ -1,7 +1,7 @@
 This is still pre alpha, so it's highly unstable. It is however
-usable at the moment if you want to try it out. Build the framework
-target then install it as a private framework in another app to take
-it for a spin. 
+usable at the moment if you want to try it out. Build the DemoApp
+target, try it out, and have a look through the code (it's quite
+small).
 
 I've only tested it with gcc on i386, so you may find that it doesn't
 work with anything else at the moment. If you've got a different setup,
