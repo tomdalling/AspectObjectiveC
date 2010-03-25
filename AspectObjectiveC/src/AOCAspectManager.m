@@ -53,7 +53,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(NSInvocation*)inv;
 {
-    for(NSObject<AOCAdvice>* advice in adviceList){
+    for(NSObject<AOCAdviceProtocol>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceBefore:)]){
             [advice adviceBefore:inv];
         }
@@ -63,7 +63,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 -(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(NSInvocation*)inv;
 {    
     BOOL invocationWasReplaced = NO;
-    for(NSObject<AOCAdvice>* advice in adviceList){
+    for(NSObject<AOCAdviceProtocol>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceInsteadOf:)]){
             if([advice adviceInsteadOf:inv]){
                 invocationWasReplaced = YES;
@@ -76,7 +76,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(void) _runAdvice:(NSArray*)adviceList afterInvocation:(NSInvocation*)inv;
 {
-    for(NSObject<AOCAdvice>* advice in adviceList){
+    for(NSObject<AOCAdviceProtocol>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceAfter:)]){
             [advice adviceAfter:inv];
         }
@@ -123,7 +123,7 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
     return g_sharedAspectManager;
 }
 
--(BOOL) addAdvice:(NSObject<AOCAdvice>*)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) addAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);
@@ -143,7 +143,7 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
     }
 }
 
--(void) removeAdvice:(NSObject<AOCAdvice>*)advice forSelector:(SEL)selector ofClass:(Class)cls;
+-(void) removeAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);

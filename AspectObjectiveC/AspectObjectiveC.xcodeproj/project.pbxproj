@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E247931E114C999000626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
-		E247931F114C999000626905 /* AOCAutoAdvice.h in Headers */ = {isa = PBXBuildFile; fileRef = E247931C114C999000626905 /* AOCAutoAdvice.h */; };
-		E2479320114C999000626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
+		E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
+		E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
+		E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E2479363114C9DB000626905 /* DemoApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2479362114C9DB000626905 /* DemoApp.xib */; };
 		E2479368114C9E2400626905 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2479367114C9E2400626905 /* main.m */; };
 		E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
-		E24793AC114CA4DC00626905 /* AOCAutoAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E247931D114C999000626905 /* AOCAutoAdvice.m */; };
 		E24793AD114CA4DD00626905 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */; };
@@ -52,8 +51,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
-		E247931C114C999000626905 /* AOCAutoAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAutoAdvice.h; sourceTree = "<group>"; };
-		E247931D114C999000626905 /* AOCAutoAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAutoAdvice.m; sourceTree = "<group>"; };
+		E242D146115B882200BE8E66 /* AOCAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAdvice.m; sourceTree = "<group>"; };
 		E247932D114C9CC300626905 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E247932F114C9CC300626905 /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
 		E2479362114C9DB000626905 /* DemoApp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoApp.xib; sourceTree = "<group>"; };
@@ -179,14 +177,13 @@
 			isa = PBXGroup;
 			children = (
 				E22AD4F91147DF150020D988 /* AOCAdvice.h */,
+				E242D146115B882200BE8E66 /* AOCAdvice.m */,
 				E293AB9F1147E0E600D7F9C7 /* AOCAspectManager.h */,
 				E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */,
-				E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */,
-				E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */,
 				E2BA921811484FC00068257E /* AOCError.h */,
 				E2BA921911484FC00068257E /* AOCError.m */,
-				E247931C114C999000626905 /* AOCAutoAdvice.h */,
-				E247931D114C999000626905 /* AOCAutoAdvice.m */,
+				E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */,
+				E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -213,7 +210,6 @@
 			files = (
 				E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */,
 				E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */,
-				E247931F114C999000626905 /* AOCAutoAdvice.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,11 +354,11 @@
 			files = (
 				E2479368114C9E2400626905 /* main.m in Sources */,
 				E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */,
-				E24793AC114CA4DC00626905 /* AOCAutoAdvice.m in Sources */,
 				E24793AD114CA4DD00626905 /* AOCError.m in Sources */,
 				E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */,
 				E29D0E5F11526E3C00FD6070 /* DemoAppDelegate.m in Sources */,
 				E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */,
+				E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,7 +371,7 @@
 				E2BA921A11484FC00068257E /* AOCError.m in Sources */,
 				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
 				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
-				E247931E114C999000626905 /* AOCAutoAdvice.m in Sources */,
+				E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +382,7 @@
 				E2F6E5891149319300658AB2 /* AOCError.m in Sources */,
 				E2F6E5881149319000658AB2 /* AOCMethodHooking.m in Sources */,
 				E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */,
-				E2479320114C999000626905 /* AOCAutoAdvice.m in Sources */,
+				E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

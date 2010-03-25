@@ -1,23 +1,23 @@
 //
-//  AOCAutoAdvice.m
+//  AOCAdvice.m
 //  AspectObjectiveC
 //
 //  Created by Tom on 14/03/10.
 //  Copyright 2010 . All rights reserved.
 //
 
-#import "AOCAutoAdvice.h"
+#import "AOCAdvice.h"
 
 
 #pragma mark -
-#pragma mark AOCAutoAdvice(Private)
+#pragma mark AOCAdvice(Private)
 
-@interface AOCAutoAdvice(Private)
+@interface AOCAdvice(Private)
 -(SEL) _makeAdviceSelWithPrefix:(NSString*)prefix fromSel:(SEL)selBeingInvoked;
 -(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(NSInvocation*)inv;
 @end
 
-@implementation AOCAutoAdvice(Private)
+@implementation AOCAdvice(Private)
 
 -(SEL) _makeAdviceSelWithPrefix:(NSString*)prefix fromSel:(SEL)selBeingInvoked;
 {
@@ -55,9 +55,9 @@
 
 
 #pragma mark -
-#pragma mark AOCAutoAdvice
+#pragma mark AOCAdvice
 
-@implementation AOCAutoAdvice
+@implementation AOCAdvice
 
 -(NSInvocation*) invocation;
 {

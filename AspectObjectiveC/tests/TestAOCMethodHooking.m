@@ -71,53 +71,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnId], m_id, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(id) returnIdKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_id;
-}
--(id) returnIdKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_id;
-}
-//hey
--(void) testKVCAccessorUnhookedId1;{
-    m_id = self;
-    id retVal = [self valueForKey:@"returnIdKVCAccessorUnhooked"];
-    id expected = self;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedId2;{
-    m_id = nil;
-    id retVal = [self valueForKey:@"returnIdKVCAccessorUnhooked"];
-    id expected = nil;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedId3;{
-    m_id = [NSDate dateWithTimeIntervalSince1970:0];
-    id retVal = [self valueForKey:@"returnIdKVCAccessorUnhooked"];
-    id expected = [NSDate dateWithTimeIntervalSince1970:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedId1;{
-    m_id = self;
-    id retVal = [self valueForKey:@"returnIdKVCAccessorHooked"];
-    id expected = self;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedId2;{
-    m_id = nil;
-    id retVal = [self valueForKey:@"returnIdKVCAccessorHooked"];
-    id expected = nil;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedId3;{
-    m_id = [NSDate dateWithTimeIntervalSince1970:0];
-    id retVal = [self valueForKey:@"returnIdKVCAccessorHooked"];
-    id expected = [NSDate dateWithTimeIntervalSince1970:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(id) returnIdForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_id;
@@ -145,41 +98,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnClass], m_class, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(Class) returnClassKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_class;
-}
--(Class) returnClassKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_class;
-}
-//hey
--(void) testKVCAccessorUnhookedClass1;{
-    m_class = NULL;
-    id retVal = [self valueForKey:@"returnClassKVCAccessorUnhooked"];
-    id expected = NULL;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedClass2;{
-    m_class = [NSDate class];
-    id retVal = [self valueForKey:@"returnClassKVCAccessorUnhooked"];
-    id expected = [NSDate class];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedClass1;{
-    m_class = NULL;
-    id retVal = [self valueForKey:@"returnClassKVCAccessorHooked"];
-    id expected = NULL;
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedClass2;{
-    m_class = [NSDate class];
-    id retVal = [self valueForKey:@"returnClassKVCAccessorHooked"];
-    id expected = [NSDate class];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(Class) returnClassForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_class;
@@ -207,19 +125,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnSEL], m_sel, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(SEL) returnSELKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_sel;
-}
--(SEL) returnSELKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_sel;
-}
-//hey
-// SEL is an invalid type of KVC value, so it's not tested
-//ho
-// SEL is an invalid type of KVC value, so it's not tested
-//jo
 -(SEL) returnSELForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_sel;
@@ -253,53 +158,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnChar], m_chr, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(char) returnCharKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_chr;
-}
--(char) returnCharKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_chr;
-}
-//hey
--(void) testKVCAccessorUnhookedChar1;{
-    m_chr = CHAR_MAX;
-    id retVal = [self valueForKey:@"returnCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithChar:CHAR_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedChar2;{
-    m_chr = 'a';
-    id retVal = [self valueForKey:@"returnCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithChar:'a'];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedChar3;{
-    m_chr = CHAR_MIN;
-    id retVal = [self valueForKey:@"returnCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithChar:CHAR_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedChar1;{
-    m_chr = CHAR_MAX;
-    id retVal = [self valueForKey:@"returnCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithChar:CHAR_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedChar2;{
-    m_chr = 'a';
-    id retVal = [self valueForKey:@"returnCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithChar:'a'];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedChar3;{
-    m_chr = CHAR_MIN;
-    id retVal = [self valueForKey:@"returnCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithChar:CHAR_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(char) returnCharForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_chr;
@@ -333,53 +191,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnUChar], m_uchr, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(unsigned char) returnUCharKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_uchr;
-}
--(unsigned char) returnUCharKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_uchr;
-}
-//hey
--(void) testKVCAccessorUnhookedUChar1;{
-    m_uchr = UCHAR_MAX;
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedChar:UCHAR_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUChar2;{
-    m_uchr = 'z';
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedChar:'z'];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUChar3;{
-    m_uchr = 0;
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedChar:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedUChar1;{
-    m_uchr = UCHAR_MAX;
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedChar:UCHAR_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUChar2;{
-    m_uchr = 'z';
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedChar:'z'];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUChar3;{
-    m_uchr = 0;
-    id retVal = [self valueForKey:@"returnUCharKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedChar:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(unsigned char) returnUCharForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_uchr;
@@ -425,77 +236,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnShort], m_shrt, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(short) returnShortKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_shrt;
-}
--(short) returnShortKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_shrt;
-}
-//hey
--(void) testKVCAccessorUnhookedShort1;{
-    m_shrt = SHRT_MAX;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithShort:SHRT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedShort2;{
-    m_shrt = 333;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithShort:333];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedShort3;{
-    m_shrt = 0;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithShort:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedShort4;{
-    m_shrt = -333;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithShort:-333];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedShort5;{
-    m_shrt = SHRT_MIN;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithShort:SHRT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedShort1;{
-    m_shrt = SHRT_MAX;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithShort:SHRT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedShort2;{
-    m_shrt = 333;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithShort:333];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedShort3;{
-    m_shrt = 0;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithShort:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedShort4;{
-    m_shrt = -333;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithShort:-333];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedShort5;{
-    m_shrt = SHRT_MIN;
-    id retVal = [self valueForKey:@"returnShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithShort:SHRT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(short) returnShortForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_shrt;
@@ -529,53 +269,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnUShort], m_ushrt, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(unsigned short) returnUShortKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ushrt;
-}
--(unsigned short) returnUShortKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ushrt;
-}
-//hey
--(void) testKVCAccessorUnhookedUShort1;{
-    m_ushrt = USHRT_MAX;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedShort:USHRT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUShort2;{
-    m_ushrt = 55;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedShort:55];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUShort3;{
-    m_ushrt = 0;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedShort:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedUShort1;{
-    m_ushrt = USHRT_MAX;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedShort:USHRT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUShort2;{
-    m_ushrt = 55;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedShort:55];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUShort3;{
-    m_ushrt = 0;
-    id retVal = [self valueForKey:@"returnUShortKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedShort:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(unsigned short) returnUShortForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_ushrt;
@@ -615,65 +308,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnInt], m_int, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(int) returnIntKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_int;
-}
--(int) returnIntKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_int;
-}
-//hey
--(void) testKVCAccessorUnhookedInt1;{
-    m_int = INT_MAX;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithInt:INT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedInt2;{
-    m_int = 0;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithInt:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedInt3;{
-    m_int = -144;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithInt:-144];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedInt4;{
-    m_int = INT_MIN;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithInt:INT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedInt1;{
-    m_int = INT_MAX;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithInt:INT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedInt2;{
-    m_int = 0;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithInt:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedInt3;{
-    m_int = -144;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithInt:-144];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedInt4;{
-    m_int = INT_MIN;
-    id retVal = [self valueForKey:@"returnIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithInt:INT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(int) returnIntForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_int;
@@ -707,53 +341,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnUInt], m_uint, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(unsigned int) returnUIntKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_uint;
-}
--(unsigned int) returnUIntKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_uint;
-}
-//hey
--(void) testKVCAccessorUnhookedUInt1;{
-    m_uint = UINT_MAX;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedInt:UINT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUInt2;{
-    m_uint = 60000;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedInt:60000];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedUInt3;{
-    m_uint = 0;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedInt:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedUInt1;{
-    m_uint = UINT_MAX;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedInt:UINT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUInt2;{
-    m_uint = 60000;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedInt:60000];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedUInt3;{
-    m_uint = 0;
-    id retVal = [self valueForKey:@"returnUIntKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedInt:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(unsigned int) returnUIntForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_uint;
@@ -793,65 +380,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnLong], m_long, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(long) returnLongKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_long;
-}
--(long) returnLongKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_long;
-}
-//hey
--(void) testKVCAccessorUnhookedLong1;{
-    m_long = LONG_MAX;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLong:LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLong2;{
-    m_long = 800;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLong:800];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLong3;{
-    m_long = 0;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLong4;{
-    m_long = LONG_MIN;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLong:LONG_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedLong1;{
-    m_long = LONG_MAX;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLong:LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLong2;{
-    m_long = 800;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLong:800];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLong3;{
-    m_long = 0;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLong4;{
-    m_long = LONG_MIN;
-    id retVal = [self valueForKey:@"returnLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLong:LONG_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(long) returnLongForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_long;
@@ -885,53 +413,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnULong], m_ulong, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(unsigned long) returnULongKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ulong;
-}
--(unsigned long) returnULongKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ulong;
-}
-//hey
--(void) testKVCAccessorUnhookedULong1;{
-    m_ulong = ULONG_MAX;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLong:ULONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedULong2;{
-    m_ulong = 1337;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLong:1337];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedULong3;{
-    m_ulong = 0;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedULong1;{
-    m_ulong = ULONG_MAX;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLong:ULONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedULong2;{
-    m_ulong = 1337;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLong:1337];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedULong3;{
-    m_ulong = 0;
-    id retVal = [self valueForKey:@"returnULongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(unsigned long) returnULongForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_ulong;
@@ -977,77 +458,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnLongLong], m_longLong, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(long long) returnLongLongKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_longLong;
-}
--(long long) returnLongLongKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_longLong;
-}
-//hey
--(void) testKVCAccessorUnhookedLongLong1;{
-    m_longLong = LONG_LONG_MAX;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLongLong:LONG_LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLongLong2;{
-    m_longLong = 3376;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLongLong:3376];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLongLong3;{
-    m_longLong = 0;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLongLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLongLong4;{
-    m_longLong = -872;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLongLong:-872];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedLongLong5;{
-    m_longLong = LONG_LONG_MIN;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithLongLong:LONG_LONG_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedLongLong1;{
-    m_longLong = LONG_LONG_MAX;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLongLong:LONG_LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLongLong2;{
-    m_longLong = 3376;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLongLong:3376];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLongLong3;{
-    m_longLong = 0;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLongLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLongLong4;{
-    m_longLong = -872;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLongLong:-872];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedLongLong5;{
-    m_longLong = LONG_LONG_MIN;
-    id retVal = [self valueForKey:@"returnLongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithLongLong:LONG_LONG_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(long long) returnLongLongForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_longLong;
@@ -1081,53 +491,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnULongLong], m_ulongLong, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(unsigned long long) returnULongLongKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ulongLong;
-}
--(unsigned long long) returnULongLongKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ulongLong;
-}
-//hey
--(void) testKVCAccessorUnhookedULongLong1;{
-    m_ulongLong = ULONG_LONG_MAX;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:ULONG_LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedULongLong2;{
-    m_ulongLong = ULONG_LONG_MAX - 64;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:ULONG_LONG_MAX - 64];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedULongLong3;{
-    m_ulongLong = 0;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedULongLong1;{
-    m_ulongLong = ULONG_LONG_MAX;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:ULONG_LONG_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedULongLong2;{
-    m_ulongLong = ULONG_LONG_MAX - 64;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:ULONG_LONG_MAX - 64];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedULongLong3;{
-    m_ulongLong = 0;
-    id retVal = [self valueForKey:@"returnULongLongKVCAccessorHooked"];
-    id expected = [NSNumber numberWithUnsignedLongLong:0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(unsigned long long) returnULongLongForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_ulongLong;
@@ -1173,77 +536,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnFloat], m_float, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(float) returnFloatKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_float;
-}
--(float) returnFloatKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_float;
-}
-//hey
--(void) testKVCAccessorUnhookedFloat1;{
-    m_float = FLT_MAX;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedFloat2;{
-    m_float = FLT_MAX - 33.0f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MAX - 33.0f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedFloat3;{
-    m_float = 0.0f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithFloat:0.0f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedFloat4;{
-    m_float = -123.4f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithFloat:-123.4f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedFloat5;{
-    m_float = FLT_MIN;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedFloat1;{
-    m_float = FLT_MAX;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorHooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedFloat2;{
-    m_float = FLT_MAX - 33.0f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorHooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MAX - 33.0f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedFloat3;{
-    m_float = 0.0f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorHooked"];
-    id expected = [NSNumber numberWithFloat:0.0f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedFloat4;{
-    m_float = -123.4f;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorHooked"];
-    id expected = [NSNumber numberWithFloat:-123.4f];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedFloat5;{
-    m_float = FLT_MIN;
-    id retVal = [self valueForKey:@"returnFloatKVCAccessorHooked"];
-    id expected = [NSNumber numberWithFloat:FLT_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(float) returnFloatForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_float;
@@ -1289,77 +581,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnDouble], m_double, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(double) returnDoubleKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_double;
-}
--(double) returnDoubleKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_double;
-}
-//hey
--(void) testKVCAccessorUnhookedDouble1;{
-    m_double = DBL_MAX;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedDouble2;{
-    m_double = 66.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithDouble:66.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedDouble3;{
-    m_double = 0.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithDouble:0.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedDouble4;{
-    m_double = DBL_MIN + 44.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MIN + 44.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhookedDouble5;{
-    m_double = DBL_MIN;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHookedDouble1;{
-    m_double = DBL_MAX;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorHooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MAX];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedDouble2;{
-    m_double = 66.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorHooked"];
-    id expected = [NSNumber numberWithDouble:66.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedDouble3;{
-    m_double = 0.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorHooked"];
-    id expected = [NSNumber numberWithDouble:0.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedDouble4;{
-    m_double = DBL_MIN + 44.0;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorHooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MIN + 44.0];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHookedDouble5;{
-    m_double = DBL_MIN;
-    id retVal = [self valueForKey:@"returnDoubleKVCAccessorHooked"];
-    id expected = [NSNumber numberWithDouble:DBL_MIN];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(double) returnDoubleForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_double;
@@ -1387,41 +608,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(_Bool) return_BoolKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_bool;
-}
--(_Bool) return_BoolKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_bool;
-}
-//hey
--(void) testKVCAccessorUnhooked_Bool1;{
-    m_bool = true;
-    id retVal = [self valueForKey:@"return_BoolKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithBool:(BOOL)true];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorUnhooked_Bool2;{
-    m_bool = false;
-    id retVal = [self valueForKey:@"return_BoolKVCAccessorUnhooked"];
-    id expected = [NSNumber numberWithBool:(BOOL)false];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//ho
--(void) testKVCAccessorHooked_Bool1;{
-    m_bool = true;
-    id retVal = [self valueForKey:@"return_BoolKVCAccessorHooked"];
-    id expected = [NSNumber numberWithBool:(BOOL)true];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
--(void) testKVCAccessorHooked_Bool2;{
-    m_bool = false;
-    id retVal = [self valueForKey:@"return_BoolKVCAccessorHooked"];
-    id expected = [NSNumber numberWithBool:(BOOL)false];
-    STAssertEqualObjects(retVal, expected, @"KVC accessor is broken");
-}
-//jo
 -(_Bool) return_BoolForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_bool;
@@ -1455,19 +641,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnPtr], m_ptr, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(void*) returnPtrKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ptr;
-}
--(void*) returnPtrKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_ptr;
-}
-//hey
-// void* is an invalid type of KVC value, so it's not tested
-//ho
-// void* is an invalid type of KVC value, so it's not tested
-//jo
 -(void*) returnPtrForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_ptr;
@@ -1495,19 +668,6 @@ void MockHookForTesting(NSInvocation* inv)
     STAssertEquals([self returnCharPtr], m_charPtr, @"Return value is mangled");
     STAssertTrue(g_hookDidRun, @"Hook should have run by now");
 }
--(char*) returnCharPtrKVCAccessorUnhooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_charPtr;
-}
--(char*) returnCharPtrKVCAccessorHooked; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_charPtr;
-}
-//hey
-// char* is an invalid type of KVC value, so it's not tested
-//ho
-// char* is an invalid type of KVC value, so it's not tested
-//jo
 -(char*) returnCharPtrForInstall; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
     return m_charPtr;

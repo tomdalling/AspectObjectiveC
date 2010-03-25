@@ -14,7 +14,7 @@
 #pragma mark -
 #pragma mark Advice
 
-@interface Add2ToArgBefore : NSObject<AOCAdvice>
+@interface Add2ToArgBefore : NSObject<AOCAdviceProtocol>
 @end
 @implementation Add2ToArgBefore
 -(void) adviceBefore:(NSInvocation*)inv;
@@ -26,7 +26,7 @@
 }
 @end
 
-@interface Add5ToReturnValueAfter : NSObject<AOCAdvice>
+@interface Add5ToReturnValueAfter : NSObject<AOCAdviceProtocol>
 @end
 @implementation Add5ToReturnValueAfter
 -(void) adviceAfter:(NSInvocation*)inv;
@@ -38,7 +38,7 @@
 }
 @end
 
-@interface LogAndReturn40Instead : NSObject<AOCAdvice>
+@interface LogAndReturn40Instead : NSObject<AOCAdviceProtocol>
 @end
 @implementation LogAndReturn40Instead
 -(BOOL) adviceInsteadOf:(NSInvocation*)inv;
