@@ -179,8 +179,8 @@ ALLOWED_RETURN_TYPES.each do |returnType|
     puts "// #{returnType} /////////////////////////"
     PrintReturnMethod(returnType, "")
     PrintReturnMethodTests(returnType)
-    PrintKVCAccessors(returnType)
-    PrintKVCAccessorTests(returnType)
+    #PrintKVCAccessors(returnType)
+    #PrintKVCAccessorTests(returnType)
     PrintReturnMethod(returnType, "ForInstall")
     suffix = TYPE_INFO[returnType][:method_suffix]
     PrintInstallMethodTest(returnType, "Return", "return#{suffix}ForInstall")
