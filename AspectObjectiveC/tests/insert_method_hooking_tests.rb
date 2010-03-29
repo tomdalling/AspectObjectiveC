@@ -2,6 +2,7 @@
 FILE_NAME_FOR_INSERT = ARGV[0]
 BEGIN_INSERT_LINE = "//begin #{File.basename(__FILE__)}"
 END_INSERT_LINE = "//end #{File.basename(__FILE__)}"
+DONT_INSERT_LINE = "//dont insert"
 
 if(!File.exists?(FILE_NAME_FOR_INSERT) || !File.writable?(FILE_NAME_FOR_INSERT))
     abort("Can't find or can't write to #{FILE_NAME_FOR_INSERT}")
@@ -9,6 +10,12 @@ end
 
 newFileContent = ""
 fileToModify = File.new(FILE_NAME_FOR_INSERT, "r")
+
+if(fileToModify.gets.chomp == DONT_INSERT_LINE)
+    exit
+else
+    fileToModify.seek(0)
+end
 
 #Include the old stuff up to BEGIN_INSERT_LINE of file
 while true
