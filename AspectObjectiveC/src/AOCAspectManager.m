@@ -1,5 +1,7 @@
 
 #import "AOCAspectManager.h"
+#import "AOCMethodHooking.h"
+#import "AOCError.h"
 
 static AOCAspectManager* g_sharedAspectManager = nil;
 
