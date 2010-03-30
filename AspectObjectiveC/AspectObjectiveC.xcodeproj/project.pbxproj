@@ -31,6 +31,9 @@
 		E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
 		E2F6E5881149319000658AB2 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E2F6E5891149319300658AB2 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
+		E2FC137B1162320800A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
+		E2FC137C1162321500A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
+		E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,6 +81,10 @@
 		E2BA925C114860FE0068257E /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.markdown; path = ../README.markdown; sourceTree = SOURCE_ROOT; };
 		E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AspectObjectiveC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F6E5811149303D00658AB2 /* AspectObjectiveC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AspectObjectiveC-Info.plist"; sourceTree = "<group>"; };
+		E2FC1377116231FE00A17133 /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
+		E2FC1378116231FE00A17133 /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		E2FC1379116231FE00A17133 /* libffi.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libffi.5.dylib; sourceTree = "<group>"; };
+		E2FC137A116231FE00A17133 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2FC137B1162320800A17133 /* libffi.5.dylib in Frameworks */,
 				E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2FC137C1162321500A17133 /* libffi.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +151,7 @@
 				E2905BB81147942200D69FE7 /* src */,
 				E2905BB91147942200D69FE7 /* tests */,
 				E247935D114C9D5800626905 /* DemoApp */,
+				E2FC1375116231FE00A17133 /* thirdparty */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */,
@@ -199,6 +210,25 @@
 				E2BA572C114904520080CA2D /* TestAOCAspectManager.m */,
 			);
 			path = tests;
+			sourceTree = "<group>";
+		};
+		E2FC1375116231FE00A17133 /* thirdparty */ = {
+			isa = PBXGroup;
+			children = (
+				E2FC1376116231FE00A17133 /* libffi */,
+			);
+			path = thirdparty;
+			sourceTree = "<group>";
+		};
+		E2FC1376116231FE00A17133 /* libffi */ = {
+			isa = PBXGroup;
+			children = (
+				E2FC1377116231FE00A17133 /* ffi.h */,
+				E2FC1378116231FE00A17133 /* ffitarget.h */,
+				E2FC1379116231FE00A17133 /* libffi.5.dylib */,
+				E2FC137A116231FE00A17133 /* LICENSE */,
+			);
+			path = libffi;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -434,6 +464,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "DemoApp-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -457,6 +491,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "DemoApp-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -484,6 +522,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "UnitTests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -510,6 +552,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
 				INFOPLIST_FILE = "UnitTests-Info.plist";
 				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Cocoa,
@@ -539,6 +585,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "AspectObjectiveC-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
@@ -565,6 +615,10 @@
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "AspectObjectiveC-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/thirdparty/libffi\"",
+				);
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,

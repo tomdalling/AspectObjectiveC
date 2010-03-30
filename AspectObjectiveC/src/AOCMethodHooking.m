@@ -1,7 +1,13 @@
 
 #import "AOCMethodHooking.h"
 #import "AOCError.h"
+#import "ffi.h"
 #include <objc/runtime.h>
+#include <sys/mman.h>
+
+#ifndef FFI_CLOSURES
+#   error "libffi closures are not supported for the current architecture"
+#endif
 
 static AOCMethodInvocationHook g_globalInvocationHook = NULL;
 
@@ -13,7 +19,7 @@ static IMP const _AOC_INVALID_IMP = (IMP)((void*)0xDEADBEEF);
 
 SEL _AOCBackupSelForSel(SEL selector);
 BOOL _AOCCanInstallHookForMethodSig(NSMethodSignature* methodSig, NSError** outError);
-IMP _AOCHookImpForMethodSig(NSMethodSignature* methodSig);
+IMP _AOCHookImpForActualImp(IMP actualImp);
 void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv);
 NSInvocation* _AOCInvocationFromVargs(id self, SEL _cmd, va_list vl);
 void _AOCSetInvocationArgFromVargs(NSInvocation* inv, NSMethodSignature* ms, va_list vl, int argIndex);
@@ -25,44 +31,23 @@ void _AOCSetImpFromBackupMethod(Class cls, SEL selector);
 #pragma mark -
 #pragma mark Hook IMPs for supported return types
 
-#define _AOC_HOOK_IMP_GUTS\
-    va_list vl; \
-    va_start(vl,_cmd);\
-    NSInvocation* inv = _AOCInvocationFromVargs(self, _cmd, vl); \
-    va_end(vl); \
-    \
-    _AOCHookImpGuts(self, _cmd, inv);
-
-#define _AOC_MAKE_HOOK_IMP(TYPE, SUFFIX) \
-    TYPE _AOCHookImp_ ## SUFFIX(id self, SEL _cmd, ...) \
-    { \
-        _AOC_HOOK_IMP_GUTS \
-        \
-        TYPE returnVal; \
-        [inv getReturnValue:&returnVal]; \
-        return returnVal; \
-    } \
-
-_AOC_MAKE_HOOK_IMP(char,char);
-_AOC_MAKE_HOOK_IMP(int,int);
-_AOC_MAKE_HOOK_IMP(short,short);
-_AOC_MAKE_HOOK_IMP(long,long);
-_AOC_MAKE_HOOK_IMP(long long,longLong);
-_AOC_MAKE_HOOK_IMP(unsigned char,uchar);
-_AOC_MAKE_HOOK_IMP(unsigned int,uint);
-_AOC_MAKE_HOOK_IMP(unsigned short,ushort);
-_AOC_MAKE_HOOK_IMP(unsigned long,ulong);
-_AOC_MAKE_HOOK_IMP(unsigned long long,ulongLong);
-_AOC_MAKE_HOOK_IMP(float,float);
-_AOC_MAKE_HOOK_IMP(double,double);
-_AOC_MAKE_HOOK_IMP(_Bool,bool);
-_AOC_MAKE_HOOK_IMP(char*,charptr);
-_AOC_MAKE_HOOK_IMP(id,id);
-_AOC_MAKE_HOOK_IMP(Class,class);
-_AOC_MAKE_HOOK_IMP(SEL,sel);
-_AOC_MAKE_HOOK_IMP(void*,ptr);
-//special case because it doesn't return anything
-void _AOCHookImp_void(id self, SEL _cmd, ...) { _AOC_HOOK_IMP_GUTS }
+void _AOCHookImp(ffi_cif* cif, void* result, void** args, void* userdata)
+{
+    NSLog(@"It begins!!!!!!!!!!!!!!!!!");
+    id self = *((id*)args[0]);
+    SEL _cmd = *((SEL*)args[1]);
+    void (*actualImp)(id,SEL,id) = (void (*)(id,SEL,id))userdata;
+    
+    NSLog(@"\tactualImp = %p", actualImp);
+    NSLog(@"\tself = %p", self);
+    NSLog(@"\t_cmd = %p", _cmd);
+    
+    actualImp(self, _cmd, nil);
+    NSLog(@"ran actual!");
+    
+    
+    NSLog(@"<%p %@> %@", self, [self className], NSStringFromSelector(_cmd));
+}
 
 #pragma mark -
 #pragma mark Private functions definition
@@ -75,46 +60,63 @@ SEL _AOCBackupSelForSel(SEL selector)
 
 BOOL _AOCCanInstallHookForMethodSig(NSMethodSignature* methodSig, NSError** outError)
 {
-    IMP hookImp = _AOCHookImpForMethodSig(methodSig);
-    if(hookImp == NULL){
-        AOCSetError(outError, NSLocalizedString(@"Can't install hook",@""), NSLocalizedString(@"The return type of the method is unsupported.",@""));
-        return NO;
-    }
-    
-    //TODO: check argument types
+    //TODO: here
     
     return YES;
 }
 
-IMP _AOCHookImpForMethodSig(NSMethodSignature* methodSig)
+IMP _AOCHookImpForActualImp(IMP actualImp)
 {
-    NSCAssert(methodSig != nil, @"");
-    const char* returnTypeEncoding = [methodSig methodReturnType];
-    NSCAssert(returnTypeEncoding != NULL, @"");
-    NSCAssert(returnTypeEncoding[0] != 0, @"");
+    ffi_cif* cif = malloc(sizeof(ffi_cif));
+    ffi_closure *closure;
+    void (*boundMethod)(id, SEL, id);
+    void (*actualMethod)(id, SEL, id) = (void (*)(id, SEL, id))actualImp;
+    ffi_type** arg_types = malloc(sizeof(ffi_type)*3);
+    ffi_status status;
     
-    switch(returnTypeEncoding[0]){
-        case _C_CHR: return (IMP)_AOCHookImp_char;
-        case _C_INT: return (IMP)_AOCHookImp_int;
-        case _C_SHT: return (IMP)_AOCHookImp_short;
-        case _C_LNG: return (IMP)_AOCHookImp_long;
-        case _C_LNG_LNG: return (IMP)_AOCHookImp_longLong;
-        case _C_UCHR: return (IMP)_AOCHookImp_uchar;
-        case _C_UINT: return (IMP)_AOCHookImp_uint;
-        case _C_USHT: return (IMP)_AOCHookImp_ushort;
-        case _C_ULNG: return (IMP)_AOCHookImp_ulong;
-        case _C_ULNG_LNG: return (IMP)_AOCHookImp_ulongLong;
-        case _C_FLT: return (IMP)_AOCHookImp_float;
-        case _C_DBL: return (IMP)_AOCHookImp_double;
-        case _C_BOOL: return (IMP)_AOCHookImp_bool;
-        case _C_VOID: return (IMP)_AOCHookImp_void;
-        case _C_CHARPTR: return (IMP)_AOCHookImp_charptr;
-        case _C_ID: return (IMP)_AOCHookImp_id;
-        case _C_CLASS: return (IMP)_AOCHookImp_class;
-        case _C_SEL: return (IMP)_AOCHookImp_sel;
-        case _C_PTR: return (IMP)_AOCHookImp_ptr;
-        default: return NULL;
+    arg_types[0] = &ffi_type_pointer;
+    arg_types[1] = &ffi_type_pointer;
+    arg_types[2] = &ffi_type_pointer;
+    
+    if ((closure = ffi_closure_alloc(sizeof(ffi_closure), (void**)&boundMethod)) == NULL)
+    {
+        NSLog(@"error A");
     }
+    
+    // Prepare the ffi_cif structure.
+    if ((status = ffi_prep_cif(cif, FFI_DEFAULT_ABI,
+                               3, &ffi_type_void, arg_types)) != FFI_OK)
+    {
+        NSLog(@"error B");
+    }
+    
+    // Prepare the ffi_closure structure.
+    if ((status = ffi_prep_closure_loc(closure, cif, _AOCHookImp, (void*)actualImp, (void*)boundMethod)) != FFI_OK)
+    {
+        NSLog(@"error C");
+    }
+    
+    NSLog(@"closure = %p", closure);
+    NSLog(@"%p for %p", boundMethod, actualImp);
+    boundMethod(nil, NULL, nil);
+    NSLog(@"Done");
+    actualMethod(nil, NULL, nil);
+    NSLog(@"Done2");
+    return (IMP)boundMethod;
+    
+    // The closure is now ready to be executed, and can be saved for later
+    // execution if desired.
+    
+//    Invoke the closure.
+//    result = ((unsigned char(*)(float, unsigned int))closure)(42, 5.1);
+//    
+//    // Free the memory associated with the closure.
+//    if (munmap(closure, sizeof(closure)) == -1)
+//    {
+//        // Check errno and handle the error.
+//    }
+//    
+//    return 0;
 }
 
 void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv)
@@ -254,27 +256,8 @@ BOOL AOCInstallHook(Class cls, SEL selector, NSError** outError)
     NSCParameterAssert(cls != NULL);
     NSCParameterAssert(selector != NULL);
     
-    if(AOCIsHookInstalled(cls, selector)){
-        AOCSetError(outError, NSLocalizedString(@"Can't install hook", @""), NSLocalizedString(@"A hook is already installed.", @""));
-        return NO;
-    }
-    
     Method mthd = class_getInstanceMethod(cls, selector);
-    if(mthd == NULL){
-        AOCSetError(outError, NSLocalizedString(@"Can't install hook", @""), NSLocalizedString(@"No instance method exists for the specified selector and class.", @""));
-        return NO;
-    }
-    
-    NSMethodSignature* methodSig = [NSMethodSignature signatureWithObjCTypes:method_getTypeEncoding(mthd)];
-    NSCAssert(methodSig != nil, @"Couldn't create NSMethodSignature from method_getTypeEncoding");
-    if(!_AOCCanInstallHookForMethodSig(methodSig, outError))
-        return NO;
-    
-    if(!_AOCCreateOrRevalidateBackupMethod(cls, selector, outError))
-        return NO;
-    
-    IMP hookImp = _AOCHookImpForMethodSig(methodSig);
-    NSCAssert(hookImp != NULL, @"_AOCCanInstallHookForMethodSig passed, but _AOCHookImpForMethodSig returned NULL");
+    IMP hookImp = _AOCHookImpForActualImp(method_getImplementation(mthd));
     method_setImplementation(mthd, hookImp);
     
     return YES;

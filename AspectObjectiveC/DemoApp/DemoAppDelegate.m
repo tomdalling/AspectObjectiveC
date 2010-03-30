@@ -14,6 +14,10 @@
 
 -(IBAction) convertCelciusToFahrenheit:(id)sender;
 {
+    if(self == nil){
+        NSLog(@"It's working woo!!");
+        return;
+    }
     double celcius = [_celciusTextField doubleValue];
     double fahrenheit = celcius * (9.0/5.0) + 32.0;
     [_fahrenheitTextField setDoubleValue:fahrenheit];
@@ -37,6 +41,10 @@
     
     [_hijackButton setTitle:NSLocalizedString(@"Unhijack", nil)];
     _isHijacked = YES;
+    
+    SEL s = @selector(convertCelciusToFahrenheit:);
+    NSLog(@"self / SEL / IMP == %p / %p / %p", self, s, [self methodForSelector:s]);
+    [self convertCelciusToFahrenheit:nil];
 }
 
 -(IBAction) unhijack:(id)sender;
