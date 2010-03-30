@@ -35,16 +35,12 @@
                                                                ofClass:[DemoAppDelegate class]
                                                                  error:&error];
     if(!didHijack){
-        [[self window] presentError:error];
+        [NSApp presentError:error];
         return;
     }
     
     [_hijackButton setTitle:NSLocalizedString(@"Unhijack", nil)];
     _isHijacked = YES;
-    
-    SEL s = @selector(convertCelciusToFahrenheit:);
-    NSLog(@"self / SEL / IMP == %p / %p / %p", self, s, [self methodForSelector:s]);
-    [self convertCelciusToFahrenheit:nil];
 }
 
 -(IBAction) unhijack:(id)sender;

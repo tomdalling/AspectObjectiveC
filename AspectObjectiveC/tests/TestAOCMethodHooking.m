@@ -591,33 +591,6 @@ void MockHookForTesting(NSInvocation* inv)
 }
 
 
-// _Bool /////////////////////////
--(_Bool) return_Bool; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_bool;
-}
--(void) testReturn_Bool1;{
-    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-    m_bool = true;
-    STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
-    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
-}
--(void) testReturn_Bool2;{
-    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-    m_bool = false;
-    STAssertEquals([self return_Bool], m_bool, @"Return value is mangled");
-    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
-}
--(_Bool) return_BoolForInstall; {
-    NSLog(@"inside %@", NSStringFromSelector(_cmd));
-    return m_bool;
-}
--(void) testInstallAndUninstallForReturnType_Bool; {
-    SEL selector = @selector(return_BoolForInstall);
-    [self doTestInstallAndUninstallForSelector:selector];
-}
-
-
 // void* /////////////////////////
 -(void*) returnPtr; {
     NSLog(@"inside %@", NSStringFromSelector(_cmd));
@@ -1192,31 +1165,6 @@ void MockHookForTesting(NSInvocation* inv)
 }
 
 
-// _Bool /////////////////////////
--(void) assertArgEqualOfType_Bool:(_Bool)arg;{
-    STAssertEquals(arg, m_bool, @"Argument is mangled");
-}
--(void) testArgEqualFor_Bool1; {
-    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-    m_bool = true;
-    [self assertArgEqualOfType_Bool:m_bool];
-    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
-}
--(void) testArgEqualFor_Bool2; {
-    STAssertFalse(g_hookDidRun, @"Hook shouldn't have run yet");
-    m_bool = false;
-    [self assertArgEqualOfType_Bool:m_bool];
-    STAssertTrue(g_hookDidRun, @"Hook should have run by now");
-}
--(void) installMethodForArgType_Bool:(_Bool)arg;{
-    NSLog(@"Inside %@", NSStringFromSelector(_cmd));
-}
--(void) testInstallAndUninstallForArgType_Bool; {
-    SEL selector = @selector(installMethodForArgType_Bool:);
-    [self doTestInstallAndUninstallForSelector:selector];
-}
-
-
 // void* /////////////////////////
 -(void) assertArgEqualOfTypePtr:(void*)arg;{
     STAssertEquals(arg, m_ptr, @"Argument is mangled");
@@ -1307,8 +1255,6 @@ void MockHookForTesting(NSInvocation* inv)
     AOCInstallHook([self class], @selector(returnFloatKVCAccessorHooked), nil);
     AOCInstallHook([self class], @selector(returnDouble), nil);
     AOCInstallHook([self class], @selector(returnDoubleKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(return_Bool), nil);
-    AOCInstallHook([self class], @selector(return_BoolKVCAccessorHooked), nil);
     AOCInstallHook([self class], @selector(returnPtr), nil);
     AOCInstallHook([self class], @selector(returnPtrKVCAccessorHooked), nil);
     AOCInstallHook([self class], @selector(returnCharPtr), nil);
@@ -1329,7 +1275,6 @@ void MockHookForTesting(NSInvocation* inv)
     AOCInstallHook([self class], @selector(assertArgEqualOfTypeULongLong:), nil);
     AOCInstallHook([self class], @selector(assertArgEqualOfTypeFloat:), nil);
     AOCInstallHook([self class], @selector(assertArgEqualOfTypeDouble:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfType_Bool:), nil);
     AOCInstallHook([self class], @selector(assertArgEqualOfTypePtr:), nil);
     AOCInstallHook([self class], @selector(assertArgEqualOfTypeCharPtr:), nil);
 }

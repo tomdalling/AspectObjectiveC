@@ -3,249 +3,288 @@
 #import "AOCError.h"
 #import "ffi.h"
 #include <objc/runtime.h>
-#include <sys/mman.h>
 
 #ifndef FFI_CLOSURES
 #   error "libffi closures are not supported for the current architecture"
 #endif
 
+static NSMutableDictionary* g_closureBySelectorByClass = nil;
 static AOCMethodInvocationHook g_globalInvocationHook = NULL;
 
-static NSString* const _AOC_BACKUP_SEL_PREFIX = @"__AOC_actual_imp_of_";
-static IMP const _AOC_INVALID_IMP = (IMP)((void*)0xDEADBEEF);
+#pragma mark -
+#pragma mark Private function declarations
+
+NSArray* _AOCSupportedScalarReturnTypes();
+NSArray* _AOCSupportedScalarArgumentTypes();
+BOOL     _AOCScalarTypeIsInArray(const char* scalarType, NSArray* array);
+BOOL     _AOCReturnTypeIsSupported(const char* returnType);
+BOOL     _AOCArgumentTypeIsSupported(const char* argumentType);
+BOOL     _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError);
+
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp);
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp);
+void         _AOCHookClosureFree(ffi_closure* closure);
+void         _AOCSetCIFArgTypes(ffi_type* argTypes[], NSMethodSignature* sig);
+ffi_type*    _AOCFFITypeForType(const char* type);
+
+NSMutableDictionary* _AOCGetClosuresBySelector(Class cls, BOOL createIfNeeded);
+ffi_closure*         _AOCGetClosure(Class cls, SEL selector);
+void                 _AOCSetClosure(ffi_closure* closure, Class cls, SEL selector);
+
+void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata);
+NSInvocation* _AOCMakeInvocation(ffi_cif* cif, void** args);
 
 #pragma mark -
-#pragma mark Private functions declaration
+#pragma mark Private function definitions
 
-SEL _AOCBackupSelForSel(SEL selector);
-BOOL _AOCCanInstallHookForMethodSig(NSMethodSignature* methodSig, NSError** outError);
-IMP _AOCHookImpForActualImp(IMP actualImp);
-void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv);
-NSInvocation* _AOCInvocationFromVargs(id self, SEL _cmd, va_list vl);
-void _AOCSetInvocationArgFromVargs(NSInvocation* inv, NSMethodSignature* ms, va_list vl, int argIndex);
-BOOL _AOCCreateOrRevalidateBackupMethod(Class cls, SEL selector, NSError** outError);
-BOOL _AOCDoesValidBackupMethodExist(Class cls, SEL selector);
-void _AOCInvalidateBackupMethod(Class cls, SEL selector);
-void _AOCSetImpFromBackupMethod(Class cls, SEL selector);
-
-#pragma mark -
-#pragma mark Hook IMPs for supported return types
-
-void _AOCHookImp(ffi_cif* cif, void* result, void** args, void* userdata)
+NSArray* _AOCSupportedScalarReturnTypes()
 {
-    NSLog(@"It begins!!!!!!!!!!!!!!!!!");
-    id self = *((id*)args[0]);
-    SEL _cmd = *((SEL*)args[1]);
-    void (*actualImp)(id,SEL,id) = (void (*)(id,SEL,id))userdata;
-    
-    NSLog(@"\tactualImp = %p", actualImp);
-    NSLog(@"\tself = %p", self);
-    NSLog(@"\t_cmd = %p", _cmd);
-    
-    actualImp(self, _cmd, nil);
-    NSLog(@"ran actual!");
-    
-    
-    NSLog(@"<%p %@> %@", self, [self className], NSStringFromSelector(_cmd));
+    return [_AOCSupportedScalarArgumentTypes() arrayByAddingObject:[NSNumber numberWithChar:_C_VOID]];
 }
 
-#pragma mark -
-#pragma mark Private functions definition
-
-SEL _AOCBackupSelForSel(SEL selector)
+NSArray* _AOCSupportedScalarArgumentTypes()
 {
-    NSCParameterAssert(selector != NULL);
-    return NSSelectorFromString([_AOC_BACKUP_SEL_PREFIX stringByAppendingString:NSStringFromSelector(selector)]);
+    return [NSArray arrayWithObjects:
+            [NSNumber numberWithChar:_C_ID],
+            [NSNumber numberWithChar:_C_CLASS],
+            [NSNumber numberWithChar:_C_SEL],
+            [NSNumber numberWithChar:_C_CHR],
+            [NSNumber numberWithChar:_C_UCHR],
+            [NSNumber numberWithChar:_C_SHT],
+            [NSNumber numberWithChar:_C_USHT],
+            [NSNumber numberWithChar:_C_INT],
+            [NSNumber numberWithChar:_C_UINT],
+            [NSNumber numberWithChar:_C_LNG],
+            [NSNumber numberWithChar:_C_ULNG],
+            [NSNumber numberWithChar:_C_LNG_LNG],
+            [NSNumber numberWithChar:_C_ULNG_LNG],
+            [NSNumber numberWithChar:_C_FLT],
+            [NSNumber numberWithChar:_C_DBL],
+            [NSNumber numberWithChar:_C_PTR],
+            [NSNumber numberWithChar:_C_CHARPTR],
+            nil];
 }
 
-BOOL _AOCCanInstallHookForMethodSig(NSMethodSignature* methodSig, NSError** outError)
+BOOL _AOCScalarTypeIsInArray(const char* scalarType, NSArray* array)
 {
-    //TODO: here
+    NSCParameterAssert(scalarType != NULL);
+    NSCParameterAssert(array != nil);
     
+    if(scalarType[0] == '\0')
+        return NO;
+    
+    NSNumber* scalarTypeNum = [NSNumber numberWithChar:scalarType[0]];
+    return [array containsObject:scalarTypeNum];
+}
+
+BOOL _AOCReturnTypeIsSupported(const char* returnType)
+{
+    return _AOCScalarTypeIsInArray(returnType, _AOCSupportedScalarReturnTypes());
+}
+
+BOOL _AOCArgumentTypeIsSupported(const char* argumentType)
+{
+    return _AOCScalarTypeIsInArray(argumentType, _AOCSupportedScalarArgumentTypes());
+}
+
+BOOL _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError)
+{
+    NSCParameterAssert(sig != nil);
+    
+    if(!_AOCReturnTypeIsSupported([sig methodReturnType])){
+        AOCSetError(outError, [NSString stringWithFormat:@"Return type \"%s\" is not supported", [sig methodReturnType]], nil);
+        return NO;
+    }
+
+    NSUInteger argIdx = 0;
+    for(argIdx = 0; argIdx < [sig numberOfArguments]; ++argIdx){
+        if(!_AOCArgumentTypeIsSupported([sig getArgumentTypeAtIndex:argIdx])){
+            AOCSetError(outError, [NSString stringWithFormat:@"Argument at index %u of type \"%s\" is not supported", (unsigned int)argIdx, [sig getArgumentTypeAtIndex:argIdx]], nil);
+            return NO;
+        }
+    }
+        
     return YES;
 }
 
-IMP _AOCHookImpForActualImp(IMP actualImp)
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp)
 {
+    NSCParameterAssert(sig != nil);
+    
     ffi_cif* cif = malloc(sizeof(ffi_cif));
-    ffi_closure *closure;
-    void (*boundMethod)(id, SEL, id);
-    void (*actualMethod)(id, SEL, id) = (void (*)(id, SEL, id))actualImp;
-    ffi_type** arg_types = malloc(sizeof(ffi_type)*3);
-    ffi_status status;
+    ffi_type** argTypes = malloc(sizeof(ffi_type) * [sig numberOfArguments]);
+    ffi_closure* closure = NULL;
     
-    arg_types[0] = &ffi_type_pointer;
-    arg_types[1] = &ffi_type_pointer;
-    arg_types[2] = &ffi_type_pointer;
-    
-    if ((closure = ffi_closure_alloc(sizeof(ffi_closure), (void**)&boundMethod)) == NULL)
-    {
-        NSLog(@"error A");
+    closure = _AOCHookClosureInit(closure, cif, argTypes, sig, originalImp);
+    if(closure == NULL){
+        free(argTypes);
+        free(cif);
     }
+    return closure;
+}
+        
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp)
+{   
+    NSCParameterAssert(cif != NULL);
+    NSCParameterAssert(argTypes != NULL);
+    NSCParameterAssert(sig != nil);
     
-    // Prepare the ffi_cif structure.
-    if ((status = ffi_prep_cif(cif, FFI_DEFAULT_ABI,
-                               3, &ffi_type_void, arg_types)) != FFI_OK)
-    {
-        NSLog(@"error B");
-    }
+    void (*closureMeth)(id, SEL, id) = (void (*)(id, SEL, id))closure;
     
-    // Prepare the ffi_closure structure.
-    if ((status = ffi_prep_closure_loc(closure, cif, _AOCHookImp, (void*)actualImp, (void*)boundMethod)) != FFI_OK)
-    {
-        NSLog(@"error C");
-    }
+    _AOCSetCIFArgTypes(argTypes, sig);
     
-    NSLog(@"closure = %p", closure);
-    NSLog(@"%p for %p", boundMethod, actualImp);
-    boundMethod(nil, NULL, nil);
-    NSLog(@"Done");
-    actualMethod(nil, NULL, nil);
-    NSLog(@"Done2");
-    return (IMP)boundMethod;
+    closure = ffi_closure_alloc(sizeof(ffi_closure), (void**)&closureMeth);
+    if(closure == NULL)
+        return NULL;
     
-    // The closure is now ready to be executed, and can be saved for later
-    // execution if desired.
+    ffi_status status = FFI_OK;
+    ffi_type* returnType = _AOCFFITypeForType([sig methodReturnType]);
+    if(returnType == NULL)
+        return NULL;
+        
+    status = ffi_prep_cif(cif,
+                          FFI_DEFAULT_ABI,
+                          [sig numberOfArguments],
+                          returnType,
+                          argTypes);
+    if(status != FFI_OK)
+        return NULL;
     
-//    Invoke the closure.
-//    result = ((unsigned char(*)(float, unsigned int))closure)(42, 5.1);
-//    
-//    // Free the memory associated with the closure.
-//    if (munmap(closure, sizeof(closure)) == -1)
-//    {
-//        // Check errno and handle the error.
-//    }
-//    
-//    return 0;
+    status = ffi_prep_closure_loc(closure, cif, _AOCHookClosureImp, originalImp, closureMeth);
+    if(status != FFI_OK)
+        return NULL;
+        
+    return closure;
 }
 
-void _AOCHookImpGuts(id self, SEL _cmd, NSInvocation* inv)
+void _AOCHookClosureFree(ffi_closure* closure)
 {
-    SEL backupSel = _AOCBackupSelForSel(_cmd);
-    Method mthd = class_getInstanceMethod([self class], _cmd);
-    Method backupMthd = class_getInstanceMethod([self class], backupSel);
-    NSCAssert(mthd && backupMthd, @"");
-    IMP backupImp = method_getImplementation(backupMthd);
-    IMP hookImp = method_getImplementation(mthd);
-    
-    //put the original IMP back in before invocation
-    method_setImplementation(mthd, backupImp);
+    free(closure->cif->arg_types);
+    free(closure->cif);
+    ffi_closure_free(closure);
+}
 
-    if(g_globalInvocationHook == NULL){
-        [inv invoke];
+void _AOCSetCIFArgTypes(ffi_type* argTypeList[], NSMethodSignature* sig)
+{
+    NSUInteger argIdx = 0;
+    for(argIdx = 0; argIdx < [sig numberOfArguments]; ++argIdx){
+        ffi_type* argType = _AOCFFITypeForType([sig getArgumentTypeAtIndex:argIdx]);
+        if(argType == NULL)
+            return;
+        argTypeList[argIdx] = argType;
+    }
+}
+
+ffi_type* _AOCFFITypeForType(const char* type)
+{
+    NSCParameterAssert(type != NULL);
+    NSCParameterAssert(type[0] != '\0');
+    
+    switch(type[0]){
+        case _C_ID:
+        case _C_CLASS:
+        case _C_SEL:
+        case _C_PTR:
+        case _C_CHARPTR:
+            return &ffi_type_pointer;
+            
+        case _C_CHR: return &ffi_type_schar;
+        case _C_UCHR: return &ffi_type_uchar;
+        case _C_SHT: return &ffi_type_sshort;
+        case _C_USHT: return &ffi_type_ushort;
+        case _C_INT: return &ffi_type_sint;
+        case _C_UINT: return &ffi_type_uint;
+        case _C_LNG: return &ffi_type_slong;
+        case _C_ULNG: return &ffi_type_ulong;
+        case _C_LNG_LNG: return &ffi_type_sint64;
+        case _C_ULNG_LNG: return &ffi_type_uint64;
+        case _C_FLT: return &ffi_type_float;
+        case _C_DBL: return &ffi_type_double;
+        case _C_VOID: return &ffi_type_void;
+            
+        default:
+            NSLog(@"unhandled type \"%s\"", type);
+            return NULL;
+    }
+}
+
+NSMutableDictionary* _AOCGetClosuresBySelector(Class cls, BOOL createIfNeeded)
+{
+    if(g_closureBySelectorByClass == nil){
+        if(createIfNeeded){
+            g_closureBySelectorByClass = [NSMutableDictionary new];
+        } else {
+            return NULL;
+        }
+    }
+    
+    NSMutableDictionary* closuresBySel = [g_closureBySelectorByClass objectForKey:NSStringFromClass(cls)];
+    if(closuresBySel == nil && createIfNeeded){
+        closuresBySel = [NSMutableDictionary dictionary];
+        [g_closureBySelectorByClass setObject:closuresBySel forKey:NSStringFromClass(cls)];
+    }
+    
+    return closuresBySel;
+}
+
+ffi_closure* _AOCGetClosure(Class cls, SEL selector)
+{
+    NSDictionary* closuresBySel = _AOCGetClosuresBySelector(cls, NO);
+    if(closuresBySel == nil)
+        return NULL;
+    
+    NSValue* closureVal = [closuresBySel objectForKey:NSStringFromSelector(selector)];
+    if(closureVal == nil)
+        return nil;
+    else
+        return (ffi_closure*)[closureVal pointerValue];
+}
+
+void _AOCSetClosure(ffi_closure* closure, Class cls, SEL selector)
+{
+    NSMutableDictionary* closuresBySel = _AOCGetClosuresBySelector(cls, YES);
+    NSString* selectorKey = NSStringFromSelector(selector);
+    
+    NSValue* oldClosureVal = [closuresBySel objectForKey:selectorKey];
+    if(oldClosureVal != nil)
+        _AOCHookClosureFree([oldClosureVal pointerValue]);
+    
+    if(closure == NULL){
+        [closuresBySel removeObjectForKey:selectorKey];
     } else {
-        g_globalInvocationHook(inv);
-    }
-
-    //see if hook was uninstalled during invocation.
-    //if so leave the original IMP in, otherwise put the hook IMP back in
-    if(AOCIsHookInstalled([self class], _cmd)){
-        method_setImplementation(mthd, hookImp);
+        NSValue* newClosureVal = [NSValue valueWithPointer:closure];
+        [closuresBySel setObject:newClosureVal forKey:selectorKey];
     }
 }
 
-NSInvocation* _AOCInvocationFromVargs(id self, SEL _cmd, va_list vl)
+void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
 {
-    NSMethodSignature* ms = [self methodSignatureForSelector:_cmd];
-    NSInvocation* inv = [NSInvocation invocationWithMethodSignature:ms];
-    [inv setSelector:_cmd];
-    [inv setTarget:self];
+    if(g_globalInvocationHook == NULL){
+        ffi_call(cif, userdata, result, args);
+    } else {
+        NSInvocation* inv = _AOCMakeInvocation(cif, args);
+        g_globalInvocationHook(inv);
+        if(result != NULL && cif->rtype != &ffi_type_void){
+            [inv getReturnValue:result];
+        }
+    }
+}
+
+NSInvocation* _AOCMakeInvocation(ffi_cif* cif, void** args)
+{
+    id self = *((id*)args[0]);
+    SEL _cmd = *((SEL*)args[1]);
     
-    int numArgs = [ms numberOfArguments];
-    int i;
-    for (i=2; i < numArgs; ++i) {
-        _AOCSetInvocationArgFromVargs(inv, ms, vl, i);
+    NSMethodSignature* sig = [self methodSignatureForSelector:_cmd];
+    NSCAssert2(sig != nil, @"-[%@ methodSignatureForSelector:%@] must not return nil", [self className], NSStringFromSelector(_cmd));
+    
+    NSInvocation* inv = [NSInvocation invocationWithMethodSignature:sig];
+    NSUInteger argIdx = 0;
+    for(argIdx = 0; argIdx < cif->nargs; ++argIdx){
+        [inv setArgument:args[argIdx] atIndex:argIdx];
     }
     
     return inv;
-}
-
-void _AOCSetInvocationArgFromVargs(NSInvocation* inv, NSMethodSignature* ms, va_list vl, int argIndex)
-{
-    const char* argType = [ms getArgumentTypeAtIndex:argIndex];
-    NSCAssert(argType[0] != 0,@"");
-    
-    switch(argType[0]){
-#        define ARGT(TYPECHAR, TYPE) \
-            case TYPECHAR:{ \
-                TYPE arg = va_arg(vl, TYPE); \
-                [inv setArgument:&arg atIndex:argIndex];\
-            break;}\
-
-            ARGT(_C_ID, id);
-            ARGT(_C_CLASS, Class);
-            ARGT(_C_SEL, SEL);
-            ARGT(_C_CHR, int); //char is promoted to int with va_arg
-            ARGT(_C_UCHR, unsigned int); //char is promoted to int with va_arg
-            ARGT(_C_SHT, int); //short is promoted to int with va_arg
-            ARGT(_C_USHT, unsigned int); //short is promoted to int with va_arg
-            ARGT(_C_INT, int);
-            ARGT(_C_UINT, unsigned int);
-            ARGT(_C_LNG, long);
-            ARGT(_C_ULNG, unsigned long);
-            ARGT(_C_LNG_LNG, long long);
-            ARGT(_C_ULNG_LNG, unsigned long long);
-            ARGT(_C_FLT, double); //float is promoted to double with va_arg
-            ARGT(_C_DBL, double);
-            ARGT(_C_BOOL, int); //_Bool is promoted to int with va_arg
-            ARGT(_C_PTR, void*);
-            ARGT(_C_CHARPTR, char*);
-        default:
-            NSLog(@"Can't handle arg type: %s", argType);
-    }
-}
-
-BOOL _AOCCreateOrRevalidateBackupMethod(Class cls, SEL selector, NSError** outError)
-{
-    Method realMethod = class_getInstanceMethod(cls, selector);
-    NSCAssert(realMethod != NULL, @"");
-    
-    SEL backupSel = _AOCBackupSelForSel(selector);
-    Method backupMethod = class_getInstanceMethod(cls, backupSel);
-    if(backupMethod == nil){
-        class_addMethod(cls, backupSel, method_getImplementation(realMethod), method_getTypeEncoding(realMethod));
-        return YES;
-    }
-    
-    NSCAssert(strcmp(method_getTypeEncoding(realMethod), method_getTypeEncoding(backupMethod)) == 0, @"");
-    if(method_getImplementation(backupMethod) == _AOC_INVALID_IMP){
-        method_setImplementation(backupMethod, method_getImplementation(realMethod));
-        return YES;
-    }
-    
-    AOCSetError(outError, NSLocalizedString(@"Can't create backup method", @""), NSLocalizedString(@"Backup method already exists", @""));
-    return NO;
-}
-
-BOOL _AOCDoesValidBackupMethodExist(Class cls, SEL selector)
-{
-    SEL backupSel = _AOCBackupSelForSel(selector);
-    Method backupMethod = class_getInstanceMethod(cls, backupSel);
-    if(backupMethod == NULL)
-        return NO;
-    
-    if(method_getImplementation(backupMethod) == _AOC_INVALID_IMP)
-        return NO;
-    
-    return YES;
-}
-
-void _AOCInvalidateBackupMethod(Class cls, SEL selector)
-{
-    SEL backupSel = _AOCBackupSelForSel(selector);
-    Method backupMethod = class_getInstanceMethod(cls, backupSel);
-    if(backupMethod == NULL)
-        return;
-    
-    method_setImplementation(backupMethod, _AOC_INVALID_IMP);
-}
-
-void _AOCSetImpFromBackupMethod(Class cls, SEL selector)
-{
-    Method realMethod = class_getInstanceMethod(cls, selector);
-    Method backupMethod = class_getInstanceMethod(cls, _AOCBackupSelForSel(selector));
-    NSCAssert(backupMethod != NULL && realMethod != NULL, @"");
-    method_exchangeImplementations(realMethod, backupMethod);
 }
 
 #pragma mark -
@@ -256,9 +295,31 @@ BOOL AOCInstallHook(Class cls, SEL selector, NSError** outError)
     NSCParameterAssert(cls != NULL);
     NSCParameterAssert(selector != NULL);
     
-    Method mthd = class_getInstanceMethod(cls, selector);
-    IMP hookImp = _AOCHookImpForActualImp(method_getImplementation(mthd));
-    method_setImplementation(mthd, hookImp);
+    Method method = class_getInstanceMethod(cls, selector);
+    if(method == NULL){
+        AOCSetError(outError, [NSString stringWithFormat:@"Class %@ does not have an instance method %@", NSStringFromClass(cls), NSStringFromSelector(selector)], nil);
+        return NO;
+    }
+    
+    NSMethodSignature* sig = [cls instanceMethodSignatureForSelector:selector];
+    if(sig == nil){
+        AOCSetError(outError, [NSString stringWithFormat:@"Class %@ returned nil for instanceMethodSignatureForSelector:@selector(%@)", NSStringFromClass(cls), NSStringFromSelector(selector)], nil);
+        return NO;
+    }
+    
+    if(!_AOCCanInstallHook(sig, outError))
+        return NO;
+
+    if(AOCIsHookInstalled(cls, selector)){
+        AOCSetError(outError, NSLocalizedString(@"Hook already installed", nil), nil);
+        return NO;
+    }
+    
+    ffi_closure* hookClosure = _AOCHookClosureAlloc(sig, method_getImplementation(method));
+    NSCAssert(hookClosure != NULL, @"This should always return non-null");
+    
+    method_setImplementation(method, (IMP)hookClosure);
+    _AOCSetClosure(hookClosure, cls, selector);
     
     return YES;
 }
@@ -268,19 +329,23 @@ void AOCUninstallHook(Class cls, SEL selector)
     NSCParameterAssert(cls != NULL);
     NSCParameterAssert(selector != NULL);
     
-    if(!AOCIsHookInstalled(cls, selector))
+    ffi_closure* closure = _AOCGetClosure(cls, selector);
+    if(closure == NULL)
         return;
     
-    _AOCSetImpFromBackupMethod(cls, selector);
-    _AOCInvalidateBackupMethod(cls, selector);
+    Method method = class_getInstanceMethod(cls, selector);
+    if(method == NULL){
+        NSLog(@"Instance method \"%@\" doesn't exist on class \"%@\"", NSStringFromSelector(selector), NSStringFromClass(cls));
+        return;
+    }
+
+    method_setImplementation(method, closure->user_data);
+    _AOCSetClosure(NULL, cls, selector);
 }
 
 BOOL AOCIsHookInstalled(Class cls, SEL selector)
 {
-    if(cls == NULL || selector == NULL)
-        return NO;
-    
-    return _AOCDoesValidBackupMethodExist(cls, selector);
+    return (_AOCGetClosure(cls, selector) != NULL);
 }
 
 AOCMethodInvocationHook AOCGlobalInvocationHook()

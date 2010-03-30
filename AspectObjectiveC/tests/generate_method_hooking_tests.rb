@@ -18,7 +18,7 @@ TYPE_INFO = {
     "unsigned long long" => { :ivar => "m_ulongLong", :method_suffix => "ULongLong", :nsvalue_wrapper => "[NSNumber numberWithUnsignedLongLong:%s]" },
     "float" => { :ivar => "m_float", :method_suffix => "Float", :nsvalue_wrapper => "[NSNumber numberWithFloat:%s]" },
     "double" => { :ivar => "m_double", :method_suffix => "Double", :nsvalue_wrapper => "[NSNumber numberWithDouble:%s]" },
-    "_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool", :nsvalue_wrapper => "[NSNumber numberWithBool:(BOOL)%s]" },
+    #"_Bool" => { :ivar => "m_bool", :method_suffix => "_Bool", :nsvalue_wrapper => "[NSNumber numberWithBool:(BOOL)%s]" },
     "void*" => { :ivar => "m_ptr", :method_suffix => "Ptr" }, #KVC doesn't work with arbitrary pointer values
     "char*" => { :ivar => "m_charPtr", :method_suffix => "CharPtr" },  #KVC doesn't work with arbitrary pointer values
 }
@@ -39,7 +39,7 @@ TEST_VALUES = {
     "unsigned long long" => ["ULONG_LONG_MAX", "ULONG_LONG_MAX - 64", "0"],
     "float" => ["FLT_MAX", "FLT_MAX - 33.0f", "0.0f", "-123.4f", "FLT_MIN"],
     "double" => ["DBL_MAX", "66.0", "0.0", "DBL_MIN + 44.0", "DBL_MIN"],
-    "_Bool" => ["true", "false"],
+    #"_Bool" => ["true", "false"],
     "void*" => ["NULL", "self", "(void*)0xDEADBEEF"],
     "char*" => ["NULL", "\"hello\""],
 }
@@ -47,7 +47,7 @@ TEST_VALUES = {
 ALLOWED_RETURN_TYPES = ["id", "Class", "SEL", "char", "unsigned char", "short",
                         "unsigned short", "int", "unsigned int", "long", 
                         "unsigned long", "long long", "unsigned long long",
-                        "float", "double", "_Bool", "void*", "char*"]
+                        "float", "double", "void*", "char*"]
                         
 ALLOWED_ARG_TYPES = ALLOWED_RETURN_TYPES;
             
