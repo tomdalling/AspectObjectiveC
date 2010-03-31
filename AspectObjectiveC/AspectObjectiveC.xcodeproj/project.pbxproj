@@ -25,7 +25,6 @@
 		E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E29D0E5E11526E3C00FD6070 /* HijackAdvice.m */; };
 		E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA572C114904520080CA2D /* TestAOCAspectManager.m */; };
 		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
-		E2BA925D114860FE0068257E /* README.markdown in Resources */ = {isa = PBXBuildFile; fileRef = E2BA925C114860FE0068257E /* README.markdown */; };
 		E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2BD2A1611633B4C001BCF10 /* AOCFFIInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */; };
@@ -82,7 +81,6 @@
 		E2BA572C114904520080CA2D /* TestAOCAspectManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCAspectManager.m; sourceTree = "<group>"; };
 		E2BA921811484FC00068257E /* AOCError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCError.h; sourceTree = "<group>"; };
 		E2BA921911484FC00068257E /* AOCError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCError.m; sourceTree = "<group>"; };
-		E2BA925C114860FE0068257E /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.markdown; path = ../README.markdown; sourceTree = SOURCE_ROOT; };
 		E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCFFIInvocation.h; sourceTree = "<group>"; };
 		E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCFFIInvocation.m; sourceTree = "<group>"; };
 		E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCInvocationProtocol.h; sourceTree = "<group>"; };
@@ -162,7 +160,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				E2905BAF114793AA00D69FE7 /* UnitTests-Info.plist */,
-				E2BA925C114860FE0068257E /* README.markdown */,
 				E2F6E5811149303D00658AB2 /* AspectObjectiveC-Info.plist */,
 				E247932F114C9CC300626905 /* DemoApp-Info.plist */,
 			);
@@ -344,7 +341,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2BA925D114860FE0068257E /* README.markdown in Resources */,
 				E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */,
 				E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */,
 			);
@@ -442,7 +438,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (
@@ -461,7 +457,7 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (
