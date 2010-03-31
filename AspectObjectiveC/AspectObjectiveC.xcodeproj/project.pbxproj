@@ -6,6 +6,20 @@
 	objectVersion = 44;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		E2511D951163890100CFCB83 /* GenerateDocumentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = E2511D981163891F00CFCB83 /* Build configuration list for PBXAggregateTarget "GenerateDocumentation" */;
+			buildPhases = (
+				E2511D941163890100CFCB83 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = GenerateDocumentation;
+			productName = GenerateDocumentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
@@ -27,13 +41,16 @@
 		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
-		E2BD2A1611633B4C001BCF10 /* AOCFFIInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */; };
 		E2BD2A1711633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */ = {isa = PBXBuildFile; fileRef = E22AD4F91147DF150020D988 /* AOCAdvice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E293AB9F1147E0E600D7F9C7 /* AOCAspectManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
 		E2F6E5881149319000658AB2 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E2F6E5891149319300658AB2 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
+		E2FBC39D116380CC0022C38A /* AOCFFIInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */; };
+		E2FBC39E116380CD0022C38A /* AOCError.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BA921811484FC00068257E /* AOCError.h */; };
+		E2FBC39F116380CE0022C38A /* AOCInvocationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */ = {isa = PBXBuildFile; fileRef = E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */; };
 		E2FC137B1162320800A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
 		E2FC137C1162321500A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
 		E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
@@ -247,7 +264,10 @@
 			files = (
 				E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */,
 				E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */,
-				E2BD2A1611633B4C001BCF10 /* AOCFFIInvocation.h in Headers */,
+				E2FBC39D116380CC0022C38A /* AOCFFIInvocation.h in Headers */,
+				E2FBC39E116380CD0022C38A /* AOCError.h in Headers */,
+				E2FBC39F116380CE0022C38A /* AOCInvocationProtocol.h in Headers */,
+				E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +344,7 @@
 				E2905BAD114793AA00D69FE7 /* UnitTests */,
 				E2F6E57F1149303D00658AB2 /* AspectObjectiveC */,
 				E247932C114C9CC300626905 /* DemoApp */,
+				E2511D951163890100CFCB83 /* GenerateDocumentation */,
 			);
 		};
 /* End PBXProject section */
@@ -368,6 +389,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "ruby ${PROJECT_DIR}/tests/generate_method_hooking_tests.rb | ruby ${PROJECT_DIR}/tests/insert_method_hooking_tests.rb ${PROJECT_DIR}/tests/TestAOCMethodHooking.m";
+		};
+		E2511D941163890100CFCB83 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${PROJECT_DIR}/doc/\"\nrm -Rf html\n$DOXYGEN_PATH Doxyfile";
 		};
 		E2905BAC114793AA00D69FE7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -523,6 +557,29 @@
 			};
 			name = Release;
 		};
+		E2511D961163890100CFCB83 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = GenerateDocumentation;
+			};
+			name = Debug;
+		};
+		E2511D971163890100CFCB83 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DOXYGEN_PATH = /Applications/Doxygen.app/Contents/Resources/doxygen;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = GenerateDocumentation;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 		E2905BB0114793AA00D69FE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -664,6 +721,15 @@
 			buildConfigurations = (
 				E2479330114C9CC400626905 /* Debug */,
 				E2479331114C9CC400626905 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2511D981163891F00CFCB83 /* Build configuration list for PBXAggregateTarget "GenerateDocumentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2511D961163890100CFCB83 /* Debug */,
+				E2511D971163890100CFCB83 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
