@@ -14,10 +14,10 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 -(NSMutableArray*) _adviceListForSelector:(SEL)selector ofClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 -(BOOL) _installHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 
--(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(NSInvocation*)inv;
--(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(NSInvocation*)inv;
--(void) _runAdvice:(NSArray*)adviceList afterInvocation:(NSInvocation*)inv;
--(void) _runAdviceForInvocation:(NSInvocation*)inv;
+-(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(id<AOCInvocationProtocol>)inv;
+-(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(id<AOCInvocationProtocol>)inv;
+-(void) _runAdvice:(NSArray*)adviceList afterInvocation:(id<AOCInvocationProtocol>)inv;
+-(void) _runAdviceForInvocation:(id<AOCInvocationProtocol>)inv;
 @end
 
 @implementation AOCAspectManager(Private)
@@ -53,7 +53,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
     return AOCInstallHook(cls, selector, outError);
 }
 
--(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(NSInvocation*)inv;
+-(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(id<AOCInvocationProtocol>)inv;
 {
     for(NSObject<AOCAdviceProtocol>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceBefore:)]){
@@ -62,7 +62,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
     }
 }
 
--(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(NSInvocation*)inv;
+-(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(id<AOCInvocationProtocol>)inv;
 {    
     BOOL invocationWasReplaced = NO;
     for(NSObject<AOCAdviceProtocol>* advice in adviceList){
@@ -76,7 +76,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
     return invocationWasReplaced;
 }
 
--(void) _runAdvice:(NSArray*)adviceList afterInvocation:(NSInvocation*)inv;
+-(void) _runAdvice:(NSArray*)adviceList afterInvocation:(id<AOCInvocationProtocol>)inv;
 {
     for(NSObject<AOCAdviceProtocol>* advice in adviceList){
         if([advice respondsToSelector:@selector(adviceAfter:)]){
@@ -85,7 +85,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
     }
 }
 
--(void) _runAdviceForInvocation:(NSInvocation*)inv;
+-(void) _runAdviceForInvocation:(id<AOCInvocationProtocol>)inv;
 {
     NSArray* adviceList = [self _adviceListForSelector:[inv selector]
                                                ofClass:[[inv target] class] 
@@ -105,7 +105,7 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 @end
 
-void AOCSharedAspectManagerHook(NSInvocation* inv)
+void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
 {
     [g_sharedAspectManager _runAdviceForInvocation:inv];
 }
@@ -125,7 +125,7 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
     return g_sharedAspectManager;
 }
 
--(BOOL) addAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) addAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);
@@ -145,7 +145,7 @@ void AOCSharedAspectManagerHook(NSInvocation* inv)
     }
 }
 
--(void) removeAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls;
+-(void) removeAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);

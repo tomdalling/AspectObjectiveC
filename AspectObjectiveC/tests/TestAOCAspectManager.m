@@ -17,7 +17,7 @@
 @interface Add2ToArgBefore : NSObject<AOCAdviceProtocol>
 @end
 @implementation Add2ToArgBefore
--(void) adviceBefore:(NSInvocation*)inv;
+-(void) adviceBefore:(id<AOCInvocationProtocol>)inv;
 {    
     int intArg;
     [inv getArgument:&intArg atIndex:2];
@@ -29,7 +29,7 @@
 @interface Add5ToReturnValueAfter : NSObject<AOCAdviceProtocol>
 @end
 @implementation Add5ToReturnValueAfter
--(void) adviceAfter:(NSInvocation*)inv;
+-(void) adviceAfter:(id<AOCInvocationProtocol>)inv;
 {
     int returnValue;
     [inv getReturnValue:&returnValue];
@@ -41,7 +41,7 @@
 @interface LogAndReturn40Instead : NSObject<AOCAdviceProtocol>
 @end
 @implementation LogAndReturn40Instead
--(BOOL) adviceInsteadOf:(NSInvocation*)inv;
+-(BOOL) adviceInsteadOf:(id<AOCInvocationProtocol>)inv;
 {
     NSLog(@"Hey, I've got a 40!");
     int myforty = 40;

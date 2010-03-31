@@ -26,6 +26,10 @@
 		E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA572C114904520080CA2D /* TestAOCAspectManager.m */; };
 		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
 		E2BA925D114860FE0068257E /* README.markdown in Resources */ = {isa = PBXBuildFile; fileRef = E2BA925C114860FE0068257E /* README.markdown */; };
+		E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
+		E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
+		E2BD2A1611633B4C001BCF10 /* AOCFFIInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */; };
+		E2BD2A1711633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */ = {isa = PBXBuildFile; fileRef = E22AD4F91147DF150020D988 /* AOCAdvice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E293AB9F1147E0E600D7F9C7 /* AOCAspectManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
@@ -79,6 +83,9 @@
 		E2BA921811484FC00068257E /* AOCError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCError.h; sourceTree = "<group>"; };
 		E2BA921911484FC00068257E /* AOCError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCError.m; sourceTree = "<group>"; };
 		E2BA925C114860FE0068257E /* README.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.markdown; path = ../README.markdown; sourceTree = SOURCE_ROOT; };
+		E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCFFIInvocation.h; sourceTree = "<group>"; };
+		E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCFFIInvocation.m; sourceTree = "<group>"; };
+		E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCInvocationProtocol.h; sourceTree = "<group>"; };
 		E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AspectObjectiveC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2F6E5811149303D00658AB2 /* AspectObjectiveC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AspectObjectiveC-Info.plist"; sourceTree = "<group>"; };
 		E2FC1377116231FE00A17133 /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
@@ -195,6 +202,9 @@
 				E2BA921911484FC00068257E /* AOCError.m */,
 				E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */,
 				E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */,
+				E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */,
+				E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */,
+				E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -240,6 +250,7 @@
 			files = (
 				E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */,
 				E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */,
+				E2BD2A1611633B4C001BCF10 /* AOCFFIInvocation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +400,7 @@
 				E29D0E5F11526E3C00FD6070 /* DemoAppDelegate.m in Sources */,
 				E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */,
 				E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */,
+				E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,6 +414,7 @@
 				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
 				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
 				E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */,
+				E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +426,7 @@
 				E2F6E5881149319000658AB2 /* AOCMethodHooking.m in Sources */,
 				E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */,
 				E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */,
+				E2BD2A1711633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,10 +436,13 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = (
+					x86_64,
+					i386,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (
@@ -438,10 +455,13 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = (
+					x86_64,
+					i386,
+				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH_ACTUAL)";
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (

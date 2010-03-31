@@ -4,7 +4,7 @@
 
 static BOOL g_hookDidRun = NO;
 
-void MockHookForTesting(NSInvocation* inv)
+void MockHookForTesting(id<AOCInvocationProtocol> inv)
 {
     g_hookDidRun = YES;
     [inv invoke];

@@ -3,6 +3,7 @@
 #import "AOCError.h"
 #import "ffi.h"
 #include <objc/runtime.h>
+#include "AOCFFIInvocation.h"
 
 #ifndef FFI_CLOSURES
 #   error "libffi closures are not supported for the current architecture"
@@ -10,6 +11,13 @@
 
 static NSMutableDictionary* g_closureBySelectorByClass = nil;
 static AOCMethodInvocationHook g_globalInvocationHook = NULL;
+
+struct _AOCClosureInfo {
+    ffi_closure* closure;
+    IMP originalImp;
+    BOOL isRunning;
+    BOOL shouldFreeAfterRun;
+};
 
 #pragma mark -
 #pragma mark Private function declarations
@@ -32,7 +40,6 @@ ffi_closure*         _AOCGetClosure(Class cls, SEL selector);
 void                 _AOCSetClosure(ffi_closure* closure, Class cls, SEL selector);
 
 void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata);
-NSInvocation* _AOCMakeInvocation(ffi_cif* cif, void** args);
 
 #pragma mark -
 #pragma mark Private function definitions
@@ -150,7 +157,13 @@ ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* a
     if(status != FFI_OK)
         return NULL;
     
-    status = ffi_prep_closure_loc(closure, cif, _AOCHookClosureImp, originalImp, closureMeth);
+    struct _AOCClosureInfo * userData = malloc(sizeof(struct _AOCClosureInfo));
+    userData->closure = closure;
+    userData->originalImp = originalImp;
+    userData->isRunning = NO;
+    userData->shouldFreeAfterRun = NO;
+    
+    status = ffi_prep_closure_loc(closure, cif, _AOCHookClosureImp, userData, closureMeth);
     if(status != FFI_OK)
         return NULL;
         
@@ -161,6 +174,7 @@ void _AOCHookClosureFree(ffi_closure* closure)
 {
     free(closure->cif->arg_types);
     free(closure->cif);
+    free(closure->user_data);
     ffi_closure_free(closure);
 }
 
@@ -246,8 +260,15 @@ void _AOCSetClosure(ffi_closure* closure, Class cls, SEL selector)
     NSString* selectorKey = NSStringFromSelector(selector);
     
     NSValue* oldClosureVal = [closuresBySel objectForKey:selectorKey];
-    if(oldClosureVal != nil)
-        _AOCHookClosureFree([oldClosureVal pointerValue]);
+    if(oldClosureVal != nil){
+        ffi_closure* oldClosure = [oldClosureVal pointerValue];
+        struct _AOCClosureInfo* info = (struct _AOCClosureInfo*)oldClosure->user_data;
+        if(info->isRunning){
+            info->shouldFreeAfterRun = YES;
+        } else {
+            _AOCHookClosureFree(oldClosure);
+        }
+    }
     
     if(closure == NULL){
         [closuresBySel removeObjectForKey:selectorKey];
@@ -259,32 +280,25 @@ void _AOCSetClosure(ffi_closure* closure, Class cls, SEL selector)
 
 void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
 {
+    struct _AOCClosureInfo* info = (struct _AOCClosureInfo*)userdata;
+    
     if(g_globalInvocationHook == NULL){
-        ffi_call(cif, userdata, result, args);
-    } else {
-        NSInvocation* inv = _AOCMakeInvocation(cif, args);
-        g_globalInvocationHook(inv);
-        if(result != NULL && cif->rtype != &ffi_type_void){
-            [inv getReturnValue:result];
-        }
+        ffi_call(cif, FFI_FN(info->originalImp), result, args);
+        return;
     }
-}
-
-NSInvocation* _AOCMakeInvocation(ffi_cif* cif, void** args)
-{
-    id self = *((id*)args[0]);
-    SEL _cmd = *((SEL*)args[1]);
+ 
+    info->isRunning = YES;
+    info->shouldFreeAfterRun = NO;
     
-    NSMethodSignature* sig = [self methodSignatureForSelector:_cmd];
-    NSCAssert2(sig != nil, @"-[%@ methodSignatureForSelector:%@] must not return nil", [self className], NSStringFromSelector(_cmd));
-    
-    NSInvocation* inv = [NSInvocation invocationWithMethodSignature:sig];
-    NSUInteger argIdx = 0;
-    for(argIdx = 0; argIdx < cif->nargs; ++argIdx){
-        [inv setArgument:args[argIdx] atIndex:argIdx];
+    AOCFFIInvocation* inv = [[AOCFFIInvocation alloc] initWithCif:cif arguments:args imp:info->originalImp];
+    g_globalInvocationHook(inv);
+    if(result != NULL && cif->rtype != &ffi_type_void){
+        [inv getReturnValue:result];
     }
+    [inv release]; inv = nil;
     
-    return inv;
+    if(info->shouldFreeAfterRun)
+        _AOCHookClosureFree(info->closure);
 }
 
 #pragma mark -
@@ -339,7 +353,8 @@ void AOCUninstallHook(Class cls, SEL selector)
         return;
     }
 
-    method_setImplementation(method, closure->user_data);
+    struct _AOCClosureInfo* info = (struct _AOCClosureInfo*)closure->user_data;
+    method_setImplementation(method, info->originalImp);
     _AOCSetClosure(NULL, cls, selector);
 }
 

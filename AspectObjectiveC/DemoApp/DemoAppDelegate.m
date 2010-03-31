@@ -14,10 +14,6 @@
 
 -(IBAction) convertCelciusToFahrenheit:(id)sender;
 {
-    if(self == nil){
-        NSLog(@"It's working woo!!");
-        return;
-    }
     double celcius = [_celciusTextField doubleValue];
     double fahrenheit = celcius * (9.0/5.0) + 32.0;
     [_fahrenheitTextField setDoubleValue:fahrenheit];

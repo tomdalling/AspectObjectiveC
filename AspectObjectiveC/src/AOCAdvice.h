@@ -1,37 +1,38 @@
 
 #import <Cocoa/Cocoa.h>
+#import "AOCInvocationProtocol.h"
 
 /*!
     @abstract    The protocol implemented by all advice objects.
     @discussion  All methods are optional.
 */
-@protocol AOCAdviceProtocol
+@protocol AOCAdviceProtocol <NSObject>
 @optional
 
 /*!
     @abstract   Where "before" advice is executed
-    @discussion The NSInvocation argument will be invoked after this method is called,
+    @discussion The invocation argument will be invoked after this method is called,
                 with any modification made to it.
     @param      inv The invocation before which this method is executing
 */
-- (void) adviceBefore:(NSInvocation*)inv;
+- (void) adviceBefore:(id<AOCInvocationProtocol>)inv;
 /*!
     @abstract   Where the "instead of" advice is executed
-    @discussion The NSInvocation argument is only invoked if this method returns YES.
+    @discussion The invocation argument is only invoked if this method returns YES.
                 Otherwise, the return value of the invocation should be set manually
                 by calling either -invoke or -setReturnValue:
     @param      inv The invocation instead of which this method is executing
-    @result     YES if the NSInvocation argument should still be invoked after this method returns, otherwise NO
+    @result     YES if the invocation argument should still be invoked after this method returns, otherwise NO
 */
-- (BOOL) adviceInsteadOf:(NSInvocation*)inv;
+- (BOOL) adviceInsteadOf:(id<AOCInvocationProtocol>)inv;
 
 /*!
     @abstract   Where "after" advice is executed
-    @discussion The NSInvocation argument will be invoked after this method is called,
+    @discussion The invocation argument will be invoked after this method is called,
                 with any modification made to it.
     @param      inv The invocation after which this method is executing
 */
-- (void) adviceAfter:(NSInvocation*)inv;
+- (void) adviceAfter:(id<AOCInvocationProtocol>)inv;
 @end
 
 
@@ -64,55 +65,16 @@
                  [[self invocation] setReturnValue:...] after the actual method has been
                  called. You can also retreive the return value of the actual method via
                  [[self invocation] getReturnValue:...]
- 
-                 The NSInvocation returned by [self invocation] will have an incorrect
-                 target and selector. The target will be self, and the selector will be _cmd,
-                 as the invocation object is being used to run the advice methods. To access
-                 the actual target and actual selector, use [self target] and [self selector].
 */
 @interface AOCAdvice : NSObject<AOCAdviceProtocol> {
-    NSInvocation* _invocation;
-    id _target;
-    SEL _selector;
+    id<AOCInvocationProtocol> _inv;
 }
 
 /*!
-    @discussion The NSInvocation returned by [self invocation] will have an incorrect
-                target and selector. The target will be self, and the selector will be _cmd,
-                as the invocation object is being used to run the advice methods. To access
-                the actual target and actual selector, use [self target] and [self selector].
-                The NSInvocation returned by [self invocation] can, however, be used to modify
-                the arguments and return value.
- 
-    @result     The NSInvocation representing the actual method that the advice is running for, 
-                or nil if not called from within an advice method
+    @result     The invocation representing the actual method that the advice is running for, 
+                or nil if not called from within an advice method.
 */
-- (NSInvocation*) invocation;
-
-
-/*!
-    @discussion This differs from [[self invocation] target]. This method returns nil
-                if it's not called during the execution of -adviceBefore<sel>, -adviceAfter<sel>
-                or -adviceInsteadOf<sel>
- 
-    @result     The actual target of [self invocation], or nil if not called from within an
-                advice method
- 
-    @see        - (NSInvocation*) invocation;
-*/
-- (id) target;
-
-/*!
-    @discussion This differs from [[self invocation] selector]. This method returns NULL
-                if it's not called during the execution of -adviceBefore<sel>, -adviceAfter<sel>
-                or -adviceInsteadOf<sel>
- 
-    @result     The actual selector of [self invocation], or NULL if not called from within an 
-                advice method
- 
-    @see        - (NSInvocation*) invocation;
-*/
-- (SEL) selector;
+- (id<AOCInvocationProtocol>) invocation;
 
 @end
 

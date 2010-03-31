@@ -7,6 +7,6 @@
     NSMutableDictionary* _adviceByClass;
 }
 +(AOCAspectManager*) sharedAspectManager;
--(BOOL) addAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
--(void) removeAdvice:(NSObject<AOCAdviceProtocol>*)advice forSelector:(SEL)selector ofClass:(Class)cls;
+-(BOOL) addAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(void) removeAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls;
 @end

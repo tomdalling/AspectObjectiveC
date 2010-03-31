@@ -14,7 +14,7 @@
 
 @interface AOCAdvice(Private)
 -(SEL) _makeAdviceSelWithPrefix:(NSString*)prefix fromSel:(SEL)selBeingInvoked;
--(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(NSInvocation*)inv;
+-(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(id<AOCInvocationProtocol>)inv useReturnValue:(BOOL)useReturnValue;
 @end
 
 @implementation AOCAdvice(Private)
@@ -30,22 +30,29 @@
     return NSSelectorFromString(adviceSelStr);
 }
 
--(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(NSInvocation*)inv;
+-(BOOL) _runAdviceWithPrefix:(NSString*)prefix invocation:(id<AOCInvocationProtocol>)inv useReturnValue:(BOOL)useReturnValue;
 {
     SEL adviceSel = [self _makeAdviceSelWithPrefix:prefix fromSel:[inv selector]];
     if(![self respondsToSelector:adviceSel])
         return NO;
     
-    _invocation = inv;
-    _target = [inv target];
-    _selector = [inv selector];
-    [inv setSelector:adviceSel];
-    [inv invokeWithTarget:self];
-    [inv setTarget:_target];
-    [inv setSelector:_selector];
-    _selector = NULL;
-    _target = nil;
-    _invocation = nil;
+    _inv = inv;
+    
+    id<AOCInvocationProtocol> adviceInv = [inv copyWithZone:NULL];
+    [adviceInv setSelector:adviceSel];
+    [adviceInv setTarget:self];
+    [adviceInv setImp:NULL];
+    [adviceInv invoke];
+    [adviceInv release]; inv = nil;
+    
+    _inv = nil;
+    
+    if(useReturnValue){
+        void* returnBuffer = malloc([adviceInv returnValueSize]);
+        [adviceInv getReturnValue:returnBuffer];
+        [inv setReturnValue:returnBuffer];
+        free(returnBuffer);
+    }
     
     return YES;
 }
@@ -59,36 +66,26 @@
 
 @implementation AOCAdvice
 
--(NSInvocation*) invocation;
+-(id<AOCInvocationProtocol>) invocation;
 {
-    return _invocation;
-}
-
--(id) target;
-{
-    return _target;
-}
-
--(SEL) selector;
-{
-    return _selector;
+    return _inv;
 }
 
 #pragma mark <AOCAdvice>
 
--(void) adviceBefore:(NSInvocation*)inv;
+-(void) adviceBefore:(id<AOCInvocationProtocol>)inv;
 {
-    [self _runAdviceWithPrefix:@"adviceBefore" invocation:inv];
+    [self _runAdviceWithPrefix:@"adviceBefore" invocation:inv useReturnValue:NO];
 }
 
--(BOOL) adviceInsteadOf:(NSInvocation*)inv;
+-(BOOL) adviceInsteadOf:(id<AOCInvocationProtocol>)inv;
 {
-    return [self _runAdviceWithPrefix:@"adviceInsteadOf" invocation:inv];
+    return [self _runAdviceWithPrefix:@"adviceInsteadOf" invocation:inv useReturnValue:YES];
 }
 
--(void) adviceAfter:(NSInvocation*)inv;
+-(void) adviceAfter:(id<AOCInvocationProtocol>)inv;
 {
-    [self _runAdviceWithPrefix:@"adviceAfter" invocation:inv];
+    [self _runAdviceWithPrefix:@"adviceAfter" invocation:inv useReturnValue:NO];
 }
 
 @end
