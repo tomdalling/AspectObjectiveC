@@ -67,7 +67,7 @@
 
 -(void) testSharedAspectManagerExists;
 {
-    STAssertNotNil([AOCAspectManager sharedAspectManager], @"shared aspect manager doesn't exist");
+    STAssertNotNil([AOCAspectManager defaultAspectManager], @"shared aspect manager doesn't exist");
 }
 
 -(void) testMultipleAdvice;
@@ -81,7 +81,7 @@
     SEL s = @selector(minusTwo:);
     Class cls = [self class];
     
-    BOOL didAdd = [[AOCAspectManager sharedAspectManager] addAdvice:advice1
+    BOOL didAdd = [[AOCAspectManager defaultAspectManager] installAdvice:advice1
                                                         forSelector:s
                                                             ofClass:cls
                                                               error:nil];
@@ -91,7 +91,7 @@
     STAssertEquals(_lastArg, 10, @"Arg was wrong");
     STAssertEquals(_lastReturnVal, 8, @"Return val was wrong");
     
-    didAdd = [[AOCAspectManager sharedAspectManager] addAdvice:advice2
+    didAdd = [[AOCAspectManager defaultAspectManager] installAdvice:advice2
                                                    forSelector:s
                                                        ofClass:cls
                                                          error:nil];
@@ -100,7 +100,7 @@
     STAssertEquals(_lastArg, 12, @"Arg was wrong");
     STAssertEquals(_lastReturnVal, 10, @"Return val was wrong");
     
-    [[AOCAspectManager sharedAspectManager] removeAdvice:advice2
+    [[AOCAspectManager defaultAspectManager] uninstallAdvice:advice2
                                              forSelector:s
                                                  ofClass:cls];
     
@@ -109,7 +109,7 @@
     STAssertEquals(_lastReturnVal, 8, @"Return val was wrong");
     
     //Add aspect that already exists
-    didAdd = [[AOCAspectManager sharedAspectManager] addAdvice:advice1
+    didAdd = [[AOCAspectManager defaultAspectManager] installAdvice:advice1
                                                    forSelector:s
                                                        ofClass:cls
                                                          error:nil];
@@ -136,7 +136,7 @@
     STAssertEquals(_lastReturnVal, 5, @"return val was wrong");
     
     Add5ToReturnValueAfter* advice = [[Add5ToReturnValueAfter new] autorelease];
-    BOOL didAdd = [[AOCAspectManager sharedAspectManager] addAdvice:advice
+    BOOL didAdd = [[AOCAspectManager defaultAspectManager] installAdvice:advice
                                                         forSelector:@selector(minusFive:)
                                                             ofClass:[self class]
                                                               error:nil];
@@ -164,7 +164,7 @@
     STAssertEquals(_lastReturnVal, 26, @"return val was wrong");
     
     LogAndReturn40Instead* advice = [[LogAndReturn40Instead new] autorelease];
-    BOOL didAdd = [[AOCAspectManager sharedAspectManager] addAdvice:advice
+    BOOL didAdd = [[AOCAspectManager defaultAspectManager] installAdvice:advice
                                                         forSelector:@selector(addSixteen:)
                                                             ofClass:[self class]
                                                               error:nil];

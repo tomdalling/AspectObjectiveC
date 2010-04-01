@@ -3,16 +3,19 @@
 #import "AOCMethodHooking.h"
 #import "AOCError.h"
 
-static AOCAspectManager* g_sharedAspectManager = nil;
+static AOCAspectManager* g_defaultAspectManager = nil;
 
 
 #pragma mark -
 #pragma mark AOCAspectManager(Private)
 
 @interface AOCAspectManager(Private)
--(NSMutableDictionary*) _adviceBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
+-(NSMutableDictionary*) _adviceListBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 -(NSMutableArray*) _adviceListForSelector:(SEL)selector ofClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 -(BOOL) _installHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) _replaceHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(void) _uninstallHookMethodForSelector:(SEL)selector ofClass:(Class)cls;
+-(void) _uninstallAllHooks;
 
 -(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(id<AOCInvocationProtocol>)inv;
 -(BOOL) _runAdvice:(NSArray*)adviceList insteadOfInvocation:(id<AOCInvocationProtocol>)inv;
@@ -20,21 +23,23 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 -(void) _runAdviceForInvocation:(id<AOCInvocationProtocol>)inv;
 @end
 
+void AOCAspectManagerHook(id<AOCInvocationProtocol> inv, void* context);
+
 @implementation AOCAspectManager(Private)
 
--(NSMutableDictionary*) _adviceBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
+-(NSMutableDictionary*) _adviceListBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 {
-    NSMutableDictionary* adviceBySel = [_adviceByClass objectForKey:NSStringFromClass(cls)];
+    NSMutableDictionary* adviceBySel = [_adviceListBySelectorByClass objectForKey:NSStringFromClass(cls)];
     if(adviceBySel == nil && createIfNotFound){
         adviceBySel = [NSMutableDictionary dictionary];
-        [_adviceByClass setObject:adviceBySel forKey:NSStringFromClass(cls)];
+        [_adviceListBySelectorByClass setObject:adviceBySel forKey:NSStringFromClass(cls)];
     }
     return adviceBySel;
 }
 
 -(NSMutableArray*) _adviceListForSelector:(SEL)selector ofClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 {
-    NSMutableDictionary* adviceBySel = [self _adviceBySelectorForClass:cls createIfNotFound:createIfNotFound];
+    NSMutableDictionary* adviceBySel = [self _adviceListBySelectorForClass:cls createIfNotFound:createIfNotFound];
     if(adviceBySel == nil)
         return nil;
     
@@ -48,9 +53,55 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 -(BOOL) _installHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 {
-    if(AOCIsHookInstalled(cls, selector))
-        return YES;
-    return AOCInstallHook(cls, selector, outError);
+    if(AOCIsHookInstalled(cls, selector)){
+        return [self _replaceHookMethodForSelector:selector ofClass:cls error:outError];
+    } else {
+        return AOCInstallHook(AOCAspectManagerHook, self, cls, selector, outError);
+    }
+}
+
+-(BOOL) _replaceHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+{
+    id context = nil;
+    AOCMethodInvocationHook hook = AOCGetInstalledHook(cls, selector, (void**)&context);
+    
+    if(hook != AOCAspectManagerHook){
+        NSString* errorString = [NSString stringWithFormat:@"Method is already hooked by something other that AOCAspectManager: -[%@ %@]", NSStringFromClass(cls), NSStringFromSelector(selector)];
+        AOCSetError(outError, errorString, nil);
+        return NO;
+    }
+    
+    if(context == self)
+        return YES; //hook already installed
+
+    //hooked by another instance of AOCAspectManager, so hijack it
+    AOCUninstallHook(cls, selector);
+    return AOCInstallHook(AOCAspectManagerHook, self, cls, selector, outError);
+}
+
+-(void) _uninstallHookMethodForSelector:(SEL)selector ofClass:(Class)cls;
+{
+    if(!AOCIsHookInstalled(cls, selector))
+        return;
+    
+    id context = nil;
+    AOCMethodInvocationHook hook = AOCGetInstalledHook(cls, selector, (void**)&context);
+
+    //have to check that this object installed the hook, otherwise it will uninstall
+    //a hook that other objects may be using
+    if(hook == AOCAspectManagerHook && context == self)
+        AOCUninstallHook(cls, selector);
+}
+
+-(void) _uninstallAllHooks;
+{
+    for(NSString* classString in [_adviceListBySelectorByClass allKeys]){
+        Class cls = NSClassFromString(classString);
+        for(NSString* selString in [[_adviceListBySelectorByClass objectForKey:classString] allKeys]){
+            SEL sel = NSSelectorFromString(selString);
+            [self _uninstallHookMethodForSelector:sel ofClass:cls];
+        }
+    }
 }
 
 -(void) _runAdvice:(NSArray*)adviceList beforeInvocation:(id<AOCInvocationProtocol>)inv;
@@ -105,9 +156,10 @@ static AOCAspectManager* g_sharedAspectManager = nil;
 
 @end
 
-void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
+void AOCAspectManagerHook(id<AOCInvocationProtocol> inv, void* context)
 {
-    [g_sharedAspectManager _runAdviceForInvocation:inv];
+    AOCAspectManager* aspectManager = (AOCAspectManager*)context;
+    [aspectManager _runAdviceForInvocation:inv];
 }
 
 
@@ -116,16 +168,15 @@ void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
 
 @implementation AOCAspectManager
 
-+(AOCAspectManager*) sharedAspectManager;
++(AOCAspectManager*) defaultAspectManager;
 {
-    if(g_sharedAspectManager == nil){
-        g_sharedAspectManager = [AOCAspectManager new];
-        AOCSetGlobalInvocationHook(AOCSharedAspectManagerHook);
+    if(g_defaultAspectManager == nil){
+        g_defaultAspectManager = [AOCAspectManager new];
     }
-    return g_sharedAspectManager;
+    return g_defaultAspectManager;
 }
 
--(BOOL) addAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) installAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);
@@ -145,7 +196,7 @@ void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
     }
 }
 
--(void) removeAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls;
+-(void) uninstallAdvice:(id<AOCAdviceProtocol>)advice forSelector:(SEL)selector ofClass:(Class)cls;
 {
     NSParameterAssert(advice != nil);
     NSParameterAssert(selector != NULL);
@@ -158,6 +209,13 @@ void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
         AOCUninstallHook(cls, selector);
 }
 
+-(void) uninstallAllAdvice;
+{
+    [self _uninstallAllHooks];
+    [_adviceListBySelectorByClass release];
+    _adviceListBySelectorByClass = [NSMutableDictionary new];
+}
+
 #pragma mark NSObject
 
 -(id) init;
@@ -166,14 +224,15 @@ void AOCSharedAspectManagerHook(id<AOCInvocationProtocol> inv)
     if(self == nil)
         return nil;
     
-    _adviceByClass = [NSMutableDictionary new];
+    _adviceListBySelectorByClass = [NSMutableDictionary new];
     
     return self;
 }
 
 -(void) dealloc;
 {
-    [_adviceByClass release]; _adviceByClass = nil;
+    [self _uninstallAllHooks];
+    [_adviceListBySelectorByClass release]; _adviceListBySelectorByClass = nil;
     [super dealloc];
 }
 

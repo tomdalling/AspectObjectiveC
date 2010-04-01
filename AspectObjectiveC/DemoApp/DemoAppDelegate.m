@@ -26,7 +26,7 @@
         return;
     
     NSError* error = nil;
-    BOOL didHijack = [[AOCAspectManager sharedAspectManager] addAdvice:_hijackAdvice
+    BOOL didHijack = [[AOCAspectManager defaultAspectManager] installAdvice:_hijackAdvice
                                                            forSelector:@selector(convertCelciusToFahrenheit:)
                                                                ofClass:[DemoAppDelegate class]
                                                                  error:&error];
@@ -44,7 +44,7 @@
     if(!_isHijacked)
         return;
     
-    [[AOCAspectManager sharedAspectManager] removeAdvice:_hijackAdvice
+    [[AOCAspectManager defaultAspectManager] uninstallAdvice:_hijackAdvice
                                              forSelector:@selector(convertCelciusToFahrenheit:)
                                                  ofClass:[DemoAppDelegate class]];
     

@@ -205,13 +205,13 @@ puts "+(void) initializeNecessaryHooks; {"
 puts "    //return methods"
 ALLOWED_RETURN_TYPES.each do |returnType|
     suffix = TYPE_INFO[returnType][:method_suffix]
-    puts "    AOCInstallHook([self class], @selector(return#{suffix}), nil);"
-    puts "    AOCInstallHook([self class], @selector(return#{suffix}KVCAccessorHooked), nil);"
+    puts "    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(return#{suffix}), nil);"
+    puts "    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(return#{suffix}KVCAccessorHooked), nil);"
 end
 puts "    //arg methods"
 ALLOWED_ARG_TYPES.each do |argType|
     suffix = TYPE_INFO[argType][:method_suffix]
-    puts "    AOCInstallHook([self class], @selector(assertArgEqualOfType#{suffix}:), nil);"
+    puts "    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfType#{suffix}:), nil);"
 end
 puts "}"
 

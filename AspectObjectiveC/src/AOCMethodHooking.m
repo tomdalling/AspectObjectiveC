@@ -10,13 +10,14 @@
 #endif
 
 static NSMutableDictionary* g_closureBySelectorByClass = nil;
-static AOCMethodInvocationHook g_globalInvocationHook = NULL;
 
 struct _AOCClosureInfo {
     ffi_closure* closure;
     IMP originalImp;
     BOOL isRunning;
     BOOL shouldFreeAfterRun;
+    AOCMethodInvocationHook installedHook;
+    void* context;
 };
 
 #pragma mark -
@@ -29,8 +30,8 @@ BOOL     _AOCReturnTypeIsSupported(const char* returnType);
 BOOL     _AOCArgumentTypeIsSupported(const char* argumentType);
 BOOL     _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError);
 
-ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp);
-ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp);
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context);
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context);
 void         _AOCHookClosureFree(ffi_closure* closure);
 void         _AOCSetCIFArgTypes(ffi_type* argTypes[], NSMethodSignature* sig);
 ffi_type*    _AOCFFITypeForType(const char* type);
@@ -114,15 +115,16 @@ BOOL _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError)
     return YES;
 }
 
-ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp)
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context)
 {
     NSCParameterAssert(sig != nil);
+    NSCParameterAssert(hook != NULL);
     
     ffi_cif* cif = malloc(sizeof(ffi_cif));
     ffi_type** argTypes = malloc(sizeof(ffi_type) * [sig numberOfArguments]);
     ffi_closure* closure = NULL;
     
-    closure = _AOCHookClosureInit(closure, cif, argTypes, sig, originalImp);
+    closure = _AOCHookClosureInit(closure, cif, argTypes, sig, originalImp, hook, context);
     if(closure == NULL){
         free(argTypes);
         free(cif);
@@ -130,11 +132,12 @@ ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp)
     return closure;
 }
         
-ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp)
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context)
 {   
     NSCParameterAssert(cif != NULL);
     NSCParameterAssert(argTypes != NULL);
     NSCParameterAssert(sig != nil);
+    NSCParameterAssert(hook != NULL);
     
     void (*closureMeth)(id, SEL, id) = (void (*)(id, SEL, id))closure;
     
@@ -160,8 +163,10 @@ ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* a
     struct _AOCClosureInfo * userData = malloc(sizeof(struct _AOCClosureInfo));
     userData->closure = closure;
     userData->originalImp = originalImp;
+    userData->installedHook = hook;
     userData->isRunning = NO;
     userData->shouldFreeAfterRun = NO;
+    userData->context = context;
     
     status = ffi_prep_closure_loc(closure, cif, _AOCHookClosureImp, userData, closureMeth);
     if(status != FFI_OK)
@@ -282,7 +287,7 @@ void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
 {
     struct _AOCClosureInfo* info = (struct _AOCClosureInfo*)userdata;
     
-    if(g_globalInvocationHook == NULL){
+    if(info->installedHook == NULL){
         ffi_call(cif, FFI_FN(info->originalImp), result, args);
         return;
     }
@@ -291,7 +296,7 @@ void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
     info->shouldFreeAfterRun = NO;
     
     AOCFFIInvocation* inv = [[AOCFFIInvocation alloc] initWithCif:cif arguments:args imp:info->originalImp];
-    g_globalInvocationHook(inv);
+    info->installedHook(inv, info->context);
     if(result != NULL && cif->rtype != &ffi_type_void){
         [inv getReturnValue:result];
     }
@@ -304,10 +309,11 @@ void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
 #pragma mark -
 #pragma mark Public functions
 
-BOOL AOCInstallHook(Class cls, SEL selector, NSError** outError)
+BOOL AOCInstallHook(AOCMethodInvocationHook hook, void* context, Class cls, SEL selector, NSError** outError)
 {
     NSCParameterAssert(cls != NULL);
     NSCParameterAssert(selector != NULL);
+    NSCParameterAssert(hook != NULL);
     
     Method method = class_getInstanceMethod(cls, selector);
     if(method == NULL){
@@ -329,13 +335,29 @@ BOOL AOCInstallHook(Class cls, SEL selector, NSError** outError)
         return NO;
     }
     
-    ffi_closure* hookClosure = _AOCHookClosureAlloc(sig, method_getImplementation(method));
+    ffi_closure* hookClosure = _AOCHookClosureAlloc(sig, method_getImplementation(method), hook, context);
     NSCAssert(hookClosure != NULL, @"This should always return non-null");
     
     method_setImplementation(method, (IMP)hookClosure);
     _AOCSetClosure(hookClosure, cls, selector);
     
     return YES;
+}
+
+AOCMethodInvocationHook AOCGetInstalledHook(Class cls, SEL selector, void** outContext)
+{
+    NSCParameterAssert(cls != NULL);
+    NSCParameterAssert(selector != NULL);
+    
+    ffi_closure* closure = _AOCGetClosure(cls, selector);
+    if(closure == NULL)
+        return NULL;
+    
+    struct _AOCClosureInfo* info = (struct _AOCClosureInfo*)closure->user_data;
+    if(outContext)
+        *outContext = info->context;
+    
+    return info->installedHook;
 }
 
 void AOCUninstallHook(Class cls, SEL selector)
@@ -361,14 +383,4 @@ void AOCUninstallHook(Class cls, SEL selector)
 BOOL AOCIsHookInstalled(Class cls, SEL selector)
 {
     return (_AOCGetClosure(cls, selector) != NULL);
-}
-
-AOCMethodInvocationHook AOCGlobalInvocationHook()
-{
-    return g_globalInvocationHook;
-}
-
-void AOCSetGlobalInvocationHook(AOCMethodInvocationHook hook)
-{
-    g_globalInvocationHook = hook;
 }

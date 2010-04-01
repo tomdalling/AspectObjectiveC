@@ -4,7 +4,7 @@
 
 static BOOL g_hookDidRun = NO;
 
-void MockHookForTesting(id<AOCInvocationProtocol> inv)
+void MockHookForTesting(id<AOCInvocationProtocol> inv, void* context)
 {
     g_hookDidRun = YES;
     [inv invoke];
@@ -23,7 +23,7 @@ void MockHookForTesting(id<AOCInvocationProtocol> inv)
     STAssertFalse(g_hookDidRun, @"Hook should not run because it should not be installed");
     
     STAssertFalse(AOCIsHookInstalled(cls, selector), @"Hook should not be installed yet");
-    BOOL didInstall = AOCInstallHook(cls, selector, nil);
+    BOOL didInstall = AOCInstallHook(MockHookForTesting, NULL, cls, selector, nil);
     STAssertTrue(didInstall, @"Hook failed to install");
     STAssertTrue(AOCIsHookInstalled(cls, selector), @"AOCIsHookInstalled failed to recognise installed hook");
     
@@ -1225,58 +1225,58 @@ void MockHookForTesting(id<AOCInvocationProtocol> inv)
 //Call this from +(void)initialize
 +(void) initializeNecessaryHooks; {
     //return methods
-    AOCInstallHook([self class], @selector(returnId), nil);
-    AOCInstallHook([self class], @selector(returnIdKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnClass), nil);
-    AOCInstallHook([self class], @selector(returnClassKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnSEL), nil);
-    AOCInstallHook([self class], @selector(returnSELKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnChar), nil);
-    AOCInstallHook([self class], @selector(returnCharKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnUChar), nil);
-    AOCInstallHook([self class], @selector(returnUCharKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnShort), nil);
-    AOCInstallHook([self class], @selector(returnShortKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnUShort), nil);
-    AOCInstallHook([self class], @selector(returnUShortKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnInt), nil);
-    AOCInstallHook([self class], @selector(returnIntKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnUInt), nil);
-    AOCInstallHook([self class], @selector(returnUIntKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnLong), nil);
-    AOCInstallHook([self class], @selector(returnLongKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnULong), nil);
-    AOCInstallHook([self class], @selector(returnULongKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnLongLong), nil);
-    AOCInstallHook([self class], @selector(returnLongLongKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnULongLong), nil);
-    AOCInstallHook([self class], @selector(returnULongLongKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnFloat), nil);
-    AOCInstallHook([self class], @selector(returnFloatKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnDouble), nil);
-    AOCInstallHook([self class], @selector(returnDoubleKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnPtr), nil);
-    AOCInstallHook([self class], @selector(returnPtrKVCAccessorHooked), nil);
-    AOCInstallHook([self class], @selector(returnCharPtr), nil);
-    AOCInstallHook([self class], @selector(returnCharPtrKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnId), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnIdKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnClass), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnClassKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnSEL), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnSELKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnChar), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnCharKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUChar), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUCharKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnShort), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnShortKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUShort), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUShortKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnInt), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnIntKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUInt), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnUIntKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnLong), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnLongKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnULong), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnULongKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnLongLong), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnLongLongKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnULongLong), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnULongLongKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnFloat), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnFloatKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnDouble), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnDoubleKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnPtr), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnPtrKVCAccessorHooked), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnCharPtr), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(returnCharPtrKVCAccessorHooked), nil);
     //arg methods
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeId:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeClass:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeSEL:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeChar:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUChar:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeShort:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUShort:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeInt:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeUInt:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeLong:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeULong:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeLongLong:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeULongLong:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeFloat:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeDouble:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypePtr:), nil);
-    AOCInstallHook([self class], @selector(assertArgEqualOfTypeCharPtr:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeId:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeClass:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeSEL:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeChar:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeUChar:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeShort:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeUShort:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeInt:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeUInt:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeLong:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeULong:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeLongLong:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeULongLong:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeFloat:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeDouble:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypePtr:), nil);
+    AOCInstallHook(MockHookForTesting, NULL, [self class], @selector(assertArgEqualOfTypeCharPtr:), nil);
 }
 //end insert_method_hooking_tests.rb
 
@@ -1298,7 +1298,7 @@ void MockHookForTesting(id<AOCInvocationProtocol> inv)
     IMP impBefore = [cls instanceMethodForSelector:s];
     
     STAssertFalse(AOCIsHookInstalled(cls, s), @"Shouldn't be installed yet");
-    AOCInstallHook(cls, s, nil);
+    AOCInstallHook(MockHookForTesting, NULL, cls, s, nil);
     STAssertTrue(AOCIsHookInstalled(cls, s), @"Should be installed now");
     [self performSelector:s];
     STAssertFalse(AOCIsHookInstalled(cls, s), @"Invocation above should have uninstalled, but didn't");
@@ -1311,32 +1311,12 @@ void MockHookForTesting(id<AOCInvocationProtocol> inv)
     m_int = val;
 }
 
--(void) testSetAndGetGlobalInvocationHook;
-{
-    AOCInstallHook([self class], @selector(setIntIvarTo:), nil);
-    
-    m_int = 0;
-    
-    AOCSetGlobalInvocationHook(NULL);
-    STAssertEquals((AOCMethodInvocationHook)NULL, AOCGlobalInvocationHook(), @"not setting properly");
-    [self setIntIvarTo:17];
-    STAssertEquals(m_int, 17, @"NULL global invocation hook caused method not to run");
-    
-    AOCSetGlobalInvocationHook(MockHookForTesting);
-    STAssertEquals((AOCMethodInvocationHook)MockHookForTesting, AOCGlobalInvocationHook(), @"not setting properly");
-    g_hookDidRun = NO;
-    [self setIntIvarTo:22];
-    STAssertEquals(m_int, 22, @"method was not run");
-    STAssertTrue(g_hookDidRun, @"Hook should have run");
-}
-
 #pragma mark -
 #pragma mark SenTestCase
 
 -(void) setUp;
 {
     g_hookDidRun = NO;
-    AOCSetGlobalInvocationHook(MockHookForTesting);
     [super setUp];
 }
 
