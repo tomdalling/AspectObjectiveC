@@ -44,13 +44,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00002"></a>00002 <span class="preprocessor">#import &lt;Cocoa/Cocoa.h&gt;</span>
 <a name="l00003"></a>00003 <span class="preprocessor">#import &quot;AOCInvocationProtocol.h&quot;</span>
 <a name="l00004"></a>00004 
-<a name="l00005"></a>00005 <span class="keyword">typedef</span> void(*AOCMethodInvocationHook)(id&lt;AOCInvocationProtocol&gt;);
+<a name="l00005"></a>00005 <span class="keyword">typedef</span> void(*AOCMethodInvocationHook)(id&lt;AOCInvocationProtocol&gt;,<span class="keywordtype">void</span>*);
 <a name="l00006"></a>00006 
-<a name="l00007"></a>00007 BOOL AOCInstallHook(Class cls, <span class="keywordtype">SEL</span> selector, NSError** outError);
-<a name="l00008"></a>00008 <span class="keywordtype">void</span> AOCUninstallHook(Class cls, <span class="keywordtype">SEL</span> selector);
-<a name="l00009"></a>00009 BOOL AOCIsHookInstalled(Class cls, <span class="keywordtype">SEL</span> selector);
-<a name="l00010"></a>00010 AOCMethodInvocationHook AOCGlobalInvocationHook();
-<a name="l00011"></a>00011 <span class="keywordtype">void</span> AOCSetGlobalInvocationHook(AOCMethodInvocationHook hook);
+<a name="l00007"></a>00007 BOOL AOCInstallHook(AOCMethodInvocationHook hook, <span class="keywordtype">void</span>* context, Class cls, <span class="keywordtype">SEL</span> selector, NSError** outError);
+<a name="l00008"></a>00008 AOCMethodInvocationHook AOCGetInstalledHook(Class cls, <span class="keywordtype">SEL</span> selector, <span class="keywordtype">void</span>** outContext);
+<a name="l00009"></a>00009 <span class="keywordtype">void</span> AOCUninstallHook(Class cls, <span class="keywordtype">SEL</span> selector);
+<a name="l00010"></a>00010 BOOL AOCIsHookInstalled(Class cls, <span class="keywordtype">SEL</span> selector);
 </pre></div></div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -66,7 +65,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu Apr 1 02:05:09 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Thu Apr 1 14:48:18 2010 for AspectObjectiveC by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
