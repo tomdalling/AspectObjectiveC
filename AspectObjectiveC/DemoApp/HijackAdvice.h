@@ -1,5 +1,4 @@
 
-#import <Cocoa/Cocoa.h>
 #import "AOCAdvice.h"
 
 @interface HijackAdvice : AOCAdvice

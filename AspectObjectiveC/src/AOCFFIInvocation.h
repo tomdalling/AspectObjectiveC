@@ -1,5 +1,5 @@
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "ffi.h"
 #import "AOCInvocationProtocol.h"
 

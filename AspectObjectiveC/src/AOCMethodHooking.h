@@ -1,5 +1,5 @@
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "AOCInvocationProtocol.h"
 
 typedef void(*AOCMethodInvocationHook)(id<AOCInvocationProtocol>,void*);

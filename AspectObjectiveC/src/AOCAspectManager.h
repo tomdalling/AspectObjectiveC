@@ -1,5 +1,5 @@
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "AOCAdvice.h"
 
 /*!
