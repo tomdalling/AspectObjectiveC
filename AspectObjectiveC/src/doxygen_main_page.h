@@ -21,8 +21,13 @@
 
         <ul>
             <li>i386 or x86_64 architecture</li>
-            <li>OSX 10.5+</li> 
+            <li>OSX 10.5+</li>
         </ul>
+        
+        It may work on 10.4 (i386 only, needs older version of GCC) and on the
+        iPhone SDK, but neither have been tested. I'm interested to know if it
+        can compile and pass the unit tests on the iPhone and on 10.4, so if you
+        try, let me know how it goes.
 
         The current limitations are:
 
@@ -34,6 +39,7 @@
                 IMPs, which can cause crashes.</li>
             <li>May not work for class methods (instance methods only)</li>
             <li>May not work for variadic functions</li>
+            <li>Not thread safe, so be careful with multithreaded code.</li>
         </ul>
 
     @section future_sec Future Development
@@ -47,7 +53,7 @@
 
         <ul>
             <li>Support for ppc architecture</li>
-            <li>OSX 10.4 support
+            <li>OSX 10.4 support</li>
             <li>Allow advice to be installed an uninstalled at any time.
                 This would require swizzling <code>valueForKey:</code> which could
                 cause performance issues.</li>
