@@ -58,6 +58,8 @@
     @section doc_sec API Documentation
         
         Use the navigation at the top of the page to browse the API documentation.
+        
+        A docset for XCode integration is also available in the "doc" folder.
  
     @section example_sec Example Usage
     

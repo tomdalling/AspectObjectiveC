@@ -401,7 +401,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"${PROJECT_DIR}/doc/\"\nrm -Rf html\n$DOXYGEN_PATH Doxyfile";
+			shellScript = "cd \"${PROJECT_DIR}/doc/\"\nrm -Rf html\n$DOXYGEN_PATH Doxyfile\ncd html\nmake\nrm -Rf ../com.tomdalling.AspectObjectiveC.docset\nmv com.tomdalling.AspectObjectiveC.docset ../";
 		};
 		E2905BAC114793AA00D69FE7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
