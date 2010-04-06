@@ -50,6 +50,20 @@
 }
 @end
 
+@interface DidAdviceRunAdvice : NSObject<AOCAdviceProtocol> {
+    BOOL didRun;
+}
+@property(assign) BOOL didRun;
+@end
+@implementation DidAdviceRunAdvice
+@synthesize didRun;
+-(BOOL) adviceInsteadOf:(id<AOCInvocationProtocol>)inv;
+{
+    didRun = YES;
+    return YES;
+}
+@end
+
 #pragma mark -
 #pragma mark Tests
 
@@ -173,6 +187,66 @@
     STAssertEquals(40, [self addSixteen:300], @"Advice isn't working");
     STAssertEquals(_lastArg, 10, @"Arg was wrong");
     STAssertEquals(_lastReturnVal, 26, @"return val was wrong");
+}
+
+-(int) returnTheArg:(int)arg;
+{
+    _lastArg = arg;
+    _lastReturnVal = arg;
+    return arg;
+}
+
+-(void) testUninstallAllAdvice;
+{
+    AOCAspectManager* aspectManager = [[AOCAspectManager new] autorelease];
+    DidAdviceRunAdvice* advice = [[DidAdviceRunAdvice new] autorelease];
+    advice.didRun = NO;
+    
+    [aspectManager installAdvice:advice
+                     forSelector:@selector(returnTheArg:)
+                         ofClass:[self class]
+                           error:nil];
+    
+    STAssertFalse(advice.didRun, @"Shouldn't have run yet");
+    [self returnTheArg:0];
+    STAssertTrue(advice.didRun, @"advice should have run by now");
+    
+    advice.didRun = NO;
+    [aspectManager uninstallAllAdvice];
+    
+    STAssertFalse(advice.didRun, @"Shouldn't have run yet");
+    [self returnTheArg:1];
+    STAssertFalse(advice.didRun, @"Shouldn't have run because of uninstallAllAdvice");
+}
+
+-(void) testDealloc;
+{
+    AOCAspectManager* aspectManager = [AOCAspectManager new];
+    DidAdviceRunAdvice* advice = [[DidAdviceRunAdvice new] autorelease];
+    advice.didRun = NO;
+    
+    [aspectManager installAdvice:advice
+                     forSelector:@selector(returnTheArg:)
+                         ofClass:[self class]
+                           error:nil];
+    
+    STAssertFalse(advice.didRun, @"Shouldn't have run yet");
+    [self returnTheArg:0];
+    STAssertTrue(advice.didRun, @"advice should have run by now");
+    
+    advice.didRun = NO;
+    [aspectManager release]; aspectManager = nil;
+    
+    STAssertFalse(advice.didRun, @"Shouldn't have run yet");
+    [self returnTheArg:1];
+    STAssertFalse(advice.didRun, @"Shouldn't have run because of aspect manager should be deallocated");
+}
+
+-(void) testAllocInit;
+{
+    AOCAspectManager* am = [[AOCAspectManager alloc] init];
+    STAssertNotNil(am, @"Couldn't create a new object");
+    [am release]; am = nil;
 }
 
 @end
