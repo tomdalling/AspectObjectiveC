@@ -22,7 +22,7 @@
     Installs an advice object.
  
     If two separate AOCAspectManager try to install advice for the same
-    selector and class, then the second installation will override the first one
+    selector and class, then the second installation will fail.
  
     @param advice   The advice object to install
     @param selector The selector to install the advice for. Must be an instance method.

@@ -13,7 +13,7 @@ static AOCAspectManager* g_defaultAspectManager = nil;
 -(NSMutableDictionary*) _adviceListBySelectorForClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 -(NSMutableArray*) _adviceListForSelector:(SEL)selector ofClass:(Class)cls createIfNotFound:(BOOL)createIfNotFound;
 -(BOOL) _installHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
--(BOOL) _replaceHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) _isMethodHookedBySelf:(SEL)selector class:(Class)cls error:(NSError**)outError;
 -(void) _uninstallHookMethodForSelector:(SEL)selector ofClass:(Class)cls;
 -(void) _uninstallAllHooks;
 
@@ -54,29 +54,29 @@ void AOCAspectManagerHook(id<AOCInvocationProtocol> inv, void* context);
 -(BOOL) _installHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
 {
     if(AOCIsHookInstalled(cls, selector)){
-        return [self _replaceHookMethodForSelector:selector ofClass:cls error:outError];
+        return [self _isMethodHookedBySelf:selector class:cls error:outError];
     } else {
         return AOCInstallHook(AOCAspectManagerHook, self, cls, selector, outError);
     }
 }
 
--(BOOL) _replaceHookMethodForSelector:(SEL)selector ofClass:(Class)cls error:(NSError**)outError;
+-(BOOL) _isMethodHookedBySelf:(SEL)selector class:(Class)cls error:(NSError**)outError;
 {
     id context = nil;
     AOCMethodInvocationHook hook = AOCGetInstalledHook(cls, selector, (void**)&context);
     
     if(hook != AOCAspectManagerHook){
-        NSString* errorString = [NSString stringWithFormat:@"Method is already hooked by something other that AOCAspectManager: -[%@ %@]", NSStringFromClass(cls), NSStringFromSelector(selector)];
-        AOCSetError(outError, errorString, nil);
+        AOCSetError(outError, @"Method is already hooked by something other than AOCAspectManager", nil);
         return NO;
     }
     
     if(context == self)
-        return YES; //hook already installed
+        return YES; //hook already installed by self
 
-    //hooked by another instance of AOCAspectManager, so hijack it
-    AOCUninstallHook(cls, selector);
-    return AOCInstallHook(AOCAspectManagerHook, self, cls, selector, outError);
+    //hooked by another instance of AOCAspectManager
+    NSString* errorString = [NSString stringWithFormat:@"Advice was already installed by another aspect manager: <%@ %p>", [context className], context];
+    AOCSetError(outError, errorString, nil);
+    return NO;
 }
 
 -(void) _uninstallHookMethodForSelector:(SEL)selector ofClass:(Class)cls;
