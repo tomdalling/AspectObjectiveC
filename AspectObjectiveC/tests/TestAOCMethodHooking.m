@@ -1311,6 +1311,27 @@ void MockHookForTesting(id<AOCInvocationProtocol> inv, void* context)
     m_int = val;
 }
 
+-(void) testGetHook;
+{
+    Class cls = [self class];
+    SEL s = @selector(blankFunction);
+    void* context = (void*)0xDEADBEEF;
+    AOCMethodInvocationHook hook = MockHookForTesting;
+    
+    AOCInstallHook(hook, context, cls, s, NULL);
+    
+    void* gottenContext = NULL;
+    AOCMethodInvocationHook gottenHook = AOCGetInstalledHook(cls, s, &gottenContext);
+    
+    STAssertEquals(gottenHook, hook, @"Hook IMP is wrong");
+    STAssertEquals(gottenContext, context, @"context is wrong");
+}
+
+-(void) blankFunction;
+{
+    
+}
+
 #pragma mark -
 #pragma mark SenTestCase
 
