@@ -31,6 +31,7 @@
 		E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */; };
 		E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */; };
+		E24E410B116B8111007B53D0 /* TestAOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E410A116B8111007B53D0 /* TestAOCAdvice.m */; };
 		E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */; };
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
 		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
@@ -81,6 +82,8 @@
 		E2479367114C9E2400626905 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = generate_method_hooking_tests.rb; sourceTree = "<group>"; };
 		E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = insert_method_hooking_tests.rb; sourceTree = "<group>"; };
+		E24E4109116B8111007B53D0 /* TestAOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCAdvice.h; sourceTree = "<group>"; };
+		E24E410A116B8111007B53D0 /* TestAOCAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCAdvice.m; sourceTree = "<group>"; };
 		E24F6ADD11486D2500201FE6 /* TestAOCMethodHooking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAOCMethodHooking.h; sourceTree = "<group>"; };
 		E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAOCMethodHooking.m; sourceTree = "<group>"; };
 		E2905BAE114793AA00D69FE7 /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +235,8 @@
 				E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */,
 				E2BA572B114904520080CA2D /* TestAOCAspectManager.h */,
 				E2BA572C114904520080CA2D /* TestAOCAspectManager.m */,
+				E24E4109116B8111007B53D0 /* TestAOCAdvice.h */,
+				E24E410A116B8111007B53D0 /* TestAOCAdvice.m */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -445,6 +450,7 @@
 				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
 				E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */,
 				E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
+				E24E410B116B8111007B53D0 /* TestAOCAdvice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -103,7 +103,9 @@
 
 /*!
     @result The invocation representing the actual method that the advice is running for, 
-            or nil if not called from within an advice method.
+            or nil if not called from within an advice method. The object returned should
+            not be retained for later use, because it will be invalid after the advice
+            method has returned.
     @see AOCInvocationProtocol
 */
 - (id<AOCInvocationProtocol>) invocation;
