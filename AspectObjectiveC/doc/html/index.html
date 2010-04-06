@@ -51,6 +51,7 @@ i386 or x86_64 architecture </li>
 <li>
 OSX 10.5+ </li>
 </ul>
+<p>It may work on 10.4 (i386 only, needs older version of GCC) and on the iPhone SDK, but neither have been tested. I'm interested to know if it can compile and pass the unit tests on the iPhone and on 10.4, so if you try, let me know how it goes.</p>
 <p>The current limitations are:</p>
 <ul>
 <li>
@@ -61,6 +62,8 @@ Advice for a method must be installed before the method is called, and never rem
 May not work for class methods (instance methods only) </li>
 <li>
 May not work for variadic functions </li>
+<li>
+Not thread safe, so be careful with multithreaded code. </li>
 </ul>
 <h2><a class="anchor" id="future_sec">
 Future Development</a></h2>
@@ -103,7 +106,7 @@ Example Usage</a></h2>
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 3 13:48:46 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed Apr 7 01:29:10 2010 for AspectObjectiveC by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

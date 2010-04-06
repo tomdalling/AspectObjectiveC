@@ -93,7 +93,7 @@ Inheritance diagram for AOCAdvice:</div>
       </table>
 </div>
 <div class="memdoc">
-<dl class="return"><dt><b>Returns:</b></dt><dd>The invocation representing the actual method that the advice is running for, or nil if not called from within an advice method. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The invocation representing the actual method that the advice is running for, or nil if not called from within an advice method. The object returned should not be retained for later use, because it will be invalid after the advice method has returned. </dd></dl>
 <dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="protocol_a_o_c_invocation_protocol-p.html" title="Class similar to NSInvocation.">AOCInvocationProtocol</a> </dd></dl>
 
 </div>
@@ -117,7 +117,7 @@ Inheritance diagram for AOCAdvice:</div>
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Sat Apr 3 13:48:46 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed Apr 7 01:29:10 2010 for AspectObjectiveC by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>
