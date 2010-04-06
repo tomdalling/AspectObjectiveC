@@ -110,6 +110,8 @@
     If <tt>[self imp]</tt> is NULL, then this method works exactly like 
     NSInvocation. Otherwise, <tt>[self imp]</tt> is invoked instead of
     the actual IMP attached to the selector of the target.
+ 
+    @see setImp:
  */
 - (void) invoke;
 

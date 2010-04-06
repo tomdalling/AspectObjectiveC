@@ -36,15 +36,13 @@
     if(![self respondsToSelector:adviceSel])
         return NO;
     
-    _inv = inv;
-    
-    id<AOCInvocationProtocol> adviceInv = [inv copyWithZone:NULL];
+    id<AOCInvocationProtocol> adviceInv = [[inv copyWithZone:NULL] autorelease];
     [adviceInv setSelector:adviceSel];
     [adviceInv setTarget:self];
     [adviceInv setImp:NULL];
-    [adviceInv invoke];
-    [adviceInv release]; inv = nil;
     
+    _inv = inv;
+    [adviceInv invoke];
     _inv = nil;
     
     if(useReturnValue){
