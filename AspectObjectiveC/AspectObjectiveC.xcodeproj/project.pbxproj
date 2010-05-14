@@ -21,6 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		E230014C117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
+		E230014D117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h in Headers */ = {isa = PBXBuildFile; fileRef = E230014A117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h */; };
+		E230014E117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
+		E230014F117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
 		E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
@@ -57,6 +61,16 @@
 		E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		E29DC506119D1560007A9C8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2905BAD114793AA00D69FE7 /* UnitTests */;
+			remoteInfo = UnitTests;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		E2F6E59A1149320700658AB2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -75,6 +89,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
+		E230014A117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScanner+AOCObjcTypeScanning.h"; sourceTree = "<group>"; };
+		E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScanner+AOCObjcTypeScanning.m"; sourceTree = "<group>"; };
 		E242D146115B882200BE8E66 /* AOCAdvice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AOCAdvice.m; sourceTree = "<group>"; };
 		E247932D114C9CC300626905 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E247932F114C9CC300626905 /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
@@ -222,6 +238,8 @@
 				E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */,
 				E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */,
 				E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */,
+				E230014A117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h */,
+				E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -273,6 +291,7 @@
 				E2FBC39E116380CD0022C38A /* AOCError.h in Headers */,
 				E2FBC39F116380CE0022C38A /* AOCInvocationProtocol.h in Headers */,
 				E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */,
+				E230014D117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,6 +309,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E29DC507119D1560007A9C8C /* PBXTargetDependency */,
 			);
 			name = DemoApp;
 			productName = DemoApp;
@@ -436,6 +456,7 @@
 				E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */,
 				E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */,
 				E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
+				E230014F117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +472,7 @@
 				E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */,
 				E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 				E24E410B116B8111007B53D0 /* TestAOCAdvice.m in Sources */,
+				E230014C117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,10 +485,19 @@
 				E2F6E5871149318D00658AB2 /* AOCAspectManager.m in Sources */,
 				E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */,
 				E2BD2A1711633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
+				E230014E117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E29DC507119D1560007A9C8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2905BAD114793AA00D69FE7 /* UnitTests */;
+			targetProxy = E29DC506119D1560007A9C8C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		C01FCF4F08A954540054247B /* Debug */ = {
@@ -478,7 +509,6 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (
@@ -497,7 +527,6 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = "";
 				WARNING_CFLAGS = (

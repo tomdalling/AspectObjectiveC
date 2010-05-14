@@ -4,6 +4,7 @@
 #import "ffi.h"
 #include <objc/runtime.h>
 #include "AOCFFIInvocation.h"
+#include "NSScanner+AOCObjcTypeScanning.h"
 
 #ifndef FFI_CLOSURES
 #   error "libffi closures are not supported for the current architecture"
@@ -20,21 +21,21 @@ struct _AOCClosureInfo {
     void* context;
 };
 
+
 #pragma mark -
 #pragma mark Private function declarations
 
-NSArray* _AOCSupportedScalarReturnTypes();
-NSArray* _AOCSupportedScalarArgumentTypes();
-BOOL     _AOCScalarTypeIsInArray(const char* scalarType, NSArray* array);
-BOOL     _AOCReturnTypeIsSupported(const char* returnType);
-BOOL     _AOCArgumentTypeIsSupported(const char* argumentType);
-BOOL     _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError);
+NSString* _AOCStructNameFromType(const char* structType);
 
-ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context);
-ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context);
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context, NSError** outError);
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context, NSError** outError);
 void         _AOCHookClosureFree(ffi_closure* closure);
-void         _AOCSetCIFArgTypes(ffi_type* argTypes[], NSMethodSignature* sig);
-ffi_type*    _AOCFFITypeForType(const char* type);
+BOOL         _AOCSetCIFArgTypes(ffi_type* argTypeList[], NSMethodSignature* sig, NSError** outError);
+ffi_type*    _AOCFFITypeAlloc(const char* type);
+void         _AOCFFITypeFree(ffi_type* structType);
+ffi_type*    _AOCFFIStructTypeAlloc(const char* structTypeStr);
+BOOL         _AOCMallocElementsForStructType(const char* structType, ffi_type*** outElements);
+NSArray*     _AOCElementTypeStringsForStruct(const char* structTypeStr);
 
 NSMutableDictionary* _AOCGetClosuresBySelector(Class cls, BOOL createIfNeeded);
 ffi_closure*         _AOCGetClosure(Class cls, SEL selector);
@@ -45,77 +46,20 @@ void _AOCHookClosureImp(ffi_cif* cif, void* result, void** args, void* userdata)
 #pragma mark -
 #pragma mark Private function definitions
 
-NSArray* _AOCSupportedScalarReturnTypes()
+NSString* _AOCStructNameFromType(const char* structType)
 {
-    return [_AOCSupportedScalarArgumentTypes() arrayByAddingObject:[NSNumber numberWithChar:_C_VOID]];
-}
-
-NSArray* _AOCSupportedScalarArgumentTypes()
-{
-    return [NSArray arrayWithObjects:
-            [NSNumber numberWithChar:_C_ID],
-            [NSNumber numberWithChar:_C_CLASS],
-            [NSNumber numberWithChar:_C_SEL],
-            [NSNumber numberWithChar:_C_CHR],
-            [NSNumber numberWithChar:_C_UCHR],
-            [NSNumber numberWithChar:_C_SHT],
-            [NSNumber numberWithChar:_C_USHT],
-            [NSNumber numberWithChar:_C_INT],
-            [NSNumber numberWithChar:_C_UINT],
-            [NSNumber numberWithChar:_C_LNG],
-            [NSNumber numberWithChar:_C_ULNG],
-            [NSNumber numberWithChar:_C_LNG_LNG],
-            [NSNumber numberWithChar:_C_ULNG_LNG],
-            [NSNumber numberWithChar:_C_FLT],
-            [NSNumber numberWithChar:_C_DBL],
-            [NSNumber numberWithChar:_C_PTR],
-            [NSNumber numberWithChar:_C_CHARPTR],
-            nil];
-}
-
-BOOL _AOCScalarTypeIsInArray(const char* scalarType, NSArray* array)
-{
-    NSCParameterAssert(scalarType != NULL);
-    NSCParameterAssert(array != nil);
+    if(structType[0] != _C_STRUCT_B)
+        return nil; //not a struct type
     
-    if(scalarType[0] == '\0')
-        return NO;
+    NSString* structName = nil;
+    NSScanner* scanner = [NSScanner scannerWithString:[NSString stringWithUTF8String:structType]];
+    [scanner scanString:@"{" intoString:nil];
+    [scanner scanUpToString:@"=" intoString:&structName];
     
-    NSNumber* scalarTypeNum = [NSNumber numberWithChar:scalarType[0]];
-    return [array containsObject:scalarTypeNum];
+    return structName;
 }
 
-BOOL _AOCReturnTypeIsSupported(const char* returnType)
-{
-    return _AOCScalarTypeIsInArray(returnType, _AOCSupportedScalarReturnTypes());
-}
-
-BOOL _AOCArgumentTypeIsSupported(const char* argumentType)
-{
-    return _AOCScalarTypeIsInArray(argumentType, _AOCSupportedScalarArgumentTypes());
-}
-
-BOOL _AOCCanInstallHook(NSMethodSignature* sig, NSError** outError)
-{
-    NSCParameterAssert(sig != nil);
-    
-    if(!_AOCReturnTypeIsSupported([sig methodReturnType])){
-        AOCSetError(outError, [NSString stringWithFormat:@"Return type \"%s\" is not supported", [sig methodReturnType]], nil);
-        return NO;
-    }
-
-    NSUInteger argIdx = 0;
-    for(argIdx = 0; argIdx < [sig numberOfArguments]; ++argIdx){
-        if(!_AOCArgumentTypeIsSupported([sig getArgumentTypeAtIndex:argIdx])){
-            AOCSetError(outError, [NSString stringWithFormat:@"Argument at index %u of type \"%s\" is not supported", (unsigned int)argIdx, [sig getArgumentTypeAtIndex:argIdx]], nil);
-            return NO;
-        }
-    }
-        
-    return YES;
-}
-
-ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context)
+ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context, NSError** outError)
 {
     NSCParameterAssert(sig != nil);
     NSCParameterAssert(hook != NULL);
@@ -124,7 +68,7 @@ ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMe
     ffi_type** argTypes = malloc(sizeof(ffi_type) * [sig numberOfArguments]);
     ffi_closure* closure = NULL;
     
-    closure = _AOCHookClosureInit(closure, cif, argTypes, sig, originalImp, hook, context);
+    closure = _AOCHookClosureInit(closure, cif, argTypes, sig, originalImp, hook, context, outError);
     if(closure == NULL){
         free(argTypes);
         free(cif);
@@ -132,7 +76,7 @@ ffi_closure* _AOCHookClosureAlloc(NSMethodSignature* sig, IMP originalImp, AOCMe
     return closure;
 }
         
-ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context)
+ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* argTypes[], NSMethodSignature* sig, IMP originalImp, AOCMethodInvocationHook hook, void* context, NSError** outError)
 {   
     NSCParameterAssert(cif != NULL);
     NSCParameterAssert(argTypes != NULL);
@@ -141,16 +85,19 @@ ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* a
     
     void (*closureMeth)(id, SEL, id) = (void (*)(id, SEL, id))closure;
     
-    _AOCSetCIFArgTypes(argTypes, sig);
+    if(!_AOCSetCIFArgTypes(argTypes, sig, outError))
+        return NULL;
     
     closure = ffi_closure_alloc(sizeof(ffi_closure), (void**)&closureMeth);
     if(closure == NULL)
         return NULL;
     
     ffi_status status = FFI_OK;
-    ffi_type* returnType = _AOCFFITypeForType([sig methodReturnType]);
-    if(returnType == NULL)
+    ffi_type* returnType = _AOCFFITypeAlloc([sig methodReturnType]);
+    if(returnType == NULL){
+        AOCSetError(outError, @"AOC can not handle method return type", nil);
         return NULL;
+    }
         
     status = ffi_prep_cif(cif,
                           FFI_DEFAULT_ABI,
@@ -177,24 +124,32 @@ ffi_closure* _AOCHookClosureInit(ffi_closure* closure, ffi_cif* cif, ffi_type* a
 
 void _AOCHookClosureFree(ffi_closure* closure)
 {
+    NSUInteger i = 0;
+    for(i = 0; i < closure->cif->nargs; ++i){
+        _AOCFFITypeFree(closure->cif->arg_types[i]);
+    }
+    _AOCFFITypeFree(closure->cif->rtype);
     free(closure->cif->arg_types);
     free(closure->cif);
     free(closure->user_data);
     ffi_closure_free(closure);
 }
 
-void _AOCSetCIFArgTypes(ffi_type* argTypeList[], NSMethodSignature* sig)
+BOOL _AOCSetCIFArgTypes(ffi_type* argTypeList[], NSMethodSignature* sig, NSError** outError)
 {
     NSUInteger argIdx = 0;
     for(argIdx = 0; argIdx < [sig numberOfArguments]; ++argIdx){
-        ffi_type* argType = _AOCFFITypeForType([sig getArgumentTypeAtIndex:argIdx]);
-        if(argType == NULL)
-            return;
-        argTypeList[argIdx] = argType;
+        argTypeList[argIdx] = _AOCFFITypeAlloc([sig getArgumentTypeAtIndex:argIdx]);
+        if(argTypeList[argIdx] == NULL){
+            AOCSetError(outError, [NSString stringWithFormat:@"AOC can not handle the type of argument number %i", ((int)argIdx) - 1], nil);
+            return NO;
+        }
     }
+    
+    return YES;
 }
 
-ffi_type* _AOCFFITypeForType(const char* type)
+ffi_type* _AOCFFITypeAlloc(const char* type)
 {
     NSCParameterAssert(type != NULL);
     NSCParameterAssert(type[0] != '\0');
@@ -221,9 +176,100 @@ ffi_type* _AOCFFITypeForType(const char* type)
         case _C_DBL: return &ffi_type_double;
         case _C_VOID: return &ffi_type_void;
             
+        case _C_STRUCT_B: return _AOCFFIStructTypeAlloc(type);
+            
         default:
             NSLog(@"unhandled type \"%s\"", type);
             return NULL;
+    }
+}
+
+void _AOCFFITypeFree(ffi_type* structType)
+{
+    if(structType == NULL)
+        return;
+    if(structType->type != FFI_TYPE_STRUCT)
+        return; //base case
+    
+    size_t elementIdx = 0;
+    ffi_type* elementType = NULL;
+    while((elementType = structType->elements[elementIdx]) != NULL) {
+        if(elementType->type == FFI_TYPE_STRUCT){
+            _AOCFFITypeFree(elementType); //recurse
+        }
+        ++elementIdx;
+    }
+    
+    free(structType->elements);
+    free(structType);
+}
+
+ffi_type* _AOCFFIStructTypeAlloc(const char* structTypeStr)
+{
+    ffi_type* structType = (ffi_type*)malloc(sizeof(ffi_type));
+    structType->size = 0;
+    structType->alignment = 0;
+    structType->type = FFI_TYPE_STRUCT;
+    BOOL didWork = _AOCMallocElementsForStructType(structTypeStr, &(structType->elements));
+    
+    if(didWork){
+        return structType;
+    } else {
+        _AOCFFITypeFree(structType);
+        return NULL;
+    }
+}
+
+BOOL _AOCMallocElementsForStructType(const char* structType, ffi_type*** outElements)
+{
+    NSCParameterAssert(outElements != NULL);
+    NSCParameterAssert(structType != NULL);
+    
+    NSArray* structElementStrs = _AOCElementTypeStringsForStruct(structType);
+    if(structElementStrs == nil || [structElementStrs count] <= 0)
+        return NO;
+    
+    NSUInteger numElements = [structElementStrs count];    
+    *outElements = (ffi_type**)malloc(sizeof(void*) * (numElements + 1));
+    (*outElements)[numElements] = NULL; //null terminated
+    
+    NSUInteger i = 0;
+    for(i = 0; i < numElements; ++i){
+        NSString* typeStr = [structElementStrs objectAtIndex:i];
+        ffi_type* type = _AOCFFITypeAlloc([typeStr UTF8String]);
+        (*outElements)[i] = type;
+        if(type == NULL){
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+NSArray* _AOCElementTypeStringsForStruct(const char* structTypeStr)
+{
+    NSString* structTypeNSStr = [NSString stringWithUTF8String:structTypeStr];
+    NSScanner* scanner = [NSScanner scannerWithString:structTypeNSStr];
+    NSMutableArray* elementTypes = [NSMutableArray array];
+    
+    if(![scanner scanString:@"{" intoString:nil])
+        return nil;
+    if(![scanner scanUpToString:@"=" intoString:nil])
+        return nil;
+    if(![scanner scanString:@"=" intoString:nil])
+        return nil;
+    
+    while(YES){
+        if([scanner scanString:@"}" intoString:nil]){
+            return elementTypes;
+        }
+        
+        NSString* nextElement = nil;
+        if([scanner scanObjcType:&nextElement]){
+            [elementTypes addObject:nextElement];
+        } else {
+            return nil;
+        }
     }
 }
 
@@ -327,16 +373,14 @@ BOOL AOCInstallHook(AOCMethodInvocationHook hook, void* context, Class cls, SEL 
         return NO;
     }
     
-    if(!_AOCCanInstallHook(sig, outError))
-        return NO;
-
     if(AOCIsHookInstalled(cls, selector)){
-        AOCSetError(outError, NSLocalizedString(@"Hook already installed", nil), nil);
+        AOCSetError(outError, @"Hook already installed", nil);
         return NO;
     }
     
-    ffi_closure* hookClosure = _AOCHookClosureAlloc(sig, method_getImplementation(method), hook, context);
-    NSCAssert(hookClosure != NULL, @"This should always return non-null");
+    ffi_closure* hookClosure = _AOCHookClosureAlloc(sig, method_getImplementation(method), hook, context, outError);
+    if(hookClosure == NULL)
+        return NO;
     
     method_setImplementation(method, (IMP)hookClosure);
     _AOCSetClosure(hookClosure, cls, selector);

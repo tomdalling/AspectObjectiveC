@@ -21,6 +21,9 @@
     _Bool m_bool;
     void* m_ptr;
     char* m_charPtr;
+    NSRect m_rect;
+    NSPoint m_point;
+    NSSize m_size;
 }
 
 @end
