@@ -13,7 +13,7 @@
 
     @section current_sec Current Status
 
-        AOC is still in its very early stages. It is however usable at the
+        AOC is not ready for release just yet. It is, however, usable at the
         moment. Build the DemoApp target, try it out, and have a look through
         he code (it's quite small).
 
@@ -32,8 +32,6 @@
         The current limitations are:
 
         <ul>
-            <li>Methods that return structures, or take structures as arguments, 
-                are not supported (i.e. No NSRect/NSPoint/NSSize)</li>
             <li>Advice for a method must be installed before the method is called,
                 and never removed. This is because <code>valueForKey:</code> caches
                 IMPs, which can cause crashes.</li>
@@ -44,12 +42,7 @@
 
     @section future_sec Future Development
 
-        The most important features are:
-
-        - Support for common structures as return values and arguments 
-        (NSRect/NSPoint/NSSize)
-
-        The less important, but possible, features are:
+        Possible future work includes:
 
         <ul>
             <li>Support for ppc architecture</li>

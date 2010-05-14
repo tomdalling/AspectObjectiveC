@@ -262,7 +262,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Sets the IMP to invoke. </p>
 <p>When <code>[self imp]</code> is set to NULL, the <code>[self invoke]</code> will behave like NSInvocation and invoke the IMP returned from:</p>
-<div class="fragment"><pre class="fragment">    [[<span class="keyword">self</span> <a class="code" href="protocol_a_o_c_invocation_protocol-p.html#ac6a7cf9cea42b659196fc4c469222b5f" title="The target to invoke with.">target</a>] methodForSelector:[<span class="keyword">self</span> <a class="code" href="protocol_a_o_c_invocation_protocol-p.html#a1d851f8540abce35d0ba4cd6ba6297cd" title="The selector to invoke.">selector</a>]]
+<div class="fragment"><pre class="fragment">    [[<span class="keyword">self</span> target] methodForSelector:[<span class="keyword">self</span> selector]]
 </pre></div><p>However, <code>[self invoke]</code> will execute <code>[self imp]</code> if it is not NULL. The IMP will be passed <code>[self target]</code> and <code>[self selector]</code> as <code>self</code> and <code>_cmd</code> respectively.</p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -384,7 +384,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed Apr 7 01:29:10 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 14 16:25:57 2010 for AspectObjectiveC by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

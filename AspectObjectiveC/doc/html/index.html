@@ -43,7 +43,7 @@ About AspectObjectiveC</a></h2>
 <p>Created by <a href="http://www.tomdalling.com/">Tom Dalling</a>.</p>
 <h2><a class="anchor" id="current_sec">
 Current Status</a></h2>
-<p>AOC is still in its very early stages. It is however usable at the moment. Build the DemoApp target, try it out, and have a look through he code (it's quite small).</p>
+<p>AOC is not ready for release just yet. It is, however, usable at the moment. Build the DemoApp target, try it out, and have a look through he code (it's quite small).</p>
 <p>AOC currently requires:</p>
 <ul>
 <li>
@@ -55,8 +55,6 @@ OSX 10.5+ </li>
 <p>The current limitations are:</p>
 <ul>
 <li>
-Methods that return structures, or take structures as arguments, are not supported (i.e. No NSRect/NSPoint/NSSize) </li>
-<li>
 Advice for a method must be installed before the method is called, and never removed. This is because <code>valueForKey:</code> caches IMPs, which can cause crashes. </li>
 <li>
 May not work for class methods (instance methods only) </li>
@@ -67,11 +65,7 @@ Not thread safe, so be careful with multithreaded code. </li>
 </ul>
 <h2><a class="anchor" id="future_sec">
 Future Development</a></h2>
-<p>The most important features are:</p>
-<ul>
-<li>Support for common structures as return values and arguments (NSRect/NSPoint/NSSize)</li>
-</ul>
-<p>The less important, but possible, features are:</p>
+<p>Possible future work includes:</p>
 <ul>
 <li>
 Support for ppc architecture </li>
@@ -106,7 +100,7 @@ Example Usage</a></h2>
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Wed Apr 7 01:29:10 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 14 16:25:57 2010 for AspectObjectiveC by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

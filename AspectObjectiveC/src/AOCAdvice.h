@@ -82,17 +82,17 @@
     -(double)adviceAfterDivide:(double)numerator by:(double)denominator;
     @endcode
 
-    The return values of <tt>-adviceBefore<sel></tt> and <tt>-adviceAfter<sel></tt> are ignored.
+    The return values of <tt>-adviceBefore[sel]</tt> and <tt>-adviceAfter[sel]</tt> are ignored.
 
-    In <tt>-adviceBefore<sel></tt>, the arguments may be modified via 
+    In <tt>-adviceBefore[sel]</tt>, the arguments may be modified via 
     <tt>[[self invocation] setArgument:... atIndex:...]</tt> before the actual method is
     called. Be aware that the first argument is at index 2.
 
-    If <tt>-adviceInsteadOf<sel></tt> is implemented, then the advice will replace
+    If <tt>-adviceInsteadOf[sel]</tt> is implemented, then the advice will replace
     the actual method. The actual method will not be called, and the
-    return value from -adviceInsteadOf<sel> is treated as the actual return value.
+    return value from -adviceInsteadOf[sel] is treated as the actual return value.
 
-    In <tt>-adviceAfter<sel></tt>, the return value may be modified via
+    In <tt>-adviceAfter[sel]</tt>, the return value may be modified via
     <tt>[[self invocation] setReturnValue:...]</tt> after the actual method has been
     called. You can also retreive the return value of the actual method via
     <tt>[[self invocation] getReturnValue:...]</tt>.
