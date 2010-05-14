@@ -27,9 +27,9 @@
     
     NSError* error = nil;
     BOOL didHijack = [[AOCAspectManager defaultAspectManager] installAdvice:_hijackAdvice
-                                                           forSelector:@selector(convertCelciusToFahrenheit:)
-                                                               ofClass:[DemoAppDelegate class]
-                                                                 error:&error];
+                                                                forSelector:@selector(convertCelciusToFahrenheit:)
+                                                                    ofClass:[DemoAppDelegate class]
+                                                                      error:&error];
     if(!didHijack){
         [NSApp presentError:error];
         return;
@@ -45,8 +45,8 @@
         return;
     
     [[AOCAspectManager defaultAspectManager] uninstallAdvice:_hijackAdvice
-                                             forSelector:@selector(convertCelciusToFahrenheit:)
-                                                 ofClass:[DemoAppDelegate class]];
+                                                 forSelector:@selector(convertCelciusToFahrenheit:)
+                                                     ofClass:[DemoAppDelegate class]];
     
     [_hijackButton setTitle:NSLocalizedString(@"Hijack!", nil)];
     _isHijacked = NO;
