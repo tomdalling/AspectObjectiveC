@@ -7,8 +7,7 @@
 //
 
 #import "TestAOCAspectManager.h"
-#import "AOCAdvice.h"
-#import "AOCAspectManager.h"
+#import <AspectObjectiveC/AOC.h>
 
 
 #pragma mark -

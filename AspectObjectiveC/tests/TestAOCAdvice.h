@@ -1,7 +1,6 @@
 
 #import <SenTestingKit/SenTestingKit.h>
-#import "AOCAspectManager.h"
-#import "AOCAdvice.h"
+#import <AspectObjectiveC/AOC.h>
 
 @class HelloAdvice;
 

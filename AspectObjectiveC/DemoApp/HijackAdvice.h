@@ -1,5 +1,5 @@
 
-#import "AOCAdvice.h"
+#import <AspectObjectiveC/AOC.h>
 
 @interface HijackAdvice : AOCAdvice
 -(IBAction) adviceBeforeConvertCelciusToFahrenheit:(id)sender;

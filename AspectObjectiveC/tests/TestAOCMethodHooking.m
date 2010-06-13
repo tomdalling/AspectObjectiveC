@@ -1,6 +1,6 @@
-/*//dont insert*/
+//dont insert
 #import "TestAOCMethodHooking.h"
-#import "AOCMethodHooking.h"
+#import <AspectObjectiveC/AOCMethodHooking.h>
 
 static BOOL g_hookDidRun = NO;
 

@@ -21,31 +21,23 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		E230014C117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
+		E21AD50311C4A80100A8C812 /* AOC.h in Headers */ = {isa = PBXBuildFile; fileRef = E21AD50211C4A80100A8C812 /* AOC.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E21AD50D11C4A88000A8C812 /* AspectObjectiveC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */; };
+		E21AD51811C4A89600A8C812 /* AspectObjectiveC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */; };
 		E230014D117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h in Headers */ = {isa = PBXBuildFile; fileRef = E230014A117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h */; };
 		E230014E117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
 		E230014F117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */ = {isa = PBXBuildFile; fileRef = E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */; };
-		E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
-		E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E242D149115B882200BE8E66 /* AOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E242D146115B882200BE8E66 /* AOCAdvice.m */; };
 		E2479363114C9DB000626905 /* DemoApp.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2479362114C9DB000626905 /* DemoApp.xib */; };
 		E2479368114C9E2400626905 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E2479367114C9E2400626905 /* main.m */; };
-		E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
-		E24793AD114CA4DD00626905 /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
-		E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
-		E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50071150C40A00EFB201 /* generate_method_hooking_tests.rb */; };
-		E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */ = {isa = PBXBuildFile; fileRef = E24A50081150C40A00EFB201 /* insert_method_hooking_tests.rb */; };
 		E24E410B116B8111007B53D0 /* TestAOCAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E24E410A116B8111007B53D0 /* TestAOCAdvice.m */; };
 		E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E24F6ADE11486D2500201FE6 /* TestAOCMethodHooking.m */; };
+		E290215611C4AA120018053D /* AspectObjectiveC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */; };
+		E290216411C4AA280018053D /* AspectObjectiveC.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E2F6E5801149303D00658AB2 /* AspectObjectiveC.framework */; };
 		E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2905BB4114793D400D69FE7 /* SenTestingKit.framework */; };
-		E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABA01147E0E600D7F9C7 /* AOCAspectManager.m */; };
-		E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */ = {isa = PBXBuildFile; fileRef = E293ABB81147E96E00D7F9C7 /* AOCMethodHooking.m */; };
 		E29D0E5F11526E3C00FD6070 /* DemoAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E29D0E5C11526E3C00FD6070 /* DemoAppDelegate.m */; };
 		E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */ = {isa = PBXBuildFile; fileRef = E29D0E5E11526E3C00FD6070 /* HijackAdvice.m */; };
 		E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA572C114904520080CA2D /* TestAOCAspectManager.m */; };
-		E2BA921A11484FC00068257E /* AOCError.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BA921911484FC00068257E /* AOCError.m */; };
-		E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
-		E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2BD2A1711633B4C001BCF10 /* AOCFFIInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2BD2A1311633B4C001BCF10 /* AOCFFIInvocation.m */; };
 		E2F6E5851149317E00658AB2 /* AOCAdvice.h in Headers */ = {isa = PBXBuildFile; fileRef = E22AD4F91147DF150020D988 /* AOCAdvice.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6E5861149318200658AB2 /* AOCAspectManager.h in Headers */ = {isa = PBXBuildFile; fileRef = E293AB9F1147E0E600D7F9C7 /* AOCAspectManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,23 +47,50 @@
 		E2FBC39D116380CC0022C38A /* AOCFFIInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1211633B4C001BCF10 /* AOCFFIInvocation.h */; };
 		E2FBC39E116380CD0022C38A /* AOCError.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BA921811484FC00068257E /* AOCError.h */; };
 		E2FBC39F116380CE0022C38A /* AOCInvocationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E2BD2A1811633BE1001BCF10 /* AOCInvocationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */ = {isa = PBXBuildFile; fileRef = E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */; };
-		E2FC137B1162320800A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
+		E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */ = {isa = PBXBuildFile; fileRef = E293ABB71147E96E00D7F9C7 /* AOCMethodHooking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2FC137C1162321500A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
-		E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E2FC1379116231FE00A17133 /* libffi.5.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E29DC506119D1560007A9C8C /* PBXContainerItemProxy */ = {
+		E21AD52211C4A8AB00A8C812 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = E2905BAD114793AA00D69FE7 /* UnitTests */;
-			remoteInfo = UnitTests;
+			remoteGlobalIDString = E2F6E57F1149303D00658AB2;
+			remoteInfo = AspectObjectiveC;
+		};
+		E290218611C4AA410018053D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2F6E57F1149303D00658AB2;
+			remoteInfo = AspectObjectiveC;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		E21AD52A11C4A8CA00A8C812 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E21AD51811C4A89600A8C812 /* AspectObjectiveC.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E290218311C4AA2B0018053D /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				E290216411C4AA280018053D /* AspectObjectiveC.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E2F6E59A1149320700658AB2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -88,6 +107,7 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		E21AD50211C4A80100A8C812 /* AOC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOC.h; sourceTree = "<group>"; };
 		E22AD4F91147DF150020D988 /* AOCAdvice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AOCAdvice.h; sourceTree = "<group>"; };
 		E230014A117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSScanner+AOCObjcTypeScanning.h"; sourceTree = "<group>"; };
 		E230014B117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSScanner+AOCObjcTypeScanning.m"; sourceTree = "<group>"; };
@@ -133,7 +153,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2FC137D1162321A00A17133 /* libffi.5.dylib in Frameworks */,
+				E21AD50D11C4A88000A8C812 /* AspectObjectiveC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,7 +161,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E2FC137B1162320800A17133 /* libffi.5.dylib in Frameworks */,
+				E290215611C4AA120018053D /* AspectObjectiveC.framework in Frameworks */,
 				E2905BB5114793D400D69FE7 /* SenTestingKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,6 +247,7 @@
 		E2905BB81147942200D69FE7 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E21AD50211C4A80100A8C812 /* AOC.h */,
 				E22AD4F91147DF150020D988 /* AOCAdvice.h */,
 				E242D146115B882200BE8E66 /* AOCAdvice.m */,
 				E293AB9F1147E0E600D7F9C7 /* AOCAspectManager.h */,
@@ -292,6 +313,7 @@
 				E2FBC39F116380CE0022C38A /* AOCInvocationProtocol.h in Headers */,
 				E2FBC3A0116380CE0022C38A /* AOCMethodHooking.h in Headers */,
 				E230014D117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.h in Headers */,
+				E21AD50311C4A80100A8C812 /* AOC.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,11 +327,12 @@
 				E2479329114C9CC300626905 /* Resources */,
 				E247932A114C9CC300626905 /* Sources */,
 				E247932B114C9CC300626905 /* Frameworks */,
+				E21AD52A11C4A8CA00A8C812 /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E29DC507119D1560007A9C8C /* PBXTargetDependency */,
+				E21AD52311C4A8AB00A8C812 /* PBXTargetDependency */,
 			);
 			name = DemoApp;
 			productName = DemoApp;
@@ -324,11 +347,13 @@
 				E2905BA9114793AA00D69FE7 /* Resources */,
 				E2905BAA114793AA00D69FE7 /* Sources */,
 				E2905BAB114793AA00D69FE7 /* Frameworks */,
+				E290218311C4AA2B0018053D /* Copy Frameworks */,
 				E2905BAC114793AA00D69FE7 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E290218711C4AA410018053D /* PBXTargetDependency */,
 			);
 			name = UnitTests;
 			productName = UnitTests;
@@ -387,8 +412,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E24A50091150C40A00EFB201 /* generate_method_hooking_tests.rb in Resources */,
-				E24A500A1150C40A00EFB201 /* insert_method_hooking_tests.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,13 +472,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2479368114C9E2400626905 /* main.m in Sources */,
-				E24793AB114CA4DB00626905 /* AOCAspectManager.m in Sources */,
-				E24793AD114CA4DD00626905 /* AOCError.m in Sources */,
-				E24793AE114CA4DD00626905 /* AOCMethodHooking.m in Sources */,
 				E29D0E5F11526E3C00FD6070 /* DemoAppDelegate.m in Sources */,
 				E29D0E6011526E3C00FD6070 /* HijackAdvice.m in Sources */,
-				E242D147115B882200BE8E66 /* AOCAdvice.m in Sources */,
-				E2BD2A1411633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 				E230014F117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -464,15 +482,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E293ABA11147E0E600D7F9C7 /* AOCAspectManager.m in Sources */,
-				E293ABB91147E96E00D7F9C7 /* AOCMethodHooking.m in Sources */,
-				E2BA921A11484FC00068257E /* AOCError.m in Sources */,
 				E24F6ADF11486D2500201FE6 /* TestAOCMethodHooking.m in Sources */,
 				E2BA572D114904520080CA2D /* TestAOCAspectManager.m in Sources */,
-				E242D148115B882200BE8E66 /* AOCAdvice.m in Sources */,
-				E2BD2A1511633B4C001BCF10 /* AOCFFIInvocation.m in Sources */,
 				E24E410B116B8111007B53D0 /* TestAOCAdvice.m in Sources */,
-				E230014C117B4B49003346A5 /* NSScanner+AOCObjcTypeScanning.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,10 +504,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E29DC507119D1560007A9C8C /* PBXTargetDependency */ = {
+		E21AD52311C4A8AB00A8C812 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E2905BAD114793AA00D69FE7 /* UnitTests */;
-			targetProxy = E29DC506119D1560007A9C8C /* PBXContainerItemProxy */;
+			target = E2F6E57F1149303D00658AB2 /* AspectObjectiveC */;
+			targetProxy = E21AD52211C4A8AB00A8C812 /* PBXContainerItemProxy */;
+		};
+		E290218711C4AA410018053D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2F6E57F1149303D00658AB2 /* AspectObjectiveC */;
+			targetProxy = E290218611C4AA410018053D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -1,6 +1,6 @@
 
 #import "DemoAppDelegate.h"
-#import "AOCAspectManager.h"
+#import <AspectObjectiveC/AOC.h>
 
 
 #pragma mark -
