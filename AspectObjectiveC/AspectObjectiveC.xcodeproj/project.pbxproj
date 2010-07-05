@@ -449,7 +449,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"${PROJECT_DIR}/doc/\"\nrm -Rf html\n$DOXYGEN_PATH Doxyfile\ncd html\nmake\nrm -Rf ../com.tomdalling.AspectObjectiveC.docset\nmv com.tomdalling.AspectObjectiveC.docset ../";
+			shellScript = "cd \"${PROJECT_DIR}/doc/\"\nrm -Rf api\n$DOXYGEN_PATH Doxyfile\ncd api\nmake\nrm -Rf ../com.tomdalling.AspectObjectiveC.docset\nmv com.tomdalling.AspectObjectiveC.docset ../";
 		};
 		E2905BAC114793AA00D69FE7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -527,7 +527,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WARNING_CFLAGS = (
 					"-Werror",
 					"-Wall",
@@ -545,7 +545,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = "";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
 				WARNING_CFLAGS = (
 					"-Werror",
 					"-Wall",

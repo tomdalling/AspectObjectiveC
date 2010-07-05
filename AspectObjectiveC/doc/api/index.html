@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>AspectObjectiveC: Member List</title>
+<title>AspectObjectiveC: AspectObjectiveC</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javaScript" src="search/search.js"></script>
@@ -17,8 +17,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="navigation" id="top">
   <div class="tabs">
     <ul>
-      <li><a href="index.html"><span>Main&nbsp;Page</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="index.html"><span>Main&nbsp;Page</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -35,22 +35,57 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-  <div class="tabs">
-    <ul>
-      <li><a href="annotated.html"><span>Class&nbsp;List</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&nbsp;Hierarchy</span></a></li>
-      <li><a href="functions.html"><span>Class&nbsp;Members</span></a></li>
-    </ul>
-  </div>
 </div>
 <div class="contents">
-<h1>AOCAspectManager Member List</h1>This is the complete list of members for <a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a>, including all inherited members.<table>
-  <tr class="memlist"><td>-&nbsp;</td><td><a class="el" href="interface_a_o_c_aspect_manager.html#ae50bc76dc1a2d45292fea96d1df65d8f">dealloc</a></td><td><a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a></td><td></td></tr>
-  <tr class="memlist"><td>+&nbsp;</td><td><a class="el" href="interface_a_o_c_aspect_manager.html#a9db2122ef4d94a4ed82afc596404bc86">defaultAspectManager</a></td><td><a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a></td><td><code> [static]</code></td></tr>
-  <tr class="memlist"><td>-&nbsp;</td><td><a class="el" href="interface_a_o_c_aspect_manager.html#a03505850e940fb49d0426b153ed6f4eb">installAdvice:forSelector:ofClass:error:</a></td><td><a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a></td><td></td></tr>
-  <tr class="memlist"><td>-&nbsp;</td><td><a class="el" href="interface_a_o_c_aspect_manager.html#a7c4776645f13058fb971d1acf2c84022">uninstallAdvice:forSelector:ofClass:</a></td><td><a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a></td><td></td></tr>
-  <tr class="memlist"><td>-&nbsp;</td><td><a class="el" href="interface_a_o_c_aspect_manager.html#af92886f907c0f86b9f61d36f3d2f1878">uninstallAllAdvice</a></td><td><a class="el" href="interface_a_o_c_aspect_manager.html">AOCAspectManager</a></td><td></td></tr>
-</table></div>
+<h1>AspectObjectiveC </h1><h2><a class="anchor" id="about_sec">
+About AspectObjectiveC</a></h2>
+<p>AspectObjectiveC (AOC) brings aspect oriented programming functionality to objective c. Basically, it allows you to execute arbitrary code before, instead of, or after any method on any class at runtime. It is available under the MIT license (see LICENSE.txt).</p>
+<p>Created by <a href="http://www.tomdalling.com/">Tom Dalling</a>.</p>
+<h2><a class="anchor" id="current_sec">
+Current Status</a></h2>
+<p>AOC is not ready for release just yet. It is, however, usable at the moment. Build the DemoApp target, try it out, and have a look through he code (it's quite small).</p>
+<p>AOC currently requires:</p>
+<ul>
+<li>
+i386 or x86_64 architecture </li>
+<li>
+OSX 10.5+ </li>
+</ul>
+<p>It may work on 10.4 (i386 only, needs older version of GCC) and on the iPhone SDK, but neither have been tested. I'm interested to know if it can compile and pass the unit tests on the iPhone and on 10.4, so if you try, let me know how it goes.</p>
+<p>The current limitations are:</p>
+<ul>
+<li>
+Advice for a method must be installed before the method is called, and never removed. This is because <code>valueForKey:</code> caches IMPs, which can cause crashes. </li>
+<li>
+May not work for class methods (instance methods only) </li>
+<li>
+May not work for variadic functions </li>
+<li>
+Not thread safe, so be careful with multithreaded code. </li>
+</ul>
+<h2><a class="anchor" id="future_sec">
+Future Development</a></h2>
+<p>Possible future work includes:</p>
+<ul>
+<li>
+Support for ppc architecture </li>
+<li>
+OSX 10.4 support </li>
+<li>
+Allow advice to be installed an uninstalled at any time. This would require swizzling <code>valueForKey:</code> which could cause performance issues. </li>
+<li>
+Support class methods </li>
+<li>
+Support variadic functions </li>
+</ul>
+<h2><a class="anchor" id="doc_sec">
+API Documentation</a></h2>
+<p>Use the navigation at the top of the page to browse the API documentation.</p>
+<p>A docset for XCode integration is also available in the "doc" folder.</p>
+<h2><a class="anchor" id="example_sec">
+Example Usage</a></h2>
+<p>TODO: put example code here </p>
+</div>
 <!--- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -65,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address style="text-align: right;"><small>Generated on Fri May 14 16:25:57 2010 for AspectObjectiveC by&nbsp;
+<hr class="footer"/><address style="text-align: right;"><small>Generated by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.6.3 </small></address>
 </body>

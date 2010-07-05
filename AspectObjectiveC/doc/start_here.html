@@ -1,0 +1,319 @@
+<html>
+    <head>
+        <title>AspectObjectiveC Manual</title>
+        <style type="text/css">
+            body {
+                margin: 0;
+                padding: 10px;
+            }
+            h2 {
+                margin-top: 3em;
+                border-bottom: 1px solid black;
+                border-top: 1px solid black;
+                background: #ABC;
+                padding: 5px;
+            }
+            h3 {
+                border-bottom: 1px solid black;
+            }
+            .keyword, pre.code {
+                font-family: monospace;
+                background: #DDD;
+            }
+            .step_list {
+                border-collapse: collapse;
+            }
+            .step_list td {
+                padding: 1em;
+                vertical-align: top;
+            }
+            .step_list tr.odd {
+                background: #F0F8FF;
+            }
+            .step_list .step {
+                display: block;
+                font-weight: bold;
+            }
+            .step_list .images img {
+                display:block;
+                border: 10px solid gray;
+                margin: 10px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>AspectObjectiveC Manual</h1>
+        <div id="contents">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#h_intro">Introduction</a></li>
+                <li><a href="#h_requirements">Requirements</a></li>
+                <li><a href="#h_installation">Downloading and Installation</a></li>
+                <li><a href="#h_api">API Documentation</a></li>
+                <li><a href="#h_usage">Usage</a></li>
+                <li><a href="#h_status">Project Status</a></li>
+                <li><a href="#h_problems">Known Problems</a></li>
+                <li><a href="#h_contributing">Contributing and Contact</a></li>
+            </ol>
+        </div>
+        
+        <a name="h_intro"></a>
+        <h2>Introduction</h2>
+        <p>AspectObjectiveC (AOC) brings aspect oriented programming functionality
+        to Objective-C. Basically, it allows you to execute arbitrary code before, instead of,
+        or after any method on any class at runtime. You can replace entire methods, 
+        alter return values of methods, or alter the arguments to methods for which you
+        don't have the code (e.g., in third party frameworks). Note that using
+        AspectObjectiveC to replace methods within itself may rip a hole in the fabric of spacetime.</p>
+        
+        <p>It is available under the MIT license (see LICENSE.txt).</p>
+        
+        <p>The project is hosted on github: 
+        <a href="http://github.com/tomdalling/AspectObjectiveC">http://github.com/tomdalling/AspectObjectiveC</a></p>
+        
+        
+        
+        
+        <a name="h_requirements"></a>
+        <h2>Requirements</h2>
+        
+        <p>AOC works on OSX 10.5 and 10.6, for architectures i386 and x86_64.</p>
+        
+        <p>It probably works on 10.4 and different architectures like ppc, but has
+        not been tested. If you would like to compile it for 10.4 or another architecture,
+        feel free to contact me via the 
+        <a href="http://github.com/tomdalling/AspectObjectiveC">AspectObjectiveC github page</a>.</p>
+        
+        <p>AOC is not available on iOS (formerly &quot;iPhone OS&quot;) because it 
+        relies on the libffi closure API, which is not available on iOS.</p>
+        
+        
+        
+        
+        <a name="h_installation"></a>
+        <h2>Downloading and Installation</h2>
+        
+        <p>You can build the project yourself, or just download the latest compiled version from the
+        project's github download page:
+        <a href="http://github.com/tomdalling/AspectObjectiveC/downloads">http://github.com/tomdalling/AspectObjectiveC/downloads</a>.
+        </p>
+        
+        <p>The framework can be added to an Xcode project using the following steps.</p>
+        
+        <table class="step_list">
+            <tr class="odd">
+                <td>
+                    <span class="step">1. Add the framework folder to the project.</span>
+                    Dragging and drop the <span class="keyword">AspectObjectiveC.framework</span> folder
+                    into the project.
+                </td>
+                <td class="images"><img src="images/step1.png" /></td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="step">2. Link against the framework.</span>
+                    Under the project's target, drag 
+                    <span class="keyword">AspectObjectiveC.framework</span> 
+                    from the place it was dropped in the first step, and drop it into the
+                    build phase named <span class="keyword">Link Binary With Libraries</span>
+                </td>
+                <td class="images"><img src="images/step2.png" /></td>
+            </tr>
+            <tr class="odd">
+                <td>
+                    <span class="step">3. Copy the framework into the application bundle as a 
+                    private framework.</span>
+                    Under the project's target, create a 
+                    <span class="keyword">New Copy Files Build Phase</span>.
+                    In the info window for the new build phase, set 
+                    <span class="keyword">Destination</span> to 
+                    <span class="keyword">Frameworks</span>. Drag 
+                    <span class="keyword">AspectObjectiveC.framework</span> from the place it was
+                    dropped in the first step, and drop it under the newly created build phase.
+                </td>
+                <td class="images">
+                    <img src="images/step3a.png" />
+                    <img src="images/step3b.png" />
+                    <img src="images/step3c.png" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="step">4. Include the headers.</span>
+                    In files that use the framework, include the framework headers like so:
+                    <p class="keyword">#import&nbsp;&lt;AspectObjectiveC/AOC.h&gt;</p>
+                </td>
+                <td class="images"></td>
+            </tr>
+        </table>
+        
+        
+        
+        
+        <a name="h_api"></a>
+        <h2>API Documentation</h2>
+        
+        <p>The API documentation is available here: <a href="api/index.html">AspectObjectiveC API Documentation</a></p>
+        
+        <p>A docset for Xcode integration is also available in the <span class="keyword">doc</span>
+        folder.</p>
+        
+        
+        
+        
+        <a name="h_usage"></a>
+        <h2>Usage</h2>
+        
+        <h3>1. Create an Advice Object</h3>
+        <p>Advice objects contain the code that runs before/after/instead of a method.
+        Advice objects must implement the <span class="keyword">AOCAdviceProtocol</span>
+        protocol. The class <span class="keyword">AOCAdvice</span> is a base class that
+        is provided for convenience, and implements <span class="keyword">AOCAdviceProtocol</span>.</p>
+        
+        <p>Check the API documentation for <span class="keyword">AOCAdviceProtocol</span>
+        and <span class="keyword">AOCAdvice</span>.</p>
+        
+        <p>Here is an example advice class:</p>
+        
+        <pre class="code">
+@interface SomeAdvice : AOCAdvice
+-(double) adviceBeforeCelciusToFahrenheit:(double)celcius;
+-(double) adviceInsteadOfCelciusToFahrenheit:(double)celcius;
+-(double) adviceAfterCelciusToFahrenheit:(double)celcius;
+@end
+
+@implementation SomeAdvice
+
+-(double) adviceBeforeCelciusToFahrenheit:(double)celcius;
+{
+    // Advice before can be used to alter method arguments before they
+    // reach the method. In this case, we're going to set the `celcius` arg
+    // to `10.0`, ignoring whatever the arg actually was.
+    
+    double newCelcius = 10.0;
+    NSLog(@"BEFORE: celcius was %f, but I'm changing it to %f", celcius, newCelcius);
+    [[self invocation] setArgument:&newCelcius atIndex:2];
+    
+    return 0.0; //return value is ignored
+}
+
+-(double) adviceInsteadOfCelciusToFahrenheit:(double)celcius;
+{
+    // "Instead of" advice completely replaces a method.
+    // In this case, it will just halve whatever celcius is.
+    double halfCelcius = celcius / 2.0;
+    NSLog(@"INSTEAD OF: celcius is %f. will return %f", celcius, halfCelcius);
+    return halfCelcius; //return value is NOT ignored
+}
+
+-(double) adviceAfterCelciusToFahrenheit:(double)celcius;
+{
+    // Advice after can be used to change the return value of a method.
+    // In this case, it will triple whatever the return value was
+    
+    double returnValue;
+    [[self invocation] getReturnValue:&returnValue];
+    double newReturnValue = 3.0 * returnValue;
+    [[self invocation] setReturnValue:&newReturnValue];
+    
+    NSLog(@"AFTER: return value was %f, but I tripled it to %f", returnValue, newReturnValue);
+    return 0.0; //return value is ignored
+}
+
+@end</pre>
+
+        <h3>2. Install the advice object</h3>
+        
+        <p>Next, the advice object has to be installed on a method of a class.
+        Once installed, the advice will run whenever the method is called on any instance
+        of the class.</p>
+        
+        <p>Check the API documentation for <span class="keyword">AOCAspectManager</span>.</p>
+        
+        <p>Advice is installed like so:</p>
+        
+        <pre class="code">
+[[AOCAspectManager defaultAspectManager] installAdvice:[[SomeAdvice new] autorelease]
+                                           forSelector:@selector(celciusToFahrenheit:)
+                                               ofClass:[SomeOtherClass class]
+                                                 error:NULL];</pre>
+                                                 
+        <h3>3. Running the Advice</h3>
+        
+        <p>Running the following code...</p>
+        
+        <pre class="code">
+SomeOtherCode* soc = [[SomeOtherCode new] autorelease];
+double returnValue = [soc celciusToFahrenheit:50.0];
+NSLog(@"Final return value is %f", returnValue);</pre>
+        
+        <p>Should produce the following console output...</p>
+        
+        <pre class="code">
+BEFORE: celcius was 50.000000, but I'm changing it to 10.000000
+INSTEAD OF: celcius is 10.000000. will return 5.000000
+AFTER: return value was 5.000000, but I tripled it to 15.000000
+Final return value is 15.000000</pre>
+        
+        
+        
+        <a name="h_status"></a>
+        <h2>Project Status</h2>
+        
+        <p>This is the 1.0 release of AOC, and should be considered stable. I will continue active
+        development if there is sufficient interest in the project, otherwise I will only be
+        fixing bugs and accepting patches from other people.</p>
+        
+        
+        
+        
+        <a name="h_problems"></a>
+        <h2>Known Problems</h2>
+        
+        <ul>
+            <li>
+                <h3>AOC and KVC Accessor Methods</h3>
+                
+                <p>AOC can potentially cause crashes or not work correctly when adding advice to
+                <a href="http://developer.apple.com/mac/library/documentation/Cocoa/Conceptual/KeyValueCoding/Concepts/AccessorConventions.html#//apple_ref/doc/uid/20002174-BAJEAIEE">KVC Accessor Methods</a>.
+                This is because AOC works by swizzling method implementations,
+                and <span class="keyword">valueForKey:</span> caches the method implementations of
+                KVC accessors.</p>
+                
+                <p><strong>The solution to this problem is to only add advice to KVC accessor methods before
+                <span class="keyword">valueForKey:</span> ever calls the method</strong>. That way, 
+                <span class="keyword">valueForKey:</span> caches the swizzled
+                implementation instead of the original implementation. <strong>Also, you must never remove the advice
+                from the KVC accessor method</strong>. This is because <span class="keyword">valueForKey:</span>
+                might have cached the swizzled implementation, and calling a swizzled implementation
+                which has been deallocated (due to advice being removed) will cause a crash.</p>
+            </li>
+            <li>
+                <h3>Thread Safety</h3>
+                <p>Thread safety has not been accounted for. The AOC API should only be called from a
+                single thread. However, methods that have advice attached to them should 
+                not be affected by multithreading.</p>
+            </li>
+            <li>
+                <h3>Performance Overhead</h3>
+                <p>Adding advice to a method will add an overhead every time the method is called,
+                so you probably don't want to add advice to performance-critical methods.</p>
+            </li>
+        </ul>
+        
+        
+        
+        
+        <a name="h_contributing"></a>
+        <h2>Contributing and Contact</h2>
+        
+        <p>I'm open to bug fixes, new features, and optimisations. One feature I would like to add
+        is some form of pointcut syntax so that advice can be added to multiple methods at once, 
+        instead of one at a time. If you wish to contribute, please do so via the 
+        <a href="http://github.com/tomdalling/AspectObjectiveC">AspectObjectiveC github project page</a>.</p>
+        
+        <p>So far, I (<a href="http://www.tomdalling.com/">Tom Dalling</a>) am the only contributor to
+        the project. You can <a href="http://github.com/tomdalling">contact me via github</a>.</p>
+        
+    </body>
+</html>
