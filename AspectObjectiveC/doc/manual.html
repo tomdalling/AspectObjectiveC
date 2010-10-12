@@ -20,6 +20,9 @@
                 font-family: monospace;
                 background: #DDD;
             }
+            pre.code {
+                padding: 10px;
+            }
             .step_list {
                 border-collapse: collapse;
             }
@@ -104,7 +107,7 @@
             <tr class="odd">
                 <td>
                     <span class="step">1. Add the framework folder to the project.</span>
-                    Dragging and drop the <span class="keyword">AspectObjectiveC.framework</span> folder
+                    Drag and drop the <span class="keyword">AspectObjectiveC.framework</span> folder
                     into the project.
                 </td>
                 <td class="images"><img src="images/step1.png" /></td>
@@ -173,7 +176,7 @@
         <p>Check the API documentation for <span class="keyword">AOCAdviceProtocol</span>
         and <span class="keyword">AOCAdvice</span>.</p>
         
-        <p>Here is an example advice class:</p>
+        <p>The following is an example advice class. All three methods are optional.</p>
         
         <pre class="code">
 @interface SomeAdvice : AOCAdvice
@@ -191,18 +194,18 @@
     // to `10.0`, ignoring whatever the arg actually was.
     
     double newCelcius = 10.0;
-    NSLog(@"BEFORE: celcius was %f, but I'm changing it to %f", celcius, newCelcius);
-    [[self invocation] setArgument:&newCelcius atIndex:2];
+    NSLog(@&quot;BEFORE: celcius was %f, but I'm changing it to %f&quot;, celcius, newCelcius);
+    [[self invocation] setArgument:&amp;newCelcius atIndex:2];
     
     return 0.0; //return value is ignored
 }
 
 -(double) adviceInsteadOfCelciusToFahrenheit:(double)celcius;
 {
-    // "Instead of" advice completely replaces a method.
+    // &quot;Instead of&quot; advice completely replaces a method.
     // In this case, it will just halve whatever celcius is.
     double halfCelcius = celcius / 2.0;
-    NSLog(@"INSTEAD OF: celcius is %f. will return %f", celcius, halfCelcius);
+    NSLog(@&quot;INSTEAD OF: celcius is %f. will return %f&quot;, celcius, halfCelcius);
     return halfCelcius; //return value is NOT ignored
 }
 
@@ -212,11 +215,11 @@
     // In this case, it will triple whatever the return value was
     
     double returnValue;
-    [[self invocation] getReturnValue:&returnValue];
+    [[self invocation] getReturnValue:&amp;returnValue];
     double newReturnValue = 3.0 * returnValue;
-    [[self invocation] setReturnValue:&newReturnValue];
+    [[self invocation] setReturnValue:&amp;newReturnValue];
     
-    NSLog(@"AFTER: return value was %f, but I tripled it to %f", returnValue, newReturnValue);
+    NSLog(@&quot;AFTER: return value was %f, but I tripled it to %f&quot;, returnValue, newReturnValue);
     return 0.0; //return value is ignored
 }
 
@@ -243,9 +246,9 @@
         <p>Running the following code...</p>
         
         <pre class="code">
-SomeOtherCode* soc = [[SomeOtherCode new] autorelease];
+SomeOtherClass* soc = [[SomeOtherClass new] autorelease];
 double returnValue = [soc celciusToFahrenheit:50.0];
-NSLog(@"Final return value is %f", returnValue);</pre>
+NSLog(@&quot;Final return value is %f&quot;, returnValue);</pre>
         
         <p>Should produce the following console output...</p>
         
@@ -290,9 +293,8 @@ Final return value is 15.000000</pre>
             </li>
             <li>
                 <h3>Thread Safety</h3>
-                <p>Thread safety has not been accounted for. The AOC API should only be called from a
-                single thread. However, methods that have advice attached to them should 
-                not be affected by multithreading.</p>
+                <p>Thread safety has not been accounted for, so use this on different threads
+                at your own risk.</p>
             </li>
             <li>
                 <h3>Performance Overhead</h3>
