@@ -301,6 +301,12 @@ Final return value is 15.000000</pre>
                 <p>Adding advice to a method will add an overhead every time the method is called,
                 so you probably don't want to add advice to performance-critical methods.</p>
             </li>
+            <li>
+                <h3>Structs With Bit Fields</h3>
+                <p>AOC can't handle methods that return, or take as an argument, a struct with a bit field
+                (e.g. NSDecimal). Structs without bit fields (e.g. NSRect) should be fine.</p>
+                </p>
+            </li>
         </ul>
         
         
