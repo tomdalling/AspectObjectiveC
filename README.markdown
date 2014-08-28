@@ -1,5 +1,5 @@
-Please see the file "doc/start_here.html" for the full README and documentation.
-Mirror available [here](http://www.tomdalling.com/aoc_doc_mirror/), but it may be
+Please see the file "doc/manual.html" for the full README and documentation.
+Mirror available [here](http://tomdalling.github.io/AspectObjectiveC), but it may be
 slightly out of date.
 
 AspectObjectiveC (AOC) brings aspect oriented programming functionality
