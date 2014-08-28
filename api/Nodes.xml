@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DocSetNodes version="1.0">
+  <TOC>
+    <Node>
+      <Name>Root</Name>
+      <Path>index.html</Path>
+      <Subnodes>
+       <Node>
+        <Name>AspectObjectiveC</Name>
+        <Path>index.html</Path>
+       </Node>
+       <Node>
+        <Name>Class List</Name>
+        <Path>annotated.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>AOCAdvice</Name>
+          <Path>interface_a_o_c_advice.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;AOCAdviceProtocol&gt;</Name>
+          <Path>protocol_a_o_c_advice_protocol-p.html</Path>
+         </Node>
+         <Node>
+          <Name>AOCAspectManager</Name>
+          <Path>interface_a_o_c_aspect_manager.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;AOCInvocationProtocol&gt;</Name>
+          <Path>protocol_a_o_c_invocation_protocol-p.html</Path>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Class Hierarchy</Name>
+        <Path>hierarchy.html</Path>
+        <Subnodes>
+         <Node>
+          <Name>&lt;AOCAdviceProtocol&gt;</Name>
+          <Path>protocol_a_o_c_advice_protocol-p.html</Path>
+          <Subnodes>
+           <Node>
+            <Name>AOCAdvice</Name>
+            <Path>interface_a_o_c_advice.html</Path>
+           </Node>
+          </Subnodes>
+         </Node>
+         <Node>
+          <Name>AOCAspectManager</Name>
+          <Path>interface_a_o_c_aspect_manager.html</Path>
+         </Node>
+         <Node>
+          <Name>&lt;AOCInvocationProtocol&gt;</Name>
+          <Path>protocol_a_o_c_invocation_protocol-p.html</Path>
+         </Node>
+        </Subnodes>
+       </Node>
+       <Node>
+        <Name>Class Members</Name>
+        <Path>functions.html</Path>
+       </Node>
+       <Node>
+        <Name>File List</Name>
+        <Path>files.html</Path>
+        <Subnodes>
+        </Subnodes>
+       </Node>
+      </Subnodes>
+    </Node>
+  </TOC>
+</DocSetNodes>
